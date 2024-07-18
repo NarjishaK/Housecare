@@ -17,6 +17,7 @@ import Login from "../pages/Authentication/Login"
 import Logout from "../pages/Authentication/Logout"
 import Register from "../pages/Authentication/Register"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
+import HousecareStaff from "pages/Authentication/housecare-staff"
 
 // Inner Authentication
 import Recoverpw from "../pages/AuthenticationInner/Recoverpw"
@@ -66,10 +67,12 @@ import UiOffcanvas from "pages/Ui/UiOffcanvas"
 import Chat from "pages/Chat/Chat";
 import Kanban from "pages/Kanban"
 import Staff from "pages/staffs"
-
+import Charity from "pages/Authentication/charity"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   {path:"/staffs",component:<Staff/>},
+  {path:"/housecarestaffs",component:<HousecareStaff/>},
+  {path:"/charity",component:<Charity/>},
 
   // //calendar
   { path: "/calendar", component: <Calendar /> },

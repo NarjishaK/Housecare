@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 exports.create = asyncHandler(async (req, res) => {
-  const { staff, email, password } = req.body;
+  const { staff, email, password,date } = req.body;
   const image = req.file.filename;
 
   try {
@@ -18,6 +18,7 @@ exports.create = asyncHandler(async (req, res) => {
       staff: staff,
       password: password,
       email: email,
+      date:date,
       image: image,
     });
     if (!admin) {
@@ -39,6 +40,7 @@ exports.signin = asyncHandler(async (req, res) => {
   try {
     const admin = await Staffs.findOne({ email: email });
     if (!admin) {
+      console.log("Admin not found with email:", email);
       return res
         .status(400)
         .json({ invalid: true, message: "Invalid email or password" });
@@ -49,14 +51,19 @@ exports.signin = asyncHandler(async (req, res) => {
         staff: admin.staff,
         email: admin.email,
         image: admin.image,
+        date:admin.date,
       };
       const token = jwt.sign({ email: admin.email }, "myjwtsecretkey");
       admin.tokens = token;
-      admin.save();
+      await admin.save();
+      console.log("Signin successful, token generated");
       res.status(200).json({ token: token, HomecareAdmin: HomecareAdmin });
+    }else {
+      console.log("Password mismatch for email:", email);
+      return res.status(400).json({ invalid: true, message: "Invalid email or password" });
     }
   } catch (err) {
-    console.log(err, "signin is failed");
+    console.log(err, "signin  failed");
     return res.status(500).json({ err: "Invalid email or password" });
   }
 });
@@ -97,7 +104,7 @@ exports.edit = asyncHandler(async (req, res) => {
 });
 
 exports.update = asyncHandler(async (req, res) => {
-  const { staff, email, password } = req.body;
+  const { staff, email, password ,date} = req.body;
   const { id } = req.params;
   try {
     const admin = await Staffs.findById(id);
@@ -108,6 +115,7 @@ exports.update = asyncHandler(async (req, res) => {
     admin.email = email;
     admin.password = password;
     admin.staff = staff;
+    admin.date = date;
     if (req.file) {
       admin.image = req.file.filename;
     }
