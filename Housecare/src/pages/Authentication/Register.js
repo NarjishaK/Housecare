@@ -1,19 +1,9 @@
-import React, { useEffect, useState } from "react"
-// Formik Validation
-import * as Yup from "yup"
-import { useFormik } from "formik"
+import React, { useState } from "react"
 
 import logoDark from "../../assets/images/logo-dark.png"
 import logoLight from "../../assets/images/logo-dark.png"
 
-// action
-import { registerUser, apiError } from "../../store/actions"
-
-//redux
-import { useSelector, useDispatch } from "react-redux"
-import { createSelector } from "reselect"
-
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import {
   Alert,
   Card,
@@ -21,96 +11,49 @@ import {
   Col,
   Container,
   Form,
-  FormFeedback,
   Input,
   Label,
   Row,
 } from "reactstrap"
 import { useForm } from "helpers/useForms"
-import axios from "axios"
+import { Createstaff } from "./handle-api"
+
 const Register = props => {
-  //meta title
   document.title = "Register | Housecare"
 
   const [values, handleChange] = useForm({
     staff: "",
     email: "",
     password: "",
+    date:"",
   })
-  const [image,setImage]=useState("")
+  const [image, setImage] = useState("")
+  const [registrationStatus, setRegistrationStatus] = useState(null)
+
   const handleImage = e => {
     const selectedImage = e.target.files[0]
     setImage(selectedImage)
   }
 
-  const handleCreate=async(e)=>{
-    e.preventDefault();
-     try{
-      let formData = new FormData()
-      formData.append("staff", values.staff)
-      formData.append("password", values.password)
-      formData.append("email", values.email)
-      formData.append("image", image)
-      const response =await axios.post("http://localhost:8000/housecare",formData,{
-        headers:{
-          "Content-Type":"multipart/form-data"
-        }
-      })
-      alert("success")
-      console.log(response.data);
-      window.location.href ='/dashboard'
+  const handleCreate = async e => {
+    e.preventDefault()
+
+    let formData = new FormData()
+    formData.append("staff", values.staff)
+    formData.append("password", values.password)
+    formData.append("email", values.email)
+    formData.append("date", values.date)
+    formData.append("image", image)
+    try {
+      const response = await Createstaff(formData)
+      setRegistrationStatus("success")
+      console.log(response.data)
+      window.location.href='/login'
+    } catch (err) {
+      console.log(err)
+      setRegistrationStatus("error")
+    }
   }
-  catch(err)
-  {console.log(err);
-  alert("error")
-
-  }
-  }
-
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      email: "",
-      username: "",
-      password: "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-      username: Yup.string().required("Please Enter Your Username"),
-      password: Yup.string().required("Please Enter Your Password"),
-    }),
-    onSubmit: values => {
-      dispatch(registerUser(values))
-    },
-  })
-
-  const selectAccountState = state => state.Account
-  const AccountProperties = createSelector(selectAccountState, account => ({
-    user: account.user,
-    registrationError: account.registrationError,
-    success: account.success,
-    // loading: account.loading,
-  }))
-
-  const {
-    user,
-    registrationError,
-    success,
-  } = useSelector(AccountProperties)
-
-  useEffect(() => {
-    dispatch(apiError(""))
-  }, [dispatch])
-
-  useEffect(() => {
-    success && setTimeout(() => navigate("/login"), 2000)
-  }, [success, navigate])
 
   return (
     <React.Fragment>
@@ -146,21 +89,18 @@ const Register = props => {
                     </p>
                     <Form
                       className="form-horizontal mt-4"
-                      onSubmit={e => {
-                        e.preventDefault()
-                        validation.handleSubmit()
-                        return false
-                      }}
+                      onSubmit={handleCreate}
                     >
-                      {user && user ? (
+                      {registrationStatus === "success" && (
                         <Alert color="success">
-                          Register User Successfully
+                          Register staff Successfully
                         </Alert>
-                      ) : null}
-
-                      {registrationError && registrationError ? (
-                        <Alert color="danger">{registrationError}</Alert>
-                      ) : null}
+                      )}
+                      {registrationStatus === "error" && (
+                        <Alert color="danger">
+                          Registration failed. Please try again.
+                        </Alert>
+                      )}
 
                       <div className="mb-3">
                         <Label htmlFor="image">Image</Label>
@@ -184,11 +124,6 @@ const Register = props => {
                           value={values.email}
                           onChange={handleChange}
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
                       </div>
 
                       <div className="mb-3">
@@ -211,12 +146,16 @@ const Register = props => {
                           value={values.password}
                           onChange={handleChange}
                         />
-                        {validation.touched.password &&
-                        validation.errors.password ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.password}
-                          </FormFeedback>
-                        ) : null}
+                      </div>
+                      <div className="mb-3">
+                        <Label htmlFor="date">Date</Label>
+                        <Input
+                          name="date"
+                          type="date"
+                          placeholder="Joining Date"
+                          value={values.date}
+                          onChange={handleChange}
+                        />
                       </div>
 
                       <div className="mb-3 row mt-4">
@@ -224,7 +163,6 @@ const Register = props => {
                           <button
                             className="btn btn-primary w-md waves-effect waves-light"
                             type="submit"
-                            onClick={handleCreate}
                           >
                             Register
                           </button>
@@ -235,7 +173,6 @@ const Register = props => {
                 </CardBody>
               </Card>
               <div className="mt-5 text-center">
-                {/* <p>Already have an account ? <Link to="/login" className="text-primary"> Login </Link> </p> */}
                 © <script>document.write(new Date().getFullYear())</script>{" "}
                 Housecare
               </div>

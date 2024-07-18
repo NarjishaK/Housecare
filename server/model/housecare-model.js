@@ -4,8 +4,9 @@ const bcrypt = require('bcrypt')
 const housecareSchema = mongoose.Schema({
   staff: { type: String, required: true },
   email: { type: String, required: true },
-  password: { type: String, required: true },
+  password: { type: String,required:true },
   image: { type: String, required: true },
+  date:{type:String,required:true},
   tokens: { type: String, default: "" },
 });
 
@@ -25,7 +26,6 @@ housecareSchema.pre("save", async function (next) {
       return next();
     }
   } else {
-    console.log("Password is not modified.");
     return next();
   }
 });
