@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import {
   Row,
@@ -8,13 +8,29 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Button,
 } from "reactstrap"
+import { fetchCharity } from "./handle-api"
 
 //Import Images
 import user1 from "../../assets/images/users/user-1.jpg"
 
 function Charity() {
   const [modal, setmodal] = useState(false)
+  const [charity, setCharity] = useState([])
+
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  const loadData = async () => {
+    try {
+      const response = await fetchCharity()
+      setCharity(response)
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
     <React.Fragment>
       <div style={{ textAlign: "center" }}>
@@ -44,19 +60,19 @@ function Charity() {
                   setmodal(!modal)
                 }}
               >
-                Form
+                New Charity organaization
               </ModalHeader>
               <ModalBody>
                 <form>
                   <Row>
                     <Col lg={4}>
                       <div className="mb-3">
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">Charity</label>
                         <input
                           type="text"
                           className="form-control"
-                          id="name"
-                          placeholder="Enter Name"
+                          name="charity"
+                          placeholder="Charity Organaization"
                         />
                       </div>
                     </Col>
@@ -73,12 +89,12 @@ function Charity() {
                     </Col>
                     <Col lg={4}>
                       <div className="mb-3">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="date">Date</label>
                         <input
-                          type="password"
+                          type="date"
                           className="form-control"
-                          id="password"
-                          placeholder="Enter Password"
+                          name="date"
+                          placeholder="Date"
                         />
                       </div>
                     </Col>
@@ -86,11 +102,11 @@ function Charity() {
                   <Row>
                     <Col lg={12}>
                       <div className="mb-3">
-                        <label htmlFor="subject">Subject</label>
-                        <textarea
+                        <label htmlFor="image">Image</label>
+                        <input
                           className="form-control"
-                          id="subject"
-                          rows="3"
+                          name="image"
+                          type="file"
                         />
                       </div>
                     </Col>
@@ -99,7 +115,7 @@ function Charity() {
                     <Col lg={12}>
                       <div className="text-right">
                         <button type="submit" className="btn btn-primary">
-                          Submit
+                          ADD
                         </button>
                       </div>
                     </Col>
@@ -113,24 +129,35 @@ function Charity() {
       <Card>
         <CardBody>
           <h4 className="card-title mb-3">Charity Organaization</h4>
+          {charity.map((details)=>(
           <div className="inbox-wid">
             <Link to="#" className="text-dark">
               <div className="inbox-item">
-                <div className="inbox-item-img float-start me-3">
+                <div className="inbox-item-img float-start me-4">
                   <img
                     src={user1}
-                    className="avatar-sm rounded-circle"
+                    className="avatar-md rounded-circle"
                     alt=""
                   />
                 </div>
-                <h6 className="inbox-item-author mb-1 font-size-16">Name</h6>
+                <div>
+                <h6 className="inbox-item-author mb-1 font-size-16">{details.charity}</h6>
                 <p className="inbox-item-text text-muted mb-0">
-                  515121544541541541
+                  {details._id}<br/>{details.email}
                 </p>
-                <p className="inbox-item-date text-muted">100</p>
+                </div>
+                <div>
+                <p className="inbox-item-date text-muted">{details.date}</p>
+                </div><br/>
+                <div style={{display:"flex",justifyContent:"end"}}>
+                {/* <Button color="dark" style={{marginInline:"10px"}}> Edit </Button> */}
+                <Button>Do you want Edit or Delete this Charity organaization?  </Button>
+                </div>
+
               </div>
             </Link>
           </div>
+          ))}
         </CardBody>
       </Card>
     </React.Fragment>
