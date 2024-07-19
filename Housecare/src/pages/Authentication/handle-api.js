@@ -1,7 +1,9 @@
 import axios from "axios"
 
 const BASE_URL = "http://localhost:8000/housecare"
+const CHARITY_URL = "http://localhost:8000/charity"
 
+//housecare staff creating
 export const Createstaff = async formData => {
   try {
     const response = await axios.post(`${BASE_URL}`, formData, {
@@ -15,6 +17,7 @@ export const Createstaff = async formData => {
   }
 }
 
+//staff signin
 export const handleLogin = async (e, values, setLoginStatus) => {
   e.preventDefault()
   const Data = {
@@ -45,6 +48,7 @@ export const handleLogin = async (e, values, setLoginStatus) => {
   }
 }
 
+//Housecare staff details listing
 export const fetchStaff = async () => {
   try {
     const response = await axios.get(`${BASE_URL}`)
@@ -55,6 +59,7 @@ export const fetchStaff = async () => {
   }
 }
 
+//Housecare staff delete
 export const deleteStaff = async id => {
   try {
     await axios.delete(`${BASE_URL}/${id}`)
@@ -68,6 +73,7 @@ export const deleteStaff = async id => {
   }
 }
 
+//Staff details edit by Id
 export const staffEdit = async id => {
   try {
     const response = await axios.get(`${BASE_URL}/${id}`)
@@ -78,18 +84,29 @@ export const staffEdit = async id => {
   }
 }
 
-
+//staff details update
 export const staffUpdate = async (id, formData) => {
-    try {
-      const response = await axios.put(`${BASE_URL}/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      return response.data;
-    } catch (err) {
-      console.error("Error updating staff:", err);
-      throw err;
-    }
-  };
-  
+  try {
+    const response = await axios.put(`${BASE_URL}/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    return response.data
+  } catch (err) {
+    console.error("Error updating staff:", err)
+    throw err
+  }
+}
+
+
+//charity organaization listing
+
+export const fetchCharity =async()=>{
+  try{
+    const response = await axios.get(`${CHARITY_URL}`)
+    return response.data
+  }catch(err){
+    console.log(err,"charity organaization details listing failed");
+  }
+}
