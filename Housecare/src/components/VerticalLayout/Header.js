@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import React, { useState } from "react"
 
 import { connect } from "react-redux"
@@ -47,7 +47,7 @@ const Header = props => {
         document.documentElement.mozRequestFullScreen()
       } else if (document.documentElement.webkitRequestFullscreen) {
         document.documentElement.webkitRequestFullscreen(
-          Element.ALLOW_KEYBOARD_INPUT
+          Element.ALLOW_KEYBOARD_INPUT,
         )
       }
     } else {
@@ -62,9 +62,9 @@ const Header = props => {
   }
 
   function tToggle() {
-    var body = document.body;
-    body.classList.toggle("vertical-collpsed");
-    body.classList.toggle("sidebar-enable");
+    var body = document.body
+    body.classList.toggle("vertical-collpsed")
+    body.classList.toggle("sidebar-enable")
   }
   return (
     <React.Fragment>
@@ -107,16 +107,23 @@ const Header = props => {
                 toggle={() => setCreateMenu(!createmenu)}
                 className="d-inline-block"
               >
-
                 <div className="dropdown dropdown-topbar pt-3 mt-1 d-inline-block">
-
                   <Button
                     className="btn btn-light"
                     tag="button"
+                    disabled={!localStorage.getItem("Superadmin")}
                   >
-                    <a href='/register'>Create</a> 
+                    <a
+                      href="/register"
+                      style={{
+                        pointerEvents: localStorage.getItem("Superadmin")
+                          ? "auto"
+                          : "none",
+                      }}
+                    >
+                      Create
+                    </a>
                   </Button>
-
                 </div>
               </Dropdown>
             </div>
@@ -212,16 +219,12 @@ Header.propTypes = {
   showRightSidebar: PropTypes.any,
   showRightSidebarAction: PropTypes.func,
   t: PropTypes.any,
-  toggleLeftmenu: PropTypes.func
+  toggleLeftmenu: PropTypes.func,
 }
 
 const mapStatetoProps = state => {
-  const {
-    layoutType,
-    showRightSidebar,
-    leftMenu,
-    leftSideBarType,
-  } = state.Layout
+  const { layoutType, showRightSidebar, leftMenu, leftSideBarType } =
+    state.Layout
   return { layoutType, showRightSidebar, leftMenu, leftSideBarType }
 }
 

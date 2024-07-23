@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types"
 import {
   Dropdown,
   DropdownToggle,
@@ -11,7 +11,7 @@ import {
 import { withTranslation } from "react-i18next"
 // Redux
 import { connect } from "react-redux"
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
 
 // users
@@ -20,8 +20,8 @@ import user1 from "../../../assets/images/users/user-1.jpg"
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
-
-
+  const isSuperadmin = !!localStorage.getItem("Superadmin")
+  const admins = JSON.parse(localStorage.getItem("Superadmin"))
   return (
     <React.Fragment>
       <Dropdown
@@ -41,26 +41,32 @@ const ProfileMenu = props => {
           />
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-          <DropdownItem tag="a" href="/profile">
+          <DropdownItem
+            tag="a"
+            href={`/profile/${admins.id}`}
+            disabled={!isSuperadmin}
+          >
             {" "}
-            <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1"/>
+            <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1" />
             {props.t("Profile")}{" "}
           </DropdownItem>
           <DropdownItem tag="a" href="#">
-            <i className="mdi mdi-wallet font-size-17 text-muted align-middle me-1"/>
+            <i className="mdi mdi-wallet font-size-17 text-muted align-middle me-1" />
             {props.t("My Wallet")}
           </DropdownItem>
           <DropdownItem className="d-flex align-items-center" to="#">
             <i className="mdi mdi-cog font-size-17 text-muted align-middle me-1"></i>
-            {props.t("Settings")}<span className="badge bg-success ms-auto">11</span></DropdownItem>
+            {props.t("Settings")}
+            <span className="badge bg-success ms-auto">11</span>
+          </DropdownItem>
           <DropdownItem tag="a" href="auth-lock-screen">
-            <i className="mdi mdi-lock-open-outline font-size-17 text-muted align-middle me-1"/>
+            <i className="mdi mdi-lock-open-outline font-size-17 text-muted align-middle me-1" />
             {props.t("Lock screen")}
           </DropdownItem>
-          
-          <div className="dropdown-divider"/>
+
+          <div className="dropdown-divider" />
           <Link to="/logout" className="dropdown-item text-danger">
-            <i className="mdi mdi-power font-size-17 text-muted align-middle me-1 text-danger"/>
+            <i className="mdi mdi-power font-size-17 text-muted align-middle me-1 text-danger" />
             <span>{props.t("Logout")}</span>
           </Link>
         </DropdownMenu>
@@ -71,7 +77,7 @@ const ProfileMenu = props => {
 
 ProfileMenu.propTypes = {
   success: PropTypes.any,
-  t: PropTypes.any
+  t: PropTypes.any,
 }
 
 const mapStatetoProps = state => {
@@ -80,5 +86,5 @@ const mapStatetoProps = state => {
 }
 
 export default withRouter(
-  connect(mapStatetoProps, {})(withTranslation()(ProfileMenu))
+  connect(mapStatetoProps, {})(withTranslation()(ProfileMenu)),
 )

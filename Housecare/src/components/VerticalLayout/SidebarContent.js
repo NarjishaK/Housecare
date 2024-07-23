@@ -203,7 +203,9 @@ const SidebarContent = props => {
               </Link>
             </li> */}
 
-            <li className="menu-title">{props.t("Components")}</li>
+
+{/* ////////////////////////////// */}
+            {/* <li className="menu-title">{props.t("Components")}</li>
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="mdi mdi-buffer"></i>
@@ -298,12 +300,12 @@ const SidebarContent = props => {
                   <Link to="/tables-editable">{props.t("Editable Table")}</Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
             
             
 
-            <li className="menu-title">Extras</li>
+            <li className="menu-title">Authentication</li>
 
             <li>
               <Link to="/#" className="has-arrow waves-effect">

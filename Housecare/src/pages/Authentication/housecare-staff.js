@@ -10,11 +10,18 @@ import {
   Modal,
   ModalHeader,
 } from "reactstrap"
-import { fetchStaff, deleteStaff, staffEdit,staffUpdate } from "./handle-api"
+import {
+  fetchStaff,
+  deleteStaff,
+  staffEdit,
+  staffUpdate,
+  toggleBlockStaff,
+} from "./handle-api"
 import { Link } from "react-router-dom"
 import { useForm } from "helpers/useForms"
 
 function Staff() {
+  const isSuperadmin = !!localStorage.getItem("Superadmin")
   const [modal, setModal] = useState(false)
   const [staff, setStaff] = useState([])
   const [values, handleChange, setValues] = useForm({
@@ -22,6 +29,7 @@ function Staff() {
     email: "",
     password: "",
     date: "",
+    phone:"",
   })
   const [image, setImage] = useState("")
   const [editId, setEditId] = useState(null)
@@ -45,7 +53,7 @@ function Staff() {
       console.error(err)
     }
   }
-
+  //staff delete
   const handleDelete = async id => {
     const confirmation = window.confirm(
       "Are you sure you want delete this product?",
@@ -61,7 +69,7 @@ function Staff() {
       }
     }
   }
-
+  //staff editing By Id
   const handleEdit = async id => {
     try {
       const staffData = await staffEdit(id)
@@ -69,6 +77,7 @@ function Staff() {
         staff: staffData.staff,
         email: staffData.email,
         date: staffData.date,
+        phone: staffData.phone,
       })
       setImage(staffData.image)
       setEditId(id)
@@ -78,30 +87,56 @@ function Staff() {
     }
   }
 
+  const handleUpdate = async e => {
+    e.preventDefault()
+    const formData = new FormData()
+    formData.append("staff", values.staff)
+    formData.append("email", values.email)
+    formData.append("date", values.date)
+    formData.append("phone", values.phone)
+    formData.append("password", values.password)
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("staff", values.staff);
-    formData.append("email", values.email);
-    formData.append("date", values.date);
-    formData.append("password", values.password); 
-  
     if (image) {
-      formData.append("image", image);
+      formData.append("image", image)
     }
-  
+
     try {
-      await staffUpdate(editId, formData);
-      toggleModal();
-      loadData();
-      alert("Update successful");
+      await staffUpdate(editId, formData)
+      toggleModal()
+      loadData()
+      alert("Update successful")
     } catch (err) {
-      console.error("Error updating staff:", err);
-      alert("Update failed");
+      console.error("Error updating staff:", err)
+      alert("Update failed")
     }
-  };
-  
+  }
+
+  //revok staff
+
+  const handleBlock = async (id, currentStatus) => {
+    const confirmation = window.confirm(
+      `Are you sure you want to ${currentStatus ? "unblock" : "block"} this staff?`,
+    )
+    if (confirmation) {
+      try {
+        const updatedStaff = await toggleBlockStaff(id)
+        console.log(updatedStaff)
+        setStaff(prevStaff =>
+          prevStaff.map(s =>
+            s._id === id ? { ...s, isBlocked: !currentStatus } : s,
+          ),
+        )
+        alert(`Staff ${currentStatus ? "unblocked" : "blocked"} successfully`)
+      } catch (err) {
+        console.error(
+          `Error ${currentStatus ? "unblocking" : "blocking"} staff:`,
+          err,
+        )
+        alert(`Failed to ${currentStatus ? "unblock" : "block"} staff`)
+      }
+    }
+  }
+
   return (
     <React.Fragment>
       <Card>
@@ -111,9 +146,9 @@ function Staff() {
           <div className="table-responsive">
             <Table className="align-middle table-centered table-vertical table-nowrap">
               <thead>
-                <tr>
+                <tr style={{fontWeight:"bold"}}>
                   <td>Staff</td>
-                  <td>Email</td>
+                  <td>Email & Phone</td>
                   <td>Date</td>
                   <td style={{ textAlign: "center" }}>Action</td>
                 </tr>
@@ -129,7 +164,7 @@ function Staff() {
                       />{" "}
                       {staffs.staff}
                     </td>
-                    <td>{staffs.email}</td>
+                    <td>{staffs.email}<br/>{staffs.phone}</td>
                     <td>{staffs.date}</td>
                     <td style={{ justifyContent: "center", display: "flex" }}>
                       {/* <Card> */}
@@ -140,7 +175,10 @@ function Staff() {
                           }}
                           to="#"
                         >
-                          <Button onClick={() => handleEdit(staffs._id)}>
+                          <Button
+                            onClick={() => handleEdit(staffs._id)}
+                            disabled={!isSuperadmin}
+                          >
                             Edit
                           </Button>
                         </Link>
@@ -190,7 +228,7 @@ function Staff() {
                                 </div>
                               </Col>
                               <Col lg={4}>
-                              <div className="mb-3">
+                                <div className="mb-3">
                                   <label htmlFor="date">Date</label>
                                   <input
                                     className="form-control"
@@ -203,7 +241,19 @@ function Staff() {
                               </Col>
                             </Row>
                             <Row>
-                              <Col lg={12}>
+                            <Col lg={6}>
+                                <div className="mb-3">
+                                  <label htmlFor="phone">Phone Number</label>
+                                  <input
+                                    className="form-control"
+                                    type="number"
+                                    name="phone"
+                                    value={values.phone}
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </Col>
+                              <Col lg={6}>
                                 <div className="mb-3">
                                   <label htmlFor="image">image</label>
                                   <input
@@ -224,7 +274,7 @@ function Staff() {
                                     className="btn btn-primary"
                                     onClick={handleUpdate}
                                   >
-                                   Update
+                                    Update
                                   </button>
                                 </div>
                               </Col>
@@ -238,10 +288,23 @@ function Staff() {
                       <Button
                         color="dark"
                         size="sm"
+                        style={{ marginInline: "10px" }}
                         className="waves-effect waves-light"
                         onClick={() => handleDelete(staffs._id)}
+                        disabled={!isSuperadmin}
                       >
                         Delete
+                      </Button>
+                      <Button
+                        color="danger"
+                        style={{ paddingInline: "10px", width: "75px" }}
+                        className="waves-effect waves-light"
+                        disabled={!isSuperadmin}
+                        onClick={() =>
+                          handleBlock(staffs._id, staffs.isBlocked)
+                        }
+                      >
+                        {staffs.isBlocked ? "Unblock" : "Block"}
                       </Button>
                     </td>
                   </tr>

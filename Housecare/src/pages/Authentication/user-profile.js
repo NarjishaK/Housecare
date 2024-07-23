@@ -4,117 +4,132 @@ import {
   Row,
   Col,
   Card,
-  Alert,
   CardBody,
   Button,
   Label,
   Input,
-  FormFeedback,
   Form,
 } from "reactstrap";
-
-// Formik Validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
-
-//redux
-import { useSelector, useDispatch } from "react-redux";
-import { createSelector } from "reselect";
 import withRouter from "components/Common/withRouter";
-
-
-import user1 from "../../assets/images/users/user-1.jpg";
-// actions
-import { editProfile, resetProfileFlag } from "../../store/actions";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { useForm } from "helpers/useForms";
 
 const UserProfile = () => {
+  document.title = "Profile | Admin Profile";
 
-  //meta title
-  document.title = "Profile | Skote - React Admin & Dashboard Template";
-
-  const dispatch = useDispatch();
-
-  const [email, setemail] = useState("");
-  const [name, setname] = useState("");
-  const [idx, setidx] = useState(1);
-
-  const selectProfileState = (state) => state.Profile;
-    const ProfileProperties = createSelector(
-      selectProfileState,
-        (profile) => ({
-          error: profile.error,
-          success: profile.success,
-        })
-    );
-
-    const {
-      error,
-      success
-  } = useSelector(ProfileProperties);
+  const [superadmin, setSuperAdmin] = useState(null);
+  const { id } = useParams();
+  const [values, handleChange, setValues] = useForm({
+    admin: "",
+    email: "",
+  });
+  const [image, setImage] = useState(""); 
 
   useEffect(() => {
-    if (localStorage.getItem("authUser")) {
-      const obj = JSON.parse(localStorage.getItem("authUser"));
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        setname(obj.displayName);
-        setemail(obj.email);
-        setidx(obj.uid);
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        setname(obj.username);
-        setemail(obj.email);
-        setidx(obj.uid);
+    const storedSuperadmin = localStorage.getItem("Superadmin");
+    if (storedSuperadmin) {
+      const parsedSuperadmin = JSON.parse(storedSuperadmin);
+      setSuperAdmin(parsedSuperadmin);
+      setValues({
+        admin: parsedSuperadmin.admin,
+        email: parsedSuperadmin.email,
+      });
+      setImage(`http://localhost:8000/${parsedSuperadmin.image}`); // Set image URL
+    }
+  }, [setValues]);
+
+  const handleImage = (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage) {
+      setImage(URL.createObjectURL(selectedImage)); 
+      setValues((prevValues) => ({
+        ...prevValues,
+        image: selectedImage
+      }));
+    }
+  };
+
+  useEffect(() => {
+    if (!id) {
+      console.error("Admin ID is undefined.");
+      alert("Admin ID is missing.");
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/admin/${id}`);
+        const adminData = response.data;
+        setValues({
+          admin: adminData.admin,
+          email: adminData.email,
+        });
+        setImage(`http://localhost:8000/${adminData.image}`); 
+        setSuperAdmin(adminData);
+      } catch (err) {
+        console.error("An error occurred while fetching admin data:", err);
       }
-      setTimeout(() => {
-        dispatch(resetProfileFlag());
-      }, 3000);
+    };
+
+    fetchData();
+  }, [id, setValues]);
+  const [admins, setAdmin] = useState([])
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("admin", values.admin);
+    formData.append("email", values.email);
+    if (values.image) {
+      formData.append("image", values.image);
+    }  
+
+    try {
+      const response = await axios.put(`http://localhost:8000/admin/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      localStorage.setItem(
+        "Superadmin",
+        JSON.stringify({
+          ...admins,
+          email: values.email,
+          admin: values.admin,
+          image: response.data.image,
+        }),
+      )
+      setAdmin(JSON.parse(localStorage.getItem("Superadmin")))
+     alert(" updated successfull!")
+    } catch (err) {
+      console.error("An error occurred while updating admin data:", err);
+      alert("Failed to update admin. Please check the console for more details.");
     }
-  }, [dispatch, success]);
-
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      username: name || '',
-      idx: idx || '',
-    },
-    validationSchema: Yup.object({
-      username: Yup.string().required("Please Enter Your UserName"),
-    }),
-    onSubmit: (values) => {
-      dispatch(editProfile(values));
-    }
-  });
-
+  };
 
   return (
     <React.Fragment>
       <div className="page-content p-0">
         <Container fluid>
-
           <Row>
             <Col lg="12">
-              {error && error ? <Alert color="danger">{error}</Alert> : null}
-              {success ? <Alert color="success">{success}</Alert> : null}
-
               <Card>
                 <CardBody>
                   <div className="d-flex">
                     <div className="ms-3">
                       <img
-                        src={user1}
+                        src={`http://localhost:8000/upload/${superadmin?.image}`||image} 
                         alt=""
                         className="avatar-md rounded-circle img-thumbnail"
                       />
                     </div>
                     <div className="flex-grow-1 align-self-center">
                       <div className="text-muted">
-                        <h5>{name}</h5>
-                        <p className="mb-1">{email}</p>
-                        <p className="mb-0">Id no: #{idx}</p>
+                        <h5 className="ms-3">{superadmin?.admin}</h5>
+                        <p className="mb-1 ms-3">{superadmin?.email}</p>
+                        <p className="mb-1 ms-3">
+                          {superadmin?._id || "ID not available"}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -123,41 +138,45 @@ const UserProfile = () => {
             </Col>
           </Row>
 
-          <h4 className="card-title mb-4">Change User Name</h4>
+          <h4 className="card-title mb-4">Update Super Admin</h4>
 
           <Card>
             <CardBody>
-              <Form
-                className="form-horizontal"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  validation.handleSubmit();
-                  return false;
-                }}
-              >
+              <Form className="form-horizontal" onSubmit={handleUpdate}>
                 <div className="form-group">
-                  <Label className="form-label">User Name</Label>
+                  <Label className="form-label">Admin Name</Label>
                   <Input
-                    name="username"
-                    // value={name}
+                    name="admin"
+                    value={values.admin}
+                    onChange={handleChange}
                     className="form-control"
-                    placeholder="Enter User Name"
+                    placeholder="Enter Admin Name"
                     type="text"
-                    onChange={validation.handleChange}
-                    onBlur={validation.handleBlur}
-                    value={validation.values.username || ""}
-                    invalid={
-                      validation.touched.username && validation.errors.username ? true : false
-                    }
                   />
-                  {validation.touched.username && validation.errors.username ? (
-                    <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
-                  ) : null}
-                  <Input name="idx" value={idx} type="hidden" />
+                  <br />
+                  <Label className="form-label">Email</Label>
+                  <Input
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    className="form-control"
+                    placeholder="Enter Email Address"
+                    type="email"
+                  />
+                  <br />
+                  <Label className="form-label">Profile Image</Label>
+                  <Input
+                    name="image"
+                    className="form-control"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImage}
+                  />
+                  <br />
                 </div>
                 <div className="text-center mt-4">
                   <Button type="submit" color="danger">
-                    Update User Name
+                    Update
                   </Button>
                 </div>
               </Form>
