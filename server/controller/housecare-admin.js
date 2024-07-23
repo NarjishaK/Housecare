@@ -2,9 +2,9 @@ const asyncHandler = require("express-async-handler");
 const Staffs = require("../model/housecare-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+//create new staff
 exports.create = asyncHandler(async (req, res) => {
-  const { staff, email, password,date } = req.body;
+  const { staff, email, password,date,phone } = req.body;
   const image = req.file.filename;
 
   try {
@@ -19,6 +19,7 @@ exports.create = asyncHandler(async (req, res) => {
       password: password,
       email: email,
       date:date,
+      phone:phone,
       image: image,
     });
     if (!admin) {
@@ -34,7 +35,7 @@ exports.create = asyncHandler(async (req, res) => {
       .json({ err: "something went wrong in Admin creation" });
   }
 });
-
+//staff login 
 exports.signin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -45,6 +46,12 @@ exports.signin = asyncHandler(async (req, res) => {
         .status(400)
         .json({ invalid: true, message: "Invalid email or password" });
     }
+    if (admin.isBlocked) {
+      console.log("Account is blocked for email:", email);
+      return res
+        .status(403)
+        .json({ invalid: true, message: "Your account is blocked. Please contact support." });
+    }
     const isPasswordIsMatch = await bcrypt.compare(password, admin.password);
     if (admin && isPasswordIsMatch) {
       const HomecareAdmin = {
@@ -52,6 +59,7 @@ exports.signin = asyncHandler(async (req, res) => {
         email: admin.email,
         image: admin.image,
         date:admin.date,
+        phone:admin.phone,
       };
       const token = jwt.sign({ email: admin.email }, "myjwtsecretkey");
       admin.tokens = token;
@@ -67,7 +75,7 @@ exports.signin = asyncHandler(async (req, res) => {
     return res.status(500).json({ err: "Invalid email or password" });
   }
 });
-
+//list staff details
 exports.list = asyncHandler(async (req, res) => {
   try {
     const admin = await Staffs.find();
@@ -83,7 +91,7 @@ exports.list = asyncHandler(async (req, res) => {
     return res.status(500).json({ err: "Admin listing failed" });
   }
 });
-
+//edit by id staff details
 exports.edit = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
@@ -102,9 +110,9 @@ exports.edit = asyncHandler(async (req, res) => {
       .json({ err: "an error occured in Admin details edit by Id" });
   }
 });
-
+//update staff details
 exports.update = asyncHandler(async (req, res) => {
-  const { staff, email, password ,date} = req.body;
+  const { staff, email, password ,date,phone} = req.body;
   const { id } = req.params;
   try {
     const admin = await Staffs.findById(id);
@@ -116,6 +124,7 @@ exports.update = asyncHandler(async (req, res) => {
     admin.password = password;
     admin.staff = staff;
     admin.date = date;
+    admin.phone =phone;
     if (req.file) {
       admin.image = req.file.filename;
     }
@@ -129,6 +138,7 @@ exports.update = asyncHandler(async (req, res) => {
   }
 });
 
+//delete staff
 exports.delete = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -148,3 +158,21 @@ exports.delete = asyncHandler(async (req, res) => {
       .json({ message: "an error occured in admin delete" });
   }
 });
+
+//revok staff
+exports.block = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const staff = await Staffs.findById(id);
+    if (!staff) {
+      return res.status(404).json({ message: "Staff not found" });
+    }
+
+    staff.isBlocked = !staff.isBlocked; 
+    await staff.save();
+    res.json(staff);
+  } catch (error) {
+    console.error("Error in Block Staff:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

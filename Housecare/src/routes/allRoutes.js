@@ -68,11 +68,14 @@ import Chat from "pages/Chat/Chat";
 import Kanban from "pages/Kanban"
 import Staff from "pages/staffs"
 import Charity from "pages/Authentication/charity"
+import Superadmin from "pages/Authentication/superadmin"
+
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   {path:"/staffs",component:<Staff/>},
   {path:"/housecarestaffs",component:<HousecareStaff/>},
   {path:"/charity",component:<Charity/>},
+  {path:"/admin",component:<Charity/>},
 
   // //calendar
   { path: "/calendar", component: <Calendar /> },
@@ -80,8 +83,9 @@ const userRoutes = [
   { path: "/chat", component: <Chat /> },
   { path: "/kanbanboard", component: <Kanban /> },
 
+  
   // // //profile
-  { path: "/profile", component: <UserProfile /> },
+  { path: "/profile/:id", component: <UserProfile /> },
 
   // //Email
   { path: "/email-inbox", component: <EmailInbox /> },
@@ -95,10 +99,6 @@ const userRoutes = [
   { path: "/tables-datatable", component: <DatatableTables /> },
   { path: "/tables-responsive", component: <ResponsiveTables /> },
   { path: "/tables-editable", component: <EditableTables /> },
-
-  // // Maps
-  // { path: "/maps-google", component: <MapsGoogle /> },
-  // { path: "/maps-vector", component: <MapsVector /> },
 
   // // Forms
   { path: "/form-elements", component: <FormElements /> },
@@ -131,7 +131,7 @@ const userRoutes = [
   {
     path: "/",
     exact: true,
-    component: <Navigate to="/dashboard" />,
+    component: <Navigate to="/admin" />,
   },
 ]
 
@@ -140,6 +140,7 @@ const authRoutes = [
   { path: "/login", component: <Login /> },
   { path: "/forgot-password", component: <ForgetPwd /> },
   { path: "/register", component: <Register /> },
+  { path: "/admin", component: <Superadmin /> },
 
   { path: "/pages-404", component: <Pages404 /> },
   { path: "/pages-500", component: <Pages500 /> },

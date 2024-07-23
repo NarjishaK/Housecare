@@ -26,6 +26,7 @@ const Register = props => {
     email: "",
     password: "",
     date:"",
+    phone:"",
   })
   const [image, setImage] = useState("")
   const [registrationStatus, setRegistrationStatus] = useState(null)
@@ -37,13 +38,18 @@ const Register = props => {
 
   const handleCreate = async e => {
     e.preventDefault()
-
+    // if (!values.staff || !values.email || !values.password || !values.date || !image) {
+    //   setRegistrationStatus("error");
+    //   return;
+    // }
     let formData = new FormData()
     formData.append("staff", values.staff)
     formData.append("password", values.password)
     formData.append("email", values.email)
     formData.append("date", values.date)
     formData.append("image", image)
+    formData.append("phone", values.phone)
+    
     try {
       const response = await Createstaff(formData)
       setRegistrationStatus("success")
@@ -154,6 +160,16 @@ const Register = props => {
                           type="date"
                           placeholder="Joining Date"
                           value={values.date}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <Label htmlFor="phone">Phone</Label>
+                        <Input
+                          name="phone"
+                          type="number"
+                          placeholder="Phone Number"
+                          value={values.phone}
                           onChange={handleChange}
                         />
                       </div>

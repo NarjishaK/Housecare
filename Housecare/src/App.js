@@ -1,30 +1,29 @@
-import PropTypes from 'prop-types'
-import React from "react"
-
-import { Route, Routes } from "react-router-dom"
-import { connect } from "react-redux"
+import PropTypes from 'prop-types';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { connect } from "react-redux";
 
 // Import Routes all
-import { userRoutes, authRoutes } from "./routes/allRoutes"
+import { userRoutes, authRoutes } from "./routes/allRoutes";
 
 // Import all middleware
-import Authmiddleware from "./routes/middleware/Authmiddleware"
+import Authmiddleware from "./routes/middleware/Authmiddleware";
 
 // layouts Format
-import VerticalLayout from "./components/VerticalLayout/"
-import HorizontalLayout from "./components/HorizontalLayout/"
-import NonAuthLayout from "./components/NonAuthLayout"
+import VerticalLayout from "./components/VerticalLayout/";
+import HorizontalLayout from "./components/HorizontalLayout/";
+import NonAuthLayout from "./components/NonAuthLayout";
 
 // Import scss
-import "./assets/scss/theme.scss"
+import "./assets/scss/theme.scss";
 
 // Import Firebase Configuration file
-// import { initFirebaseBackend } from "./helpers/firebase_helper"
+// import { initFirebaseBackend } from "./helpers/firebase_helper";
 
-import fakeBackend from "./helpers/AuthType/fakeBackend"
+import fakeBackend from "./helpers/AuthType/fakeBackend";
 
 // Activating fake backend
-fakeBackend()
+fakeBackend();
 
 // const firebaseConfig = {
 //   apiKey: process.env.REACT_APP_APIKEY,
@@ -35,73 +34,62 @@ fakeBackend()
 //   messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
 //   appId: process.env.REACT_APP_APPID,
 //   measurementId: process.env.REACT_APP_MEASUREMENTID,
-// }
+// };
 
 // init firebase backend
-// initFirebaseBackend(firebaseConfig)
+// initFirebaseBackend(firebaseConfig);
 
-const App = props => {
-// {alert('hiii')}
-//   useEffect(() => {
-//     alert('hii')
-//     document.getElementsByTagName("html")[0].setAttribute("dir", "rtl");
-//   }, [])
-
+const App = (props) => {
   function getLayout() {
-    let layoutCls = VerticalLayout
     switch (props.layout.layoutType) {
       case "horizontal":
-        layoutCls = HorizontalLayout
-        break
+        return HorizontalLayout;
       default:
-        layoutCls = VerticalLayout
-        break
+        return VerticalLayout;
     }
-    return layoutCls
   }
 
-  const Layout = getLayout()
+  const Layout = getLayout();
+
   return (
     <React.Fragment>
       <Routes>
-      {/* Non-authenticated routes */}
-      {authRoutes.map((route, idx) => (
-        <Route
-          key={idx}
-          path={route.path}
-          element={
-            <NonAuthLayout>
-              {route.component}
-          </NonAuthLayout>
-          }
-        />
-      ))}
+        {/* Non-authenticated routes */}
+        {authRoutes.map((route, idx) => (
+          <Route
+            key={idx}
+            path={route.path}
+            element={
+              <NonAuthLayout>
+                {route.component}
+              </NonAuthLayout>
+            }
+          />
+        ))}
 
-      {/* Authenticated routes */}
-      {userRoutes.map((route, idx) => (
-        <Route
-          key={idx}
-          path={route.path}
-          element={
-            <Authmiddleware>
-              <Layout>{route.component}</Layout>
-              </Authmiddleware>              
-          }
-        />
-      ))}
-    </Routes>
+        {/* Authenticated routes */}
+        {userRoutes.map((route, idx) => (
+          <Route
+            key={idx}
+            path={route.path}
+            element={
+              <Authmiddleware>
+                <Layout>{route.component}</Layout>
+              </Authmiddleware>
+            }
+          />
+        ))}
+      </Routes>
     </React.Fragment>
-  )
-}
+  );
+};
 
 App.propTypes = {
-  layout: PropTypes.any
-}
+  layout: PropTypes.any,
+};
 
-const mapStateToProps = state => {
-  return {
-    layout: state.Layout,
-  }
-}
+const mapStateToProps = (state) => ({
+  layout: state.Layout,
+});
 
-export default connect(mapStateToProps, null)(App)
+export default connect(mapStateToProps, null)(App);
