@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-
+const dblink = process.env.MONGODB_URI
 function connectDB() {
-    mongoose.connect("mongodb+srv://narjishakuniyil:e7eEAKgbyxLzh3AG@housecare.243sss4.mongodb.net/?retryWrites=true&w=majority&appName=housecare", {
+    mongoose.connect(dblink, {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
     })
