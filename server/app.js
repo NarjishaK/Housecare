@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+require('dotenv').config();
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var connectDB =require('./config/db')
@@ -10,6 +11,7 @@ var usersRouter = require('./routes/users');
 var housecareRouter = require('./routes/housecare');
 var charityRouter = require("./routes/charity")
 var adminRouter = require("./routes/admin")
+var charitystaffRouter = require("./routes/charitystaff")
 
 connectDB()
 
@@ -35,6 +37,7 @@ app.use('/users', usersRouter);
 app.use('/housecare', housecareRouter);
 app.use('/charity',charityRouter);
 app.use('/admin',adminRouter);
+app.use('/charitystaff',charitystaffRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

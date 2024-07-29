@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
-const dblink = process.env.MONGODB_URI
+require('dotenv').config();
+
+const dblink = process.env.MONGODB_URI;
+console.log("helooo",dblink);
 function connectDB() {
     mongoose.connect(dblink, {
-        // useNewUrlParser: true,
-        // useUnifiedTopology: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
     })
     .then(() => {
         console.log("Database connected successfully");
@@ -15,5 +18,3 @@ function connectDB() {
 }
 
 module.exports = connectDB;
-
-

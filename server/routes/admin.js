@@ -38,3 +38,4 @@ router.get("/", AdminController.lists);
 router.get("/:id",AdminController.edit)
 router.put("/:id", upload.single('image'), AdminController.updateAdmin);
 module.exports = router;
+

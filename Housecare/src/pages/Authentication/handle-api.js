@@ -40,6 +40,7 @@ export const handleLogin = async (e, values, setLoginStatus) => {
       localStorage.setItem("HomecareAdmin", JSON.stringify(HomecareAdmin))
       console.log("Token and user data stored in Local storage")
       window.location.href = "/dashboard"
+      // history.push("/dashboard");
     }
   } catch (err) {
     setLoginStatus("error")

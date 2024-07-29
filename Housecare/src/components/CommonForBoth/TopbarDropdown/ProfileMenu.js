@@ -43,7 +43,7 @@ const ProfileMenu = props => {
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem
             tag="a"
-            href={`/profile/${admins.id}`}
+            href={isSuperadmin ? `/profile/${admins.id}` : "#"}
             disabled={!isSuperadmin}
           >
             {" "}
