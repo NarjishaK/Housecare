@@ -56,6 +56,7 @@ import UiPagination from "../pages/Ui/UiPagination"
 import UiPopoverTooltips from "../pages/Ui/UiPopoverTooltips"
 import UiTabsAccordions from "../pages/Ui/UiTabsAccordions"
 import UiSessionTimeout from "../pages/Ui/UiSessionTimeout"
+import CharityDetails from "pages/Authentication/charitydetails"
 
 //Extra Pages
 import PagesInvoice from "../pages/Extra Pages/pages-invoice";
@@ -76,6 +77,7 @@ const userRoutes = [
   {path:"/housecarestaffs",component:<HousecareStaff/>},
   {path:"/charity",component:<Charity/>},
   {path:"/admin",component:<Charity/>},
+  {path:"/charitydetails/:id",component:<CharityDetails/>},
 
   // //calendar
   { path: "/calendar", component: <Calendar /> },

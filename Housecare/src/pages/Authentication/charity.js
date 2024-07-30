@@ -30,6 +30,12 @@ function Charity() {
     charity: "",
     email: "",
     date: "",
+    arbic: "",
+    CR_NO: "",
+    role: "",
+    VAT_REG_NO: "",
+    authorizedperson: "",
+    phone: "",
   })
 
   function removeBodyCss() {
@@ -62,6 +68,12 @@ function Charity() {
     formData.append("charity", values.charity)
     formData.append("email", values.email)
     formData.append("date", values.date)
+    formData.append("arbic", values.arbic)
+    formData.append("CR_NO", values.CR_NO)
+    formData.append("role", values.role)
+    formData.append("VAT_REG_NO", values.VAT_REG_NO)
+    formData.append("phone", values.phone)
+    formData.append("authorizedperson", values.authorizedperson)
     formData.append("image", image)
     try {
       await handleCharity(formData)
@@ -91,7 +103,13 @@ function Charity() {
       setValues({
         charity: charityDetails.charity,
         email: charityDetails.email,
+        CR_NO: charityDetails.CR_NO,
+        role: charityDetails.role,
         date: charityDetails.date,
+        VAT_REG_NO: charityDetails.VAT_REG_NO,
+        phone: charityDetails.phone,
+        arbic: charityDetails.arbic,
+        authorizedperson: charityDetails.authorizedperson,
       })
       setmodal_center(true)
     } catch (err) {
@@ -105,6 +123,12 @@ function Charity() {
     const formData = new FormData()
     formData.append("email", values.email)
     formData.append("date", values.date)
+    formData.append("CR_NO", values.CR_NO)
+    formData.append("role", values.role)
+    formData.append("VAT_REG_NO", values.VAT_REG_NO)
+    formData.append("arbic", values.arbic)
+    formData.append("phone", values.phone)
+    formData.append("authorizedperson", values.authorizedperson)
     formData.append("charity", values.charity)
 
     if (image) {
@@ -124,6 +148,10 @@ function Charity() {
   const handleImage = e => {
     const selectedImage = e.target.files[0]
     setImage(selectedImage)
+  }
+  //charity details
+  const handleView = _id => {
+    window.location.href = `charitydetails/${_id}`
   }
   return (
     <React.Fragment>
@@ -174,6 +202,19 @@ function Charity() {
                     </Col>
                     <Col lg={4}>
                       <div className="mb-3">
+                        <label htmlFor="name">اسم الجمعية الخيرية</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="arbic"
+                          value={values.arbic}
+                          onChange={handleChange}
+                          placeholder="اسم الجمعية الخيرية"
+                        />
+                      </div>
+                    </Col>
+                    <Col lg={4}>
+                      <div className="mb-3">
                         <label htmlFor="email">Email</label>
                         <input
                           type="email"
@@ -182,6 +223,79 @@ function Charity() {
                           value={values.email}
                           onChange={handleChange}
                           placeholder="Enter Email"
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg={4}>
+                      <div className="mb-3">
+                        <label htmlFor="CR_NO">CR_NO</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="CR_NO"
+                          value={values.CR_NO}
+                          onChange={handleChange}
+                          placeholder="CR_NO"
+                        />
+                      </div>
+                    </Col>
+                    <Col lg={4}>
+                      <div className="mb-3">
+                        <label htmlFor="VAT_REG_NO">VAT_REG_NO</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="VAT_REG_NO"
+                          value={values.VAT_REG_NO}
+                          onChange={handleChange}
+                          placeholder="VAT_REG_NO"
+                        />
+                      </div>
+                    </Col>
+                    <Col lg={4}>
+                      <div className="mb-3">
+                        <label htmlFor="Phone">Phone</label>
+                        <input
+                          type="number"
+                          className="form-control"
+                          name="phone"
+                          value={values.phone}
+                          onChange={handleChange}
+                          placeholder="Phone No"
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col lg={4}>
+                      <div className="mb-3">
+                        <label htmlFor="Role">Role</label>
+                        <select
+                          className="form-control"
+                          name="role"
+                          value={values.role}
+                          onChange={handleChange}
+                        >
+                          <option>Main_Admin</option>
+                          <option>DATA_ENTRY</option>
+                          <option>DATA_VERIFY</option>
+                        </select>
+                      </div>
+                    </Col>
+                    <Col lg={4}>
+                      <div className="mb-3">
+                        <label htmlFor="Authorizedperson">
+                          Authorizedperson
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="authorizedperson"
+                          value={values.authorizedperson}
+                          onChange={handleChange}
+                          placeholder="Authorizedperson"
                         />
                       </div>
                     </Col>
@@ -248,12 +362,12 @@ function Charity() {
                   </div>
                   <div>
                     <h6 className="inbox-item-author mb-1 font-size-16">
-                      {details.charity}
+                      {details.authorizedperson}
                     </h6>
                     <p className="inbox-item-text text-muted mb-0">
-                      {details._id}
+                      {details.arbic}
                       <br />
-                      {details.email}
+                      {details.charity}
                     </p>
                   </div>
                   <div>
@@ -264,7 +378,7 @@ function Charity() {
                   {/* <Button  >Edit </Button> */}
                   <Col style={{ display: "flex", justifyContent: "end" }}>
                     <div
-                      className="text-center"
+                      // className="text-center"
                       onClick={() => {
                         tog_center()
                       }}
@@ -308,6 +422,39 @@ function Charity() {
                         <Row>
                           <Col lg={6}>
                             <div className="mb-3">
+                              <label htmlFor="authorizedperson">
+                                Authorizedperson
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                name="authorizedperson"
+                                value={values.authorizedperson}
+                                onChange={handleChange}
+                                placeholder="Authorizedperson"
+                              />
+                            </div>
+                          </Col>
+                          <Col lg={6}>
+                            <div className="mb-3">
+                              <label htmlFor="Role">Role</label>
+                              <select
+                                className="form-control"
+                                name="role"
+                                value={values.role}
+                                onChange={handleChange}
+                              >
+                                <option>Role</option>
+                                <option>Main_Admin</option>
+                                <option>DATA_ENTRY</option>
+                                <option>DATA_VERIFY</option>
+                              </select>
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={6}>
+                            <div className="mb-3">
                               <label htmlFor="name">Charity</label>
                               <input
                                 type="text"
@@ -321,6 +468,23 @@ function Charity() {
                           </Col>
                           <Col lg={6}>
                             <div className="mb-3">
+                              <label htmlFor="name">
+                              اسم الجمعية الخيرية
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                name="arbic"
+                                value={values.arbic}
+                                onChange={handleChange}
+                                placeholder="اسم الجمعية الخيرية"
+                              />
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={6}>
+                            <div className="mb-3">
                               <label htmlFor="email">Email</label>
                               <input
                                 type="email"
@@ -329,6 +493,47 @@ function Charity() {
                                 value={values.email}
                                 onChange={handleChange}
                                 placeholder="Enter Email"
+                              />
+                            </div>
+                          </Col>
+                          <Col lg={6}>
+                            <div className="mb-3">
+                              <label htmlFor="Phone">Phone No</label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                name="phone"
+                                value={values.phone}
+                                onChange={handleChange}
+                                placeholder="Phone No"
+                              />
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={6}>
+                            <div className="mb-3">
+                              <label htmlFor="VAT_REG_NO">VAT_REG_NO</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                name="VAT_REG_NO"
+                                value={values.VAT_REG_NO}
+                                onChange={handleChange}
+                                placeholder="VAT_REG_NO"
+                              />
+                            </div>
+                          </Col>
+                          <Col lg={6}>
+                            <div className="mb-3">
+                              <label htmlFor="CR_NO">CR_NO</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                name="CR_NO"
+                                value={values.CR_NO}
+                                onChange={handleChange}
+                                placeholder="CR_NO"
                               />
                             </div>
                           </Col>
@@ -363,8 +568,14 @@ function Charity() {
                         <Button onClick={handleUpdate}>Update</Button>
                       </div>
                     </Modal>
-                    <Button onClick={() => handleDelete(details._id)}>
+                    <Button
+                      onClick={() => handleDelete(details._id)}
+                      style={{ marginInline: "10px" }}
+                    >
                       Delete{" "}
+                    </Button>
+                    <Button onClick={() => handleView(details._id)}>
+                      View{" "}
                     </Button>
                   </Col>
 

@@ -25,7 +25,7 @@ const Register = props => {
     staff: "",
     email: "",
     password: "",
-    date:"",
+    iqama:"",
     phone:"",
   })
   const [image, setImage] = useState("")
@@ -46,7 +46,7 @@ const Register = props => {
     formData.append("staff", values.staff)
     formData.append("password", values.password)
     formData.append("email", values.email)
-    formData.append("date", values.date)
+    formData.append("iqama", values.iqama)
     formData.append("image", image)
     formData.append("phone", values.phone)
     
@@ -154,12 +154,12 @@ const Register = props => {
                         />
                       </div>
                       <div className="mb-3">
-                        <Label htmlFor="date">Date</Label>
+                        <Label htmlFor="iqama">Iqama No</Label>
                         <Input
-                          name="date"
-                          type="date"
-                          placeholder="Joining Date"
-                          value={values.date}
+                          name="iqama"
+                          type="text"
+                          placeholder="Iqama No"
+                          value={values.iqama}
                           onChange={handleChange}
                         />
                       </div>

@@ -21,6 +21,7 @@
     "axios": "^1.7.2",
     "axios-mock-adapter": "^1.22.0",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "c3": "^0.7.20",
     "draft-js": "^0.11.7",
     "firebase": "^10.12.4",

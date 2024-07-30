@@ -28,7 +28,7 @@ function Staff() {
     staff: "",
     email: "",
     password: "",
-    date: "",
+    iqama: "",
     phone:"",
   })
   const [image, setImage] = useState("")
@@ -76,7 +76,7 @@ function Staff() {
       setValues({
         staff: staffData.staff,
         email: staffData.email,
-        date: staffData.date,
+        iqama: staffData.iqama,
         phone: staffData.phone,
       })
       setImage(staffData.image)
@@ -92,7 +92,7 @@ function Staff() {
     const formData = new FormData()
     formData.append("staff", values.staff)
     formData.append("email", values.email)
-    formData.append("date", values.date)
+    formData.append("iqama", values.iqama)
     formData.append("phone", values.phone)
     formData.append("password", values.password)
 
@@ -149,7 +149,7 @@ function Staff() {
                 <tr style={{fontWeight:"bold"}}>
                   <td>Staff</td>
                   <td>Email & Phone</td>
-                  <td>Date</td>
+                  <td>Iqama No</td>
                   <td style={{ textAlign: "center" }}>Action</td>
                 </tr>
               </thead>
@@ -165,7 +165,7 @@ function Staff() {
                       {staffs.staff}
                     </td>
                     <td>{staffs.email}<br/>{staffs.phone}</td>
-                    <td>{staffs.date}</td>
+                    <td>{staffs.iqama}</td>
                     <td style={{ justifyContent: "center", display: "flex" }}>
                       {/* <Card> */}
                       <div size="sm" style={{ paddingInline: "10px" }}>
@@ -229,12 +229,12 @@ function Staff() {
                               </Col>
                               <Col lg={4}>
                                 <div className="mb-3">
-                                  <label htmlFor="date">Date</label>
+                                  <label htmlFor="iqama">Iqama No</label>
                                   <input
                                     className="form-control"
-                                    type="date"
-                                    name="date"
-                                    value={values.date}
+                                    type="text"
+                                    name="iqama"
+                                    value={values.iqama}
                                     onChange={handleChange}
                                   />
                                 </div>

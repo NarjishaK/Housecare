@@ -6,7 +6,7 @@ const housecareSchema = mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String,required:true },
   image: { type: String, required: true },
-  date:{type:String,required:true},
+  iqama:{type:String,required:true},
   phone:{type:Number,required:true},
   isBlocked: { type: Boolean, default: false },
   tokens: { type: String, default: "" },

@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 //create new staff
 exports.create = asyncHandler(async (req, res) => {
-  const { staff, email, password,date,phone } = req.body;
+  const { staff, email, password,iqama,phone } = req.body;
   const image = req.file.filename;
 
   try {
@@ -18,7 +18,7 @@ exports.create = asyncHandler(async (req, res) => {
       staff: staff,
       password: password,
       email: email,
-      date:date,
+      iqama:iqama,
       phone:phone,
       image: image,
     });
@@ -58,7 +58,7 @@ exports.signin = asyncHandler(async (req, res) => {
         staff: admin.staff,
         email: admin.email,
         image: admin.image,
-        date:admin.date,
+        iqama:admin.iqama,
         phone:admin.phone,
       };
       const token = jwt.sign({ email: admin.email }, "myjwtsecretkey");
@@ -112,7 +112,7 @@ exports.edit = asyncHandler(async (req, res) => {
 });
 //update staff details
 exports.update = asyncHandler(async (req, res) => {
-  const { staff, email, password ,date,phone} = req.body;
+  const { staff, email, password ,iqama,phone} = req.body;
   const { id } = req.params;
   try {
     const admin = await Staffs.findById(id);
@@ -123,7 +123,7 @@ exports.update = asyncHandler(async (req, res) => {
     admin.email = email;
     admin.password = password;
     admin.staff = staff;
-    admin.date = date;
+    admin.iqama = iqama;
     admin.phone =phone;
     if (req.file) {
       admin.image = req.file.filename;
