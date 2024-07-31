@@ -3,11 +3,12 @@ import axios from "axios"
 const BASE_URL = "http://localhost:8000/housecare"
 const CHARITY_URL = "http://localhost:8000/charity"
 const ADMIN_URL = "http://localhost:8000/admin"
+const CHARITYSTAFF_URL = "http://localhost:8000/charitystaff"
 
 //housecare staff creating
 export const Createstaff = async formData => {
-  const token = localStorage.getItem("token");
-  axios.defaults.headers.common["Authorization"] = token;
+  const token = localStorage.getItem("token")
+  axios.defaults.headers.common["Authorization"] = token
   try {
     const response = await axios.post(`${BASE_URL}`, formData, {
       headers: {
@@ -54,8 +55,8 @@ export const handleLogin = async (e, values, setLoginStatus) => {
 
 //Housecare staff details listing
 export const fetchStaff = async () => {
-    const token = localStorage.getItem("token");
-    axios.defaults.headers.common["Authorization"] = token;
+  const token = localStorage.getItem("token")
+  axios.defaults.headers.common["Authorization"] = token
   try {
     const response = await axios.get(`${BASE_URL}`)
     return response.data
@@ -73,7 +74,7 @@ export const deleteStaff = async id => {
   } catch (err) {
     console.log(
       err.response ? err.response.data : err.message,
-      "something went wrong in staff delete",
+      "something went wrong in staff delete"
     )
     throw err
   }
@@ -81,8 +82,8 @@ export const deleteStaff = async id => {
 
 //Staff details edit by Id
 export const staffEdit = async id => {
-  const token = localStorage.getItem("token");
-    axios.defaults.headers.common["Authorization"] = token;
+  const token = localStorage.getItem("token")
+  axios.defaults.headers.common["Authorization"] = token
   try {
     const response = await axios.get(`${BASE_URL}/${id}`)
     return response.data
@@ -108,26 +109,26 @@ export const staffUpdate = async (id, formData) => {
 }
 
 //revoke staff
-export const toggleBlockStaff = async (id) => {
+export const toggleBlockStaff = async id => {
   const response = await fetch(`${BASE_URL}/block/${id}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-  });
+  })
 
   if (!response.ok) {
-    throw new Error('Failed to toggle block status');
+    throw new Error("Failed to toggle block status")
   }
 
-  return response.json(); 
-};
+  return response.json()
+}
 
 //charity organaization listing
 
 export const fetchCharity = async () => {
-  const token = localStorage.getItem("token");
-    axios.defaults.headers.common["Authorization"] = token;
+  const token = localStorage.getItem("token")
+  axios.defaults.headers.common["Authorization"] = token
   try {
     const response = await axios.get(`${CHARITY_URL}`)
     return response.data
@@ -155,7 +156,7 @@ export const handleCharity = async formData => {
 
 export const charityDelete = async id => {
   const confirmation = window.confirm(
-    "Are you sure you want delete this product?",
+    "Are you sure you want delete this product?"
   )
   if (confirmation) {
     try {
@@ -164,7 +165,7 @@ export const charityDelete = async id => {
     } catch (err) {
       console.log(
         err.response ? err.response.data : err.message,
-        "something went wrong in staff delete",
+        "something went wrong in staff delete"
       )
     }
   }
@@ -201,8 +202,8 @@ export const handleadminLogin = async (e, values, setLoginStatus) => {
   }
 }
 
-//fetch Super admin 
-export const fetchAdmin= async () => {
+//fetch Super admin
+export const fetchAdmin = async () => {
   try {
     const response = await axios.get(`${ADMIN_URL}`)
     return response.data
@@ -213,17 +214,19 @@ export const fetchAdmin= async () => {
 
 //Super admin Edit ById
 
-export const EditAdmin = async(id)=>{
-  try{
-  const response=await axios.get(`${ADMIN_URL}/${id}`)
-  return response.data
-  }catch(err){console.log(err,"Fetching admin details is failed");}
+export const EditAdmin = async id => {
+  try {
+    const response = await axios.get(`${ADMIN_URL}/${id}`)
+    return response.data
+  } catch (err) {
+    console.log(err, "Fetching admin details is failed")
+  }
 }
 //charity organaization edit by Id
 
 export const charityEdit = async id => {
-    const token = localStorage.getItem("token");
-    axios.defaults.headers.common["Authorization"] = token;
+  const token = localStorage.getItem("token")
+  axios.defaults.headers.common["Authorization"] = token
   try {
     const response = await axios.get(`${CHARITY_URL}/${id}`)
     return response.data
@@ -246,3 +249,84 @@ export const charityUpdate = async (id, formData) => {
     throw err
   }
 }
+//charity staff creation
+export const handleCharitystaff = async formData => {
+  try {
+    const response = await axios.post(`${CHARITYSTAFF_URL}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    return response.data
+  } catch (err) {
+    console.log(err, "Charitystaff  Adding Failed")
+  }
+}
+//fetch charity staffs
+export const fetchCharitystaffs = async () => {
+  try {
+    const response = await axios.get(`${CHARITYSTAFF_URL}`)
+    return response.data
+  } catch (err) {
+    console.log(err, "charity staffs details listing failed")
+  }
+}
+
+//delete charitystaffs
+
+export const charitystaffDelete = async id => {
+  const confirmation = window.confirm(
+    "Are you sure do you want to delete this staff"
+  )
+  if (confirmation) {
+    try {
+      await axios.delete(`${CHARITYSTAFF_URL}/${id}`)
+      console.log(`Deleted staff with id: ${id}`)
+    } catch (err) {
+      console.log(
+        err.response ? err.response.data : err.message,
+        "something went wrong in staff delete"
+      )
+      alert("deleting failed")
+    }
+  }
+}
+
+//charity staffs edit byId
+export const charitystaffEdit = async id => {
+  try {
+    const response = await axios.get(`${CHARITYSTAFF_URL}/${id}`)
+    return response.data
+  } catch (err) {
+    console.log("an error occured in charity staff Fetching", err)
+  }
+}
+//charity staff update
+export const charityStaffUpdate = async (id, formData) => {
+  try {
+    const response = await axios.put(`${CHARITYSTAFF_URL}/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    return response.data
+  } catch (err) {
+    console.log("an error occured in charity staff details updation", err)
+    throw err
+  }
+}
+//revoke charity staffs
+// export const blockcharityStaff = async id => {
+//   const response = await fetch(`${CHARITYSTAFF_URL}/${id}`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//     },
+//   })
+
+//   if (!response.ok) {
+//     throw new Error("Failed to  block status")
+//   }
+
+//   return response.json()
+// }

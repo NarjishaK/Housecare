@@ -113,13 +113,13 @@ exports.delete = asyncHandler(async (req, res) => {
 });
 
 exports.details = asyncHandler(async (req, res) => {
-	const { id } = req.params;
+	const { charity } = req.params;
 	try {
-    const charity =await Charity.findById(id)
-    if(!charity){
+    const charities =await Charity.findOne({charity})
+    if(!charities){
       return res.status(400).json({message:"charity is not found"})
     }
-    res.json(charity)
+    res.json(charities)
 	} catch (err) {
 		console.log('an error occured in ', err);
     return res.status(500).json({err:"An error occured in charity organaization details "})

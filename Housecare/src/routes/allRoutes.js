@@ -26,10 +26,6 @@ import LockScreen from "../pages/AuthenticationInner/auth-lock-screen"
 // Dashboard
 import Dashboard from "../pages/Dashboard/index"
 
-
-
-
-
 //Tables
 import BasicTables from "../pages/Tables/BasicTables"
 import DatatableTables from "../pages/Tables/DatatableTables"
@@ -59,13 +55,13 @@ import UiSessionTimeout from "../pages/Ui/UiSessionTimeout"
 import CharityDetails from "pages/Authentication/charitydetails"
 
 //Extra Pages
-import PagesInvoice from "../pages/Extra Pages/pages-invoice";
-import PagesDirectory from "../pages/Extra Pages/pages-directory";
-import PagesBlank from "../pages/Extra Pages/pages-blank";
-import Pages404 from "../pages/Extra Pages/pages-404";
-import Pages500 from "../pages/Extra Pages/pages-500";
+import PagesInvoice from "../pages/Extra Pages/pages-invoice"
+import PagesDirectory from "../pages/Extra Pages/pages-directory"
+import PagesBlank from "../pages/Extra Pages/pages-blank"
+import Pages404 from "../pages/Extra Pages/pages-404"
+import Pages500 from "../pages/Extra Pages/pages-500"
 import UiOffcanvas from "pages/Ui/UiOffcanvas"
-import Chat from "pages/Chat/Chat";
+import Chat from "pages/Chat/Chat"
 import Kanban from "pages/Kanban"
 import Staff from "pages/staffs"
 import Charity from "pages/Authentication/charity"
@@ -73,11 +69,11 @@ import Superadmin from "pages/Authentication/superadmin"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
-  {path:"/staffs",component:<Staff/>},
-  {path:"/housecarestaffs",component:<HousecareStaff/>},
-  {path:"/charity",component:<Charity/>},
-  {path:"/admin",component:<Charity/>},
-  {path:"/charitydetails/:id",component:<CharityDetails/>},
+  { path: "/staffs", component: <Staff /> },
+  { path: "/housecarestaffs", component: <HousecareStaff /> },
+  { path: "/charity", component: <Charity /> },
+  { path: "/admin", component: <Charity /> },
+  { path: "/charitydetails/:id", component: <CharityDetails /> },
 
   // //calendar
   { path: "/calendar", component: <Calendar /> },
@@ -85,7 +81,6 @@ const userRoutes = [
   { path: "/chat", component: <Chat /> },
   { path: "/kanbanboard", component: <Kanban /> },
 
-  
   // // //profile
   { path: "/profile/:id", component: <UserProfile /> },
 
@@ -94,8 +89,6 @@ const userRoutes = [
   { path: "/email-read", component: <EmailRead /> },
   { path: "/email-compose", component: <EmailCompose /> },
 
-
-  
   // // Tables
   { path: "/tables-basic", component: <BasicTables /> },
   { path: "/tables-datatable", component: <DatatableTables /> },
