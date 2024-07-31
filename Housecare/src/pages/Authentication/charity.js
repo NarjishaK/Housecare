@@ -371,16 +371,12 @@ function Charity() {
                     </p>
                   </div>
                   <div className="inbox-item-date text-muted" >
-                    {/* <p className="inbox-item-date text-muted">{details.date}</p> */}
                     <Button style={{marginInline:"10px"}}>Staffs</Button>
                     <Button >Staffs</Button>
                   </div>
                   <br />
-                  {/* <div > */}
-                  {/* <Button  >Edit </Button> */}
                   <Col style={{ display: "flex", justifyContent: "end" }}>
                     <div
-                      // className="text-center"
                       onClick={() => {
                         tog_center()
                       }}

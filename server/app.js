@@ -12,6 +12,7 @@ var housecareRouter = require('./routes/housecare');
 var charityRouter = require("./routes/charity")
 var adminRouter = require("./routes/admin")
 var charitystaffRouter = require("./routes/charitystaff")
+var benificiaryRouter = require("./routes/benificiary")
 
 connectDB()
 
@@ -38,6 +39,7 @@ app.use('/housecare', housecareRouter);
 app.use('/charity',charityRouter);
 app.use('/admin',adminRouter);
 app.use('/charitystaff',charitystaffRouter);
+app.use('/benificiary',benificiaryRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
