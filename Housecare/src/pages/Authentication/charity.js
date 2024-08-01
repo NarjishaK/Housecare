@@ -370,10 +370,10 @@ function Charity() {
                       {details.charity}
                     </p>
                   </div>
-                  <div className="inbox-item-date text-muted" >
+                  {/* <div className="inbox-item-date text-muted" >
                     <Button style={{marginInline:"10px"}}>Staffs</Button>
                     <Button >Staffs</Button>
-                  </div>
+                  </div> */}
                   <br />
                   <Col style={{ display: "flex", justifyContent: "end" }}>
                     <div

@@ -14,10 +14,10 @@ const Authentication = require("../middleware/auth")
 // });
 // var upload = multer({ storage: storage });
 
-router.post("/", Controller.create);
-router.get("/",Controller.list);
-router.get("/:id", Controller.edit);
-router.put("/:id", Controller.update);
-router.delete("/:id", Controller.delete);
+router.post("/",Authentication, Controller.create);
+router.get("/",Authentication,Controller.list);
+router.get("/:id",Authentication, Controller.edit);
+router.put("/:id",Authentication, Controller.update);
+router.delete("/:id",Authentication, Controller.delete);
 
 module.exports = router;

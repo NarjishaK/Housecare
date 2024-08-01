@@ -4,6 +4,7 @@ const BASE_URL = "http://localhost:8000/housecare"
 const CHARITY_URL = "http://localhost:8000/charity"
 const ADMIN_URL = "http://localhost:8000/admin"
 const CHARITYSTAFF_URL = "http://localhost:8000/charitystaff"
+const BENIFICIARY_URL = "http://localhost:8000/benificiary"
 
 //housecare staff creating
 export const Createstaff = async formData => {
@@ -18,6 +19,7 @@ export const Createstaff = async formData => {
     return response.data
   } catch (err) {
     console.log(err, "an error occure in signup")
+    throw err
   }
 }
 
@@ -251,6 +253,8 @@ export const charityUpdate = async (id, formData) => {
 }
 //charity staff creation
 export const handleCharitystaff = async formData => {
+  const token = localStorage.getItem("token")
+  axios.defaults.headers.common["Authorization"] = token
   try {
     const response = await axios.post(`${CHARITYSTAFF_URL}`, formData, {
       headers: {
@@ -259,7 +263,8 @@ export const handleCharitystaff = async formData => {
     })
     return response.data
   } catch (err) {
-    console.log(err, "Charitystaff  Adding Failed")
+    console.log( "Charitystaff  Adding Failed")
+    throw err
   }
 }
 //fetch charity staffs
@@ -330,3 +335,73 @@ export const charityStaffUpdate = async (id, formData) => {
 
 //   return response.json()
 // }
+
+
+//create benificiary  
+export const handleBenificiary = async formData => {
+  const token = localStorage.getItem("token")
+  axios.defaults.headers.common["Authorization"] = token
+  try {
+    const response = await axios.post(`${BENIFICIARY_URL}`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return response.data
+  } catch (err) {
+    console.log(err, "Benificiary  Adding Failed")
+    throw err
+  }
+}
+//fetch benificiary
+export const fetchBenificiarys = async () => {
+  try {
+    const response = await axios.get(`${BENIFICIARY_URL}`)
+    return response.data
+  } catch (err) {
+    console.log(err, "benificiary details listing failed")
+  }
+}
+//delete benificiary
+
+export const benificiaryDelete = async id => {
+  const confirmation = window.confirm(
+    "Are you sure do you want to delete this staff"
+  )
+  if (confirmation) {
+    try {
+      await axios.delete(`${BENIFICIARY_URL}/${id}`)
+      console.log(`Deleted staff with id: ${id}`)
+    } catch (err) {
+      console.log(
+        err.response ? err.response.data : err.message,
+        "something went wrong in staff delete"
+      )
+      alert("deleting failed")
+    }
+  }
+}
+//benificiary edit byId
+export const benificiaryEdit = async id => {
+  try {
+    const response = await axios.get(`${BENIFICIARY_URL}/${id}`)
+    return response.data
+  } catch (err) {
+    console.log("an error occured in benificiary Fetching", err)
+  }
+}
+
+//benificiary update
+export const benificiaryUpdate = async (id, formData) => {
+  try {
+    const response = await axios.put(`${BENIFICIARY_URL}/${id}`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    return response.data
+  } catch (err) {
+    console.log("an error occured in benificiary details updation", err)
+    throw err
+  }
+}
