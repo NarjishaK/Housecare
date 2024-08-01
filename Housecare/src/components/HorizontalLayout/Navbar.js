@@ -1,9 +1,9 @@
 import PropTypes from "prop-types"
-import React, { useState, useEffect } from "react"
-import { Row, Col, Collapse } from "reactstrap"
+import React, {  useEffect } from "react"
+import { Collapse } from "reactstrap"
 import { Link } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
-import classname from "classnames"
+// import classname from "classnames"
 
 //i18n
 import { withTranslation } from "react-i18next"
@@ -11,14 +11,14 @@ import { withTranslation } from "react-i18next"
 import { connect } from "react-redux"
 
 const Navbar = props => {
-  const [ui, setui] = useState(false)
-  const [email, setemail] = useState(false)
-  const [form, setform] = useState(false)
-  const [table, settable] = useState(false)
+  // const [ui, setui] = useState(false)
+  // const [email, setemail] = useState(false)
+  // const [form, setform] = useState(false)
+  // const [table, settable] = useState(false)
   // const [icon, seticon] = useState(false)
   // const [map, setmap] = useState(false)
-  const [extra, setextra] = useState(false)
-  const [moreItem, setMoreItem] = useState(false)
+  // const [extra, setextra] = useState(false)
+  // const [moreItem, setMoreItem] = useState(false)
 
   useEffect(() => {
     const pathName = process.env.PUBLIC_URL + props.router.location.pathname
@@ -94,14 +94,36 @@ const Navbar = props => {
               id="topnav-menu-content"
             >
               <ul className="navbar-nav">
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link className="nav-link" to="/dashboard">
                     <i className="ti-dashboard"></i>
                     {props.t("Dashboard")} {props.menuOpen}
                   </Link>
-                </li>
+                </li> */}
 
-                <li className="nav-item dropdown">
+                <li className="nav-item">
+                <Link to="/dashboard" className="nav-link">
+                <i className="mdi mdi-view-dashboard"></i>
+                {/* <span className="badge rounded-pill bg-primary float-end">2</span> */}
+                <span>{props.t("Dashboard")}</span>
+              </Link>
+            </li>
+
+
+                <li className="nav-item">
+                  <Link className="nav-link" to="/housecarestaffs">
+                  <i className="mdi mdi-account-box"></i>
+                    {props.t("Housecare Staffs")}
+                  </Link>
+                </li>
+                <li className="nav-item">
+              <Link to="/charity" className="nav-link">
+                <i className="mdi mdi-account-box"></i>
+                <span>{props.t("Charity Organaization")}</span>
+              </Link>
+            </li>
+            {/* ////////////////////////////////// */}
+                {/* <li className="nav-item dropdown">
                   <Link
                     to="/#"
                     onClick={e => {
@@ -299,8 +321,11 @@ const Navbar = props => {
                       {props.t("Session Timeout")}
                     </Link>
                   </div>
-                </li>
+                </li> */}
 
+
+
+{/* 
                 <li className="nav-item dropdown">
                   <Link
                     className="nav-link dropdown-toggle arrow-none"
@@ -348,7 +373,7 @@ const Navbar = props => {
                       </Col>
                     </Row>
                   </div>
-                </li>
+                </li> */}
               </ul>
             </Collapse>
           </nav>

@@ -16,7 +16,7 @@ import {
 const INIT_STATE = {
   layoutColor:"default",
   layoutMode:"light",
-  layoutType: "vertical",
+  layoutType: "Horizontal",
   layoutWidth: "fluid",
   leftSideBarTheme: "dark",
   leftSideBarType: "default",

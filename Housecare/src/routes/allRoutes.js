@@ -66,6 +66,7 @@ import Kanban from "pages/Kanban"
 import Staff from "pages/staffs"
 import Charity from "pages/Authentication/charity"
 import Superadmin from "pages/Authentication/superadmin"
+import Beneficiarydetails from "pages/Authentication/beneficiarydetails"
 
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -74,6 +75,7 @@ const userRoutes = [
   { path: "/charity", component: <Charity /> },
   { path: "/admin", component: <Charity /> },
   { path: "/charitydetails/:id", component: <CharityDetails /> },
+  { path: "/beneficiarydetails/:id", component: <Beneficiarydetails /> },
 
   // //calendar
   { path: "/calendar", component: <Calendar /> },

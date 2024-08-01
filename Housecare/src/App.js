@@ -42,10 +42,10 @@ fakeBackend();
 const App = (props) => {
   function getLayout() {
     switch (props.layout.layoutType) {
-      case "horizontal":
-        return HorizontalLayout;
-      default:
+      case "vertical":
         return VerticalLayout;
+      default:
+        return  HorizontalLayout;
     }
   }
 
