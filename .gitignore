@@ -13,7 +13,7 @@
 /server/coverage
 
 # production
-/Housecare/build
+# /Housecare/build
 /server/build
 
 # misc
