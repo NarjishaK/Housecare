@@ -24,6 +24,8 @@ import { useForm } from "helpers/useForms"
 function Charity() {
   const [modal, setmodal] = useState(false)
   const [charity1, setCharity1] = useState([])
+  
+  
   const [image, setImage] = useState([])
   const [editId, setEditId] = useState(null)
   const [modal_center, setmodal_center] = useState(false)
@@ -60,7 +62,8 @@ function Charity() {
       console.log(err)
     }
   }
-
+  console.log(charity1,"rerrrrrrrr");
+  console.log(values.charity,"ggggggggggg");
   //handle charity organaization Add
 
   const charityCreate = async e => {
