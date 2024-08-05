@@ -1,28 +1,39 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+/Housecare/node_modules
+/Housecare/.pnp
+/Housecare/.pnp.js
+/server/node_modules
+/server/.pnp
+/server/.pnp.js
 
 # testing
-/coverage
+/Housecare/coverage
+/server/coverage
 
 # production
-/build
+/Housecare/build
+/server/build
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+/Housecare/.env.local
+/Housecare/.env.development.local
+/Housecare/.env.test.local
+/Housecare/.env.production.local
+/server/.env.local
+/server/.env.development.local
+/server/.env.test.local
+/server/.env.production.local
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.idea
-package-lock.json
-.eslintcache
-debug.log
+/Housecare/.idea
+/server/.idea
+/Housecare/package-lock.json
+/server/package-lock.json
+/Housecare/.eslintcache
+/server/.eslintcache
