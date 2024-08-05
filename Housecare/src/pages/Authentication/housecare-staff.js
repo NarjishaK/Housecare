@@ -19,6 +19,7 @@ import {
 } from "./handle-api"
 import { Link } from "react-router-dom"
 import { useForm } from "helpers/useForms"
+import { BASE_URL} from "./handle-api"
 
 function Staff() {
   const isSuperadmin = !!localStorage.getItem("Superadmin")
@@ -161,7 +162,7 @@ function Staff() {
                   <tr>
                     <td>
                       <img
-                        src={`http://localhost:8000/upload/${staffs.image}`}
+                        src={`${BASE_URL}/upload/${staffs.image}`}
                         alt={`${staffs.staff}`}
                         className="avatar-xs rounded-circle me-2"
                       />{" "}

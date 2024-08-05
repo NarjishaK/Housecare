@@ -11,6 +11,7 @@ import {
   Alert,
 } from "reactstrap"
 import { Link } from "react-router-dom"
+import { BASE_URL } from "./handle-api"
 
 import { handleadminLogin,fetchAdmin } from "./handle-api"
 // import images
@@ -90,7 +91,7 @@ const Superadmin = () => {
 
                       <div className="user-thumb text-center mb-4">
                         <img
-                          src={`http://localhost:8000/upload/${admins.image}`}
+                          src={`${BASE_URL}/upload/${admins.image}`}
                           className="rounded-circle avatar-md img-thumbnail"
                           alt="thumbnail"
                         />

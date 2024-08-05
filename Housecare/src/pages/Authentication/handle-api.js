@@ -1,17 +1,26 @@
 import axios from "axios"
 
-const BASE_URL = "http://localhost:8000/housecare"
-const CHARITY_URL = "http://localhost:8000/charity"
-const ADMIN_URL = "http://localhost:8000/admin"
-const CHARITYSTAFF_URL = "http://localhost:8000/charitystaff"
-const BENIFICIARY_URL = "http://localhost:8000/benificiary"
+
+// const BASE_URL = "http://api.housecare.tecnavis.com/housecare"
+// const CHARITY_URL = "http://api.housecare.tecnavis.com/charity"
+// const ADMIN_URL = "http://api.housecare.tecnavis.com/admin"
+// const CHARITYSTAFF_URL = "http://api.housecare.tecnavis.com/charitystaff"
+// const BENIFICIARY_URL = "http://api.housecare.tecnavis.com/benificiary"
+
+const HOUSECARE_BASE_URL = `${process.env.REACT_APP_BASE_URL}/housecare`;
+const CHARITY_URL = `${process.env.RREACT_APP_BASE_URL}/charity`;
+const ADMIN_URL = `${process.env.REACT_APP_BASE_URL}/admin`;
+const CHARITYSTAFF_URL = `${process.env.REACT_APP_BASE_URL}/charitystaff`;
+const BENIFICIARY_URL = `${process.env.REACT_APP_BASE_URL}/benificiary`;
+export const BASE_URL = `${process.env.REACT_APP_BASE_URL}`
+
 
 //housecare staff creating
 export const Createstaff = async formData => {
   const token = localStorage.getItem("token")
   axios.defaults.headers.common["Authorization"] = token
   try {
-    const response = await axios.post(`${BASE_URL}`, formData, {
+    const response = await axios.post(`${HOUSECARE_BASE_URL}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -34,7 +43,7 @@ export const handleLogin = async (e, values, setLoginStatus) => {
   console.log("Attempting to login with data:", Data)
 
   try {
-    const response = await axios.post(`${BASE_URL}/signin`, Data)
+    const response = await axios.post(`${HOUSECARE_BASE_URL}/signin`, Data)
     if (response.status === 200) {
       setLoginStatus("success")
       const token = response.data.token
@@ -60,7 +69,7 @@ export const fetchStaff = async () => {
   const token = localStorage.getItem("token")
   axios.defaults.headers.common["Authorization"] = token
   try {
-    const response = await axios.get(`${BASE_URL}`)
+    const response = await axios.get(`${HOUSECARE_BASE_URL}`)
     return response.data
   } catch (err) {
     console.error("staff list failed: internal error", err)
@@ -71,7 +80,7 @@ export const fetchStaff = async () => {
 //Housecare staff delete
 export const deleteStaff = async id => {
   try {
-    await axios.delete(`${BASE_URL}/${id}`)
+    await axios.delete(`${HOUSECARE_BASE_URL}/${id}`)
     console.log(`Deleted staff with id: ${id}`)
   } catch (err) {
     console.log(
@@ -87,7 +96,7 @@ export const staffEdit = async id => {
   const token = localStorage.getItem("token")
   axios.defaults.headers.common["Authorization"] = token
   try {
-    const response = await axios.get(`${BASE_URL}/${id}`)
+    const response = await axios.get(`${HOUSECARE_BASE_URL}/${id}`)
     return response.data
   } catch (err) {
     console.log(err, "staff fetching error")
@@ -98,7 +107,7 @@ export const staffEdit = async id => {
 //staff details update
 export const staffUpdate = async (id, formData) => {
   try {
-    const response = await axios.put(`${BASE_URL}/${id}`, formData, {
+    const response = await axios.put(`${HOUSECARE_BASE_URL}/${id}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -112,7 +121,7 @@ export const staffUpdate = async (id, formData) => {
 
 //revoke staff
 export const toggleBlockStaff = async id => {
-  const response = await fetch(`${BASE_URL}/block/${id}`, {
+  const response = await fetch(`${HOUSECARE_BASE_URL}/block/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

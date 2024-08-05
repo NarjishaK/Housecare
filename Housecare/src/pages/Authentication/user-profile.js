@@ -35,7 +35,7 @@ const UserProfile = () => {
         admin: parsedSuperadmin.admin,
         email: parsedSuperadmin.email,
       });
-      setImage(`http://localhost:8000/${parsedSuperadmin.image}`); // Set image URL
+      setImage(`http://api.housecare.tecnavis.com/${parsedSuperadmin.image}`); // Set image URL
     }
   }, [setValues]);
 
@@ -59,13 +59,13 @@ const UserProfile = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/admin/${id}`);
+        const response = await axios.get(`http://api.housecare.tecnavis.com/admin/${id}`);
         const adminData = response.data;
         setValues({
           admin: adminData.admin,
           email: adminData.email,
         });
-        setImage(`http://localhost:8000/${adminData.image}`); 
+        setImage(`http://api.housecare.tecnavis.com/${adminData.image}`); 
         setSuperAdmin(adminData);
       } catch (err) {
         console.error("An error occurred while fetching admin data:", err);
@@ -85,7 +85,7 @@ const UserProfile = () => {
     }  
 
     try {
-      const response = await axios.put(`http://localhost:8000/admin/${id}`, formData, {
+      const response = await axios.put(`http://api.housecare.tecnavis.com/admin/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -118,7 +118,7 @@ const UserProfile = () => {
                   <div className="d-flex">
                     <div className="ms-3">
                       <img
-                        src={`http://localhost:8000/upload/${superadmin?.image}`||image} 
+                        src={`http://api.housecare.tecnavis.com/upload/${superadmin?.image}`||image} 
                         alt=""
                         className="avatar-md rounded-circle img-thumbnail"
                       />

@@ -73,7 +73,7 @@ function CharityDetails() {
       axios.defaults.headers.common["Authorization"] = token
       try {
         const response = await axios.get(
-          `http://localhost:8000/charity/details/${id}`
+          `api.housecare.tecnavis.com/charity/details/${id}`
         )
         setCharitys(response.data)
       } catch (error) {
@@ -261,7 +261,7 @@ function CharityDetails() {
             {charitys.charity} {charitys.arbic}
           </p>
           <img
-            src={`http://localhost:8000/upload/${charitys.image}`}
+            src={`http://api.housecare.tecnavis.com//upload/${charitys.image}`}
             alt="user"
             className="avatar-xs me-2 rounded-circle"
           />{" "}
@@ -478,7 +478,7 @@ function CharityDetails() {
                       <tr className="table-light">
                         <td>
                           <img
-                            src={`http://localhost:8000/upload/${charitystaff.image}`}
+                            src={`http://api.housecare.tecnavis.com/upload/${charitystaff.image}`}
                             alt="user"
                             className="avatar-xs me-2 rounded-circle"
                           />{" "}

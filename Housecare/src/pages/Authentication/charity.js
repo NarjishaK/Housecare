@@ -355,7 +355,7 @@ function Charity() {
                 <div className="inbox-item">
                   <div className="inbox-item-img float-start me-4">
                     <img
-                      src={`http://localhost:8000/upload/${details.image}`}
+                      src={`http://api.housecare.tecnavis.com/upload/${details.image}`}
                       className="avatar-md rounded-circle"
                       alt=""
                     />
