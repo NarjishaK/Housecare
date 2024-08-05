@@ -23,7 +23,7 @@ import { useForm } from "helpers/useForms"
 
 function Charity() {
   const [modal, setmodal] = useState(false)
-  const [charity, setCharity] = useState([])
+  const [charity1, setCharity1] = useState([])
   const [image, setImage] = useState([])
   const [editId, setEditId] = useState(null)
   const [modal_center, setmodal_center] = useState(false)
@@ -55,7 +55,7 @@ function Charity() {
   const loadData = async () => {
     try {
       const response = await fetchCharity()
-      setCharity(response)
+      setCharity1(response)
     } catch (err) {
       console.log(err)
     }
@@ -350,7 +350,7 @@ function Charity() {
       <Card>
         <CardBody>
           <h4 className="card-title mb-3">Charity Organaization</h4>
-          {charity.map(details => (
+          {charity1.map(details => (
             <div className="inbox-wid">
               <Link to="#" className="text-dark">
                 <div className="inbox-item">
