@@ -27,7 +27,8 @@ import {
   handleCharitystaff,
   benificiaryDelete,
   benificiaryEdit,
-  benificiaryUpdate
+  benificiaryUpdate,
+  BASE_URL
 } from "./handle-api"
 
 
@@ -73,7 +74,7 @@ function CharityDetails() {
       axios.defaults.headers.common["Authorization"] = token
       try {
         const response = await axios.get(
-          `api.housecare.tecnavis.com/charity/details/${id}`
+          `${BASE_URL}/charity/details/${id}`
         )
         setCharitys(response.data)
       } catch (error) {
@@ -261,7 +262,7 @@ function CharityDetails() {
             {charitys.charity} {charitys.arbic}
           </p>
           <img
-            src={`http://api.housecare.tecnavis.com//upload/${charitys.image}`}
+            src={`${BASE_URL}/upload/${charitys.image}`}
             alt="user"
             className="avatar-xs me-2 rounded-circle"
           />{" "}
@@ -478,7 +479,7 @@ function CharityDetails() {
                       <tr className="table-light">
                         <td>
                           <img
-                            src={`http://api.housecare.tecnavis.com/upload/${charitystaff.image}`}
+                            src={`${BASE_URL}/upload/${charitystaff.image}`}
                             alt="user"
                             className="avatar-xs me-2 rounded-circle"
                           />{" "}

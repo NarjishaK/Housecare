@@ -2,13 +2,12 @@ import axios from "axios"
 
 
 // const BASE_URL = "http://api.housecare.tecnavis.com/housecare"
-// const CHARITY_URL = "http://api.housecare.tecnavis.com/charity"
 // const ADMIN_URL = "http://api.housecare.tecnavis.com/admin"
 // const CHARITYSTAFF_URL = "http://api.housecare.tecnavis.com/charitystaff"
 // const BENIFICIARY_URL = "http://api.housecare.tecnavis.com/benificiary"
 
 const HOUSECARE_BASE_URL = `${process.env.REACT_APP_BASE_URL}/housecare`;
-const CHARITY_URL = `${process.env.RREACT_APP_BASE_URL}/charity`;
+const CHARITY_URL= `${process.env.REACT_APP_BASE_URL}/charity`;
 const ADMIN_URL = `${process.env.REACT_APP_BASE_URL}/admin`;
 const CHARITYSTAFF_URL = `${process.env.REACT_APP_BASE_URL}/charitystaff`;
 const BENIFICIARY_URL = `${process.env.REACT_APP_BASE_URL}/benificiary`;

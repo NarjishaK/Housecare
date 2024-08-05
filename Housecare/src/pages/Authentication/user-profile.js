@@ -14,6 +14,7 @@ import withRouter from "components/Common/withRouter";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useForm } from "helpers/useForms";
+import { BASE_URL } from "./handle-api";
 
 const UserProfile = () => {
   document.title = "Profile | Admin Profile";
@@ -35,7 +36,7 @@ const UserProfile = () => {
         admin: parsedSuperadmin.admin,
         email: parsedSuperadmin.email,
       });
-      setImage(`http://api.housecare.tecnavis.com/${parsedSuperadmin.image}`); // Set image URL
+      setImage(`${BASE_URL}/${parsedSuperadmin.image}`); // Set image URL
     }
   }, [setValues]);
 
@@ -59,13 +60,13 @@ const UserProfile = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://api.housecare.tecnavis.com/admin/${id}`);
+        const response = await axios.get(`${BASE_URL}/admin/${id}`);
         const adminData = response.data;
         setValues({
           admin: adminData.admin,
           email: adminData.email,
         });
-        setImage(`http://api.housecare.tecnavis.com/${adminData.image}`); 
+        setImage(`${BASE_URL}/${adminData.image}`); 
         setSuperAdmin(adminData);
       } catch (err) {
         console.error("An error occurred while fetching admin data:", err);
@@ -85,7 +86,7 @@ const UserProfile = () => {
     }  
 
     try {
-      const response = await axios.put(`http://api.housecare.tecnavis.com/admin/${id}`, formData, {
+      const response = await axios.put(`${BASE_URL}/admin/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -118,7 +119,7 @@ const UserProfile = () => {
                   <div className="d-flex">
                     <div className="ms-3">
                       <img
-                        src={`http://api.housecare.tecnavis.com/upload/${superadmin?.image}`||image} 
+                        src={`${BASE_URL}/upload/${superadmin?.image}`||image} 
                         alt=""
                         className="avatar-md rounded-circle img-thumbnail"
                       />
