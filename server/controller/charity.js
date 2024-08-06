@@ -1,8 +1,10 @@
 const Charity = require('../model/charity');
 const asyncHandler = require('express-async-handler');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.create = asyncHandler(async (req, res) => {
-	const { charity, email, date, arbic, CR_NO,role, VAT_REG_NO, authorizedperson, phone } = req.body;
+	const { charity, email, date, arbic, CR_NO,role,password, VAT_REG_NO, authorizedperson, phone } = req.body;
 	const image = req.file.filename;
 
 	try {
@@ -13,6 +15,7 @@ exports.create = asyncHandler(async (req, res) => {
 		const charities = await Charity.create({
 			charity: charity,
 			email: email,
+			password: password,
 			date: date,
 			authorizedperson: authorizedperson,
 			CR_NO: CR_NO,
@@ -66,7 +69,7 @@ exports.edit = asyncHandler(async (req, res) => {
 });
 
 exports.update = asyncHandler(async (req, res) => {
-	const { charity, email, date, arbic, CR_NO, role,VAT_REG_NO, authorizedperson, phone } = req.body;
+	const { charity, email, password,date, arbic, CR_NO, role,VAT_REG_NO, authorizedperson, phone } = req.body;
 	const { id } = req.params;
 	try {
 		const charities = await Charity.findById(id);
@@ -75,6 +78,7 @@ exports.update = asyncHandler(async (req, res) => {
 			return res.status(400).json({ message: 'charity not found to update' });
 		}
 		charities.email = email;
+		charities.password = password;
 		charities.charity = charity;
 		charities.date = date;
 		charities.phone = phone;
@@ -125,3 +129,41 @@ exports.details = asyncHandler(async (req, res) => {
     return res.status(500).json({err:"An error occured in charity organaization details "})
 	}
 });
+
+exports.signin = asyncHandler(async (req, res) => {
+	const { email, password } = req.body;
+	try {
+	  const user = await Charity.findOne({ email });
+	  if (!user) {
+		console.log('user not found');
+		return res.status(400).json({ message: 'user not found' });
+	  }
+	  const isMatch = await bcrypt.compare(password, user.password);
+	  if (!isMatch) {
+		console.log('password not matched');  
+		return res.status(400).json({ message: 'password not matched' });
+	  }
+	  const token = jwt.sign({ id: user._id }, 'myjwtsecretkey', {
+		expiresIn: '1d',
+	  });
+	  res.json({ token, userId: user._id }); // Include userId in the response
+	} catch (err) {
+	  console.log(err, 'login failed');
+	  return res.status(500).json({ err: 'login failed' });
+	}
+  });
+
+  exports.detailses = asyncHandler(async (req, res) => {
+	const { id } = req.params;
+	try {
+	  const charities = await Charity.findById(id); // Find by ID
+	  if (!charities) {
+		return res.status(400).json({ message: "Charity not found" });
+	  }
+	  res.json(charities);
+	} catch (err) {
+	  console.log('An error occurred:', err);
+	  return res.status(500).json({ err: "An error occurred while fetching charity details" });
+	}
+  });
+  

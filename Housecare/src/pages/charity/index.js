@@ -1,54 +1,38 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
+import { Link } from "react-router-dom"
 import {
   Container,
   Row,
   Col,
   Card,
   CardBody,
-  Button,
-  Input,
+  Label,
   Form,
+  Input,
   Alert,
 } from "reactstrap"
-import { Link } from "react-router-dom"
-import { BASE_URL } from "./handle-api"
-
-import { handleadminLogin,fetchAdmin } from "./handle-api"
-// import images
-import logoLightPng from "../../assets/images/logo-light.png"
 import logoDark from "../../assets/images/logo-dark.png"
+import logoLight from "../../assets/images/logo-dark.png"
+import withRouter from "components/Common/withRouter"
 import { useForm } from "helpers/useForms"
+import { handleCharitySignin } from "../Authentication/handle-api"
 
-const Superadmin = () => {
-  document.title = "Admin | HouseCare"
+// actions
+
+const Login = () => {
+  document.title = "Login | Housecare"
   const [values, handleChange] = useForm({
     email: "",
     password: "",
   })
 
-  const [admins,setAdmins]=useState([])
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  //fetch charity organaization deatils
-  const loadData = async () => {
-    try {
-      const response = await fetchAdmin()
-      setAdmins(response)
-    } catch (err) {
-      console.log(err)
-    }
-  }
   const [loginStatus, setLoginStatus] = useState(null)
-
   return (
     <React.Fragment>
       <div className="account-pages my-5 pt-sm-5">
         <Container>
-            {admins &&(
           <Row className="justify-content-center">
-            <Col md="8" lg="6" xl="5">
+            <Col md={8} lg={6} xl={5}>
               <Card className="overflow-hidden">
                 <CardBody className="pt-0">
                   <h3 className="text-center mt-5 mb-4">
@@ -60,25 +44,21 @@ const Superadmin = () => {
                         className="auth-logo-dark"
                       />
                       <img
-                        src={logoLightPng}
+                        src={logoLight}
                         alt=""
                         height="60"
                         className="auth-logo-light"
                       />
                     </Link>
                   </h3>
+
                   <div className="p-3">
-                    {/* <h4 className="text-muted font-size-18 mb-1 text-center">
-                      Locked
+                    <h4 className="text-muted font-size-18 mb-1 text-center">
+                      Charity Organaization
                     </h4>
-                    <p className="text-muted text-center">
-                     {` Hello ${admins.admin}, enter your password to unlock the screen!`}
-                    </p> */}
                     <Form
                       className="form-horizontal mt-4"
-                      onSubmit={e =>
-                        handleadminLogin(e, values, setLoginStatus)
-                      }
+                      onSubmit={e => handleCharitySignin(e, values, setLoginStatus)}
                     >
                       {loginStatus === "success" && (
                         <Alert color="success">Login successful</Alert>
@@ -88,71 +68,71 @@ const Superadmin = () => {
                           Login failed. Please try again.
                         </Alert>
                       )}
-
-                      <div className="user-thumb text-center mb-4">
-                        <img
-                          src={`${BASE_URL}/upload/${admins.image}`}
-                          className="rounded-circle avatar-md img-thumbnail"
-                          alt="thumbnail"
-                        />
-                        <h6 className="font-size-16 mt-3">{admins.admin}</h6>
-                      </div>
-
                       <div className="mb-3">
-                        <label htmlFor="email">Email</label>
+                        <Label htmlFor="email">Email</Label>
                         <Input
                           name="email"
                           className="form-control"
+                          placeholder="Enter email"
                           type="email"
-                          placeholder="Enter Email"
                           value={values.email}
                           onChange={handleChange}
                         />
                       </div>
                       <div className="mb-3">
-                        <label htmlFor="password">Password</label>
+                        <Label htmlFor="userpassword">Password</Label>
                         <Input
                           name="password"
-                          className="form-control"
                           type="password"
-                          placeholder="Enter password"
+                          placeholder="Enter Password"
                           value={values.password}
                           onChange={handleChange}
                         />
                       </div>
-
-                      <div className="mb-3 row">
-                        <div className="col-12 text-end">
-                          <Button
-                            color="primary"
-                            className="w-md waves-effect waves-light"
+                      <Row className="mb-3 mt-4">
+                        <div className="col-6">
+                          <div className="form-check">
+                            <input
+                              type="checkbox"
+                              className="form-check-input"
+                              id="customControlInline"
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="customControlInline"
+                            >
+                              Remember me
+                            </label>
+                          </div>
+                        </div>
+                        <div className="col-6 text-end">
+                          <button
+                            className="btn btn-primary w-md waves-effect waves-light"
                             type="submit"
                           >
-                            Unlock
-                          </Button>
+                            Log In
+                          </button>
                         </div>
-                      </div>
+                      </Row>
+                      <Row className="form-group mb-0">
+                        {/* <Link to="/forgot-password" className="text-muted">
+                          <i className="mdi mdi-lock"></i> Forgot your password?
+                        </Link> */}
+                      </Row>
                     </Form>
                   </div>
                 </CardBody>
               </Card>
+
               <div className="mt-5 text-center">
-                <p>
-                  Not you ? {" "}
-                  <Link to="/login" className=" text-primary">
-                    {" "}
-                    Are you Admin{" "}
-                  </Link>{" "}
-                </p>
-                <p>© 2024 Housecare</p>
+                © {new Date().getFullYear()} Housecare
               </div>
             </Col>
           </Row>
-          )}
         </Container>
       </div>
     </React.Fragment>
   )
 }
 
-export default Superadmin
+export default withRouter(Login)

@@ -1,11 +1,5 @@
 import axios from "axios"
 
-
-// const BASE_URL = "http://api.housecare.tecnavis.com/housecare"
-// const ADMIN_URL = "http://api.housecare.tecnavis.com/admin"
-// const CHARITYSTAFF_URL = "http://api.housecare.tecnavis.com/charitystaff"
-// const BENIFICIARY_URL = "http://api.housecare.tecnavis.com/benificiary"
-
 const HOUSECARE_BASE_URL = `${process.env.REACT_APP_BASE_URL}/housecare`;
 const CHARITY_URL= `${process.env.REACT_APP_BASE_URL}/charity`;
 const ADMIN_URL = `${process.env.REACT_APP_BASE_URL}/admin`;
@@ -159,6 +153,7 @@ export const handleCharity = async formData => {
     return response.data
   } catch (err) {
     console.log(err, "Charity Organaizaztion Adding Failed")
+    throw err
   }
 }
 
@@ -412,4 +407,24 @@ export const benificiaryUpdate = async (id, formData) => {
     console.log("an error occured in benificiary details updation", err)
     throw err
   }
+}
+//handle charity signin
+export const handleCharitySignin = async (e, values, setLoginStatus) => {
+  e.preventDefault()
+  const Data = {
+    email: values.email,
+    password: values.password,
+  } 
+  console.log("Attempting to login with data:", Data)
+  try {
+    const response = await axios.post(`${CHARITY_URL}/signin`, Data);
+    const { token, userId } = response.data; // Destructure token and userId from response
+    localStorage.setItem("token", token);
+    setLoginStatus(true);
+    console.log("Login successful");
+    window.location.href = `/charityteam/${userId}`;
+
+  } catch (err) {
+    console.log(err, "Login failed")
+  } 
 }

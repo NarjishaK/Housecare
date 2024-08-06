@@ -67,7 +67,8 @@ import Staff from "pages/staffs"
 import Charity from "pages/Authentication/charity"
 import Superadmin from "pages/Authentication/superadmin"
 import Beneficiarydetails from "pages/Authentication/beneficiarydetails"
-
+import Charity1 from "../pages/charity"
+import CharityTeam from "../pages/charity/charity-team"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -138,6 +139,9 @@ const authRoutes = [
   { path: "/forgot-password", component: <ForgetPwd /> },
   { path: "/register", component: <Register /> },
   { path: "/admin", component: <Superadmin /> },
+  {path:"/chaarity",component:<Charity1/>},
+  {path:"/charityteam/:id",component:<CharityTeam/>},
+
 
   { path: "/pages-404", component: <Pages404 /> },
   { path: "/pages-500", component: <Pages500 /> },

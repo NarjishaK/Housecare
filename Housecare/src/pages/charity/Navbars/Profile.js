@@ -20,8 +20,6 @@ import user1 from "../../../assets/images/users/user-1.jpg"
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
-  const isSuperadmin = !!localStorage.getItem("Superadmin")
-  const admins = JSON.parse(localStorage.getItem("Superadmin"))
   return (
     <React.Fragment>
       <Dropdown
@@ -43,8 +41,7 @@ const ProfileMenu = props => {
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem
             tag="a"
-            href={isSuperadmin ? `/profile/${admins.id}` : "#"}
-            disabled={!isSuperadmin}
+            href="#/profile"
           >
             {" "}
             <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1" />
@@ -52,20 +49,15 @@ const ProfileMenu = props => {
           </DropdownItem>
           <DropdownItem tag="a" href="#">
             <i className="mdi mdi-wallet font-size-17 text-muted align-middle me-1" />
-            {props.t("My Wallet")}
+            {props.t("My Wallets")}
           </DropdownItem>
-          {/* <DropdownItem className="d-flex align-items-center" to="#">
-            <i className="mdi mdi-cog font-size-17 text-muted align-middle me-1"></i>
-            {props.t("Settings")}
-            <span className="badge bg-success ms-auto">11</span>
-          </DropdownItem> */}
-          <DropdownItem tag="a" href="auth-lock-screen">
+          <DropdownItem tag="a" href="#/auth-lock-screen">
             <i className="mdi mdi-lock-open-outline font-size-17 text-muted align-middle me-1" />
             {props.t("Lock screen")}
           </DropdownItem>
 
           <div className="dropdown-divider" />
-          <Link to="/logout" className="dropdown-item text-danger">
+          <Link to="#/logout" className="dropdown-item text-danger">
             <i className="mdi mdi-power font-size-17 text-muted align-middle me-1 text-danger" />
             <span>{props.t("Logout")}</span>
           </Link>

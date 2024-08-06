@@ -6,18 +6,18 @@ import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 
 // Redux Store
-import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions"
+import { showRightSidebarAction, toggleLeftmenu } from "store/actions"
 // reactstrap
 import { Container } from "reactstrap"
 
 // Import menuDropdown
-import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
-import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
+import NotificationDropdown from "components/CommonForBoth/TopbarDropdown/NotificationDropdown"
+import ProfileMenu from "./Profile"
 
 // import megamenuImg from "../../assets/images/megamenu-img.png"
-import logo from "../../assets/images/logo-sm.png"
-import logoLight from "../../assets/images/logo-light.png"
-import logoDark from "../../assets/images/logo-dark.png"
+import logo from "assets/images/logo-sm.png"
+import logoLight from "assets/images/logo-light.png"
+import logoDark from "assets/images/logo-dark.png"
 
 //i18n
 import { withTranslation } from "react-i18next"
@@ -90,17 +90,6 @@ const Header = props => {
           </div>
 
           <div className="float-end">
-            <form className="app-search d-none d-lg-inline-block">
-              <div className="position-relative">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search..."
-                />
-                <span className="fa fa-search"></span>
-              </div>
-            </form>
-            {/* <LanguageDropdown /> */}
 
             <div className="dropdown d-none d-lg-inline-block">
               <button
@@ -152,17 +141,6 @@ const Header = props => {
             </div>
             <NotificationDropdown />
             <ProfileMenu />
-            <div className="dropdown d-inline-block">
-              <button
-                onClick={() => {
-                  props.showRightSidebarAction(!props.showRightSidebar)
-                }}
-                type="button"
-                className="btn header-item noti-icon right-bar-toggle waves-effect"
-              >
-                <i className="mdi mdi-spin mdi-cog"></i>
-              </button>
-            </div>
           </div>
         </Container>
       </div>

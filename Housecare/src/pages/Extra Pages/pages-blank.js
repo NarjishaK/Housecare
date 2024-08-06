@@ -19,8 +19,7 @@ const PagesBlank = (props) => {
     })
 
     return (
-        <React.Fragment>
-        </React.Fragment>
+       <></>
     )
 }
 

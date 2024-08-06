@@ -38,6 +38,7 @@ function Charity() {
     role: "",
     VAT_REG_NO: "",
     authorizedperson: "",
+    password:"",
     phone: "",
   })
 
@@ -78,6 +79,7 @@ function Charity() {
     formData.append("VAT_REG_NO", values.VAT_REG_NO)
     formData.append("phone", values.phone)
     formData.append("authorizedperson", values.authorizedperson)
+    formData.append("password", values.password)
     formData.append("image", image)
     try {
       await handleCharity(formData)
@@ -114,6 +116,7 @@ function Charity() {
         phone: charityDetails.phone,
         arbic: charityDetails.arbic,
         authorizedperson: charityDetails.authorizedperson,
+        password:charityDetails.password,
       })
       setmodal_center(true)
     } catch (err) {
@@ -133,6 +136,7 @@ function Charity() {
     formData.append("arbic", values.arbic)
     formData.append("phone", values.phone)
     formData.append("authorizedperson", values.authorizedperson)
+    formData.append("password", values.password)
     formData.append("charity", values.charity)
 
     if (image) {
@@ -318,7 +322,19 @@ function Charity() {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg={12}>
+                    <Col lg={6}>
+                      <div className="mb-3">
+                        <label htmlFor="password">Password</label>
+                        <input
+                          className="form-control"
+                          name="password"
+                          value={values.password}
+                          onChange={handleChange}
+                          placeholder="Password"
+                        />
+                      </div>
+                    </Col>
+                    <Col lg={6}>
                       <div className="mb-3">
                         <label htmlFor="image">Image</label>
                         <input
@@ -573,6 +589,21 @@ function Charity() {
                                 type="file"
                                 accept="image/*"
                                 onChange={handleImage}
+                              />
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={12}>
+                            <div className="mb-3">
+                              <label htmlFor="password">Password</label>
+                              <input
+                                type="password"
+                                className="form-control"
+                                name="password"
+                                value={values.password}
+                                onChange={handleChange}
+                                placeholder="Password"
                               />
                             </div>
                           </Col>
