@@ -20,6 +20,7 @@ router.get("/admin", async (req, res) => {
     admin: "Narjishaaa",
     email: "narjisha@gmail.com",
     password: "123",
+    role: "company_admin",
   };
   try {
     const sadmin = new SuperAdmin(superAdmins);

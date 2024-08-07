@@ -2,7 +2,7 @@ const Charitystaffs = require('../model/charitystaff');
 const asyncHandler = require('express-async-handler');
 
 exports.create = asyncHandler(async (req, res) => {
-	const { name, email, phone, password, role, charity } = req.body;
+	const { name, email, phone, password, roles, charity } = req.body;
 	const image = req.file.filename;
 	try {
 		const staffs = await Charitystaffs.findOne({ email });
@@ -12,7 +12,7 @@ exports.create = asyncHandler(async (req, res) => {
 		const staff = await Charitystaffs.create({
 			name: name,
 			password: password,
-			role: role,
+			roles: roles,
 			email: email,
 			phone: phone,
 			charity: charity,
@@ -57,7 +57,7 @@ exports.edit = asyncHandler(async (req, res) => {
 });
 
 exports.update = asyncHandler(async (req, res) => {
-	const { name, email, phone, password, role, charity } = req.body;
+	const { name, email, phone, password, roles, charity } = req.body;
 	const { id } = req.params;
 	try {
 		const staff = await Charitystaffs.findById(id);
@@ -68,7 +68,7 @@ exports.update = asyncHandler(async (req, res) => {
 		staff.email = email;
 		staff.phone = phone;
 		staff.password = password;
-		staff.role = role;
+		staff.roles = roles;
 		staff.charity = charity;
 		if (req.file) {
 			staff.image = req.file.filename;

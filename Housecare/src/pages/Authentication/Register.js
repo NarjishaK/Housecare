@@ -23,6 +23,7 @@ const Register = props => {
 
   const [values, handleChange] = useForm({
     staff: "",
+    role:"",
     email: "",
     password: "",
     iqama:"",
@@ -47,6 +48,7 @@ const Register = props => {
     formData.append("password", values.password)
     formData.append("email", values.email)
     formData.append("iqama", values.iqama)
+    formData.append("role", values.role)
     formData.append("image", image)
     formData.append("phone", values.phone)
     
@@ -152,6 +154,14 @@ const Register = props => {
                           value={values.password}
                           onChange={handleChange}
                         />
+                      </div>
+                      <div className="mb-3">
+                        <Label htmlFor="role">Role</Label>
+                        <select name="role" id="role" value={values.role} onChange={handleChange} className="form-select">
+                          <option >select role</option>
+                          <option value="staff">staff</option>
+                        </select>
+
                       </div>
                       <div className="mb-3">
                         <Label htmlFor="iqama">Iqama No</Label>

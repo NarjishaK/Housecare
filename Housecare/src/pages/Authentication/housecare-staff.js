@@ -22,7 +22,11 @@ import { useForm } from "helpers/useForms"
 import { BASE_URL } from "./handle-api"
 
 function Staff() {
-  const isSuperadmin = !!localStorage.getItem("Superadmin")
+  // const isSuperadmin = !!localStorage.getItem("HomecareAdmin")
+  const isRoleStaff = () => {
+    const HomecareAdmin = JSON.parse(localStorage.getItem("HomecareAdmin"))
+    return HomecareAdmin && HomecareAdmin.roles === "staff"
+  }
   const [modal, setModal] = useState(false)
   const [staff, setStaff] = useState([])
   const [values, handleChange, setValues] = useForm({
@@ -31,6 +35,7 @@ function Staff() {
     password: "",
     iqama: "",
     phone: "",
+    role: "",
   })
   const [image, setImage] = useState("")
   const [editId, setEditId] = useState(null)
@@ -77,6 +82,7 @@ function Staff() {
       setValues({
         staff: staffData.staff,
         email: staffData.email,
+        role: staffData.role,
         iqama: staffData.iqama,
         phone: staffData.phone,
         password: staffData.password,
@@ -94,6 +100,7 @@ function Staff() {
     const formData = new FormData()
     formData.append("staff", values.staff)
     formData.append("email", values.email)
+    formData.append("role", values.role)
     formData.append("iqama", values.iqama)
     formData.append("phone", values.phone)
     formData.append("password", values.password)
@@ -176,6 +183,7 @@ function Staff() {
                 <tr style={{ fontWeight: "bold" }}>
                   <td>Staff</td>
                   <td>Email </td>
+                  <td>Role </td>
                   <td>Phone </td>
                   <td>Iqama No</td>
                   <td style={{ textAlign: "center" }}>Action</td>
@@ -193,6 +201,7 @@ function Staff() {
                       {staffs.staff}
                     </td>
                     <td>{staffs.email}</td>
+                    <td>{staffs.role}</td>
                     <td>{staffs.phone}</td>
                     <td>{staffs.iqama}</td>
                     <td style={{ justifyContent: "center", display: "flex" }}>
@@ -200,12 +209,15 @@ function Staff() {
                       <div size="sm" style={{ paddingInline: "10px" }}>
                         <Link
                           onClick={() => {
-                            setModal(!modal)
+                            
+                            if (!isRoleStaff) {
+                              setModal(!modal);
+                            }
                           }}
                         >
                           <Button
                             onClick={() => handleEdit(staffs._id)}
-                            disabled={!isSuperadmin}
+                            disabled={isRoleStaff}
                             style={{
                               backgroundColor: "transparent",
                               border: "none",
@@ -308,6 +320,26 @@ function Staff() {
                               </Col>
                               <Col lg={4}>
                                 <div className="mb-3">
+                                  <label htmlFor="role">Role</label>
+                                  <select
+                                    name="role"
+                                    id="role"
+                                    value={values.role}
+                                    onChange={handleChange}
+                                    className="form-select"
+                                  >
+                                    <option>select role</option>
+                                    <option value="staff">staff</option>
+                                    <option value="company_admin">
+                                      company_admin
+                                    </option>
+                                  </select>
+                                </div>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col lg={12}>
+                                <div className="mb-3">
                                   <label htmlFor="image">image</label>
                                   <input
                                     className="form-control"
@@ -348,7 +380,7 @@ function Staff() {
                         }}
                         className="waves-effect waves-light"
                         onClick={() => handleDelete(staffs._id)}
-                        disabled={!isSuperadmin}
+                        disabled={isRoleStaff}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -365,7 +397,7 @@ function Staff() {
                         // color="danger"
                         style={{ paddingInline: "10px", width: "75px" }}
                         className="waves-effect waves-light"
-                        disabled={!isSuperadmin}
+                        disabled={isRoleStaff}
                         onClick={() =>
                           handleBlock(staffs._id, staffs.isBlocked)
                         }

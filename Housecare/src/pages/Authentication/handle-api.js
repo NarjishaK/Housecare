@@ -192,8 +192,10 @@ export const handleadminLogin = async (e, values, setLoginStatus) => {
       setLoginStatus("success")
       const token = response.data.token
       localStorage.setItem("token", token)
-      const Superadmin = response.data.Superadmin
-      localStorage.setItem("Superadmin", JSON.stringify(Superadmin))
+      const HomecareAdmin = response.data.HomecareAdmin
+      localStorage.setItem("HomecareAdmin", JSON.stringify(HomecareAdmin))
+      // const roles  = response.data.roles
+      // localStorage.setItem("roles", JSON.stringify(roles))
       console.log("Token and user data stored in Local storage")
       window.location.href = "/dashboard"
     }

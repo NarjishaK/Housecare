@@ -1,10 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const Staffs = require("../model/housecare-model");
+const Superadmin = require("../model/housecareadmin");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 //create new staff
 exports.create = asyncHandler(async (req, res) => {
-  const { staff, email, password,iqama,phone } = req.body;
+  const { staff, email, password,iqama,phone,role } = req.body;
   const image = req.file.filename;
 
   try {
@@ -18,6 +19,7 @@ exports.create = asyncHandler(async (req, res) => {
       staff: staff,
       password: password,
       email: email,
+      role: role,
       iqama:iqama,
       phone:phone,
       image: image,
@@ -36,43 +38,101 @@ exports.create = asyncHandler(async (req, res) => {
   }
 });
 //staff login 
+// exports.signin = asyncHandler(async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     const admin = await Staffs.findOne({ email: email });
+//     if (!admin) {
+//       console.log("Admin not found with email:", email);
+//       return res
+//         .status(400)
+//         .json({ invalid: true, message: "Invalid email or password" });
+//     }
+//     if (admin.isBlocked) {
+//       console.log("Account is blocked for email:", email);
+//       return res
+//         .status(403)
+//         .json({ invalid: true, message: "Your account is blocked. Please contact support." });
+//     }
+//     const isPasswordIsMatch = await bcrypt.compare(password, admin.password);
+//     if (admin && isPasswordIsMatch) {
+//       const HomecareAdmin = {
+//         staff: admin.staff,
+//         email: admin.email,
+//         image: admin.image,
+//         iqama:admin.iqama,
+//         phone:admin.phone,
+//         role:admin.role
+//       };
+//       // const roles = admin.role
+//       const token = jwt.sign({ email: admin.email }, "myjwtsecretkey");
+//       admin.tokens = token;
+//       await admin.save();
+//       console.log("Signin successful, token generated");
+//       res.status(200).json({ token: token, HomecareAdmin: HomecareAdmin });
+//     }else {
+//       console.log("Password mismatch for email:", email);
+//       return res.status(400).json({ invalid: true, message: "Invalid email or password" });
+//     }
+//   } catch (err) {
+//     console.log(err, "signin  failed");
+//     return res.status(500).json({ err: "Invalid email or password" });
+//   }
+// });
+
+
 exports.signin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
   try {
-    const admin = await Staffs.findOne({ email: email });
+    let admin = await Staffs.findOne({ email: email });
+    let isSuperAdmin = false;
+
     if (!admin) {
-      console.log("Admin not found with email:", email);
-      return res
-        .status(400)
-        .json({ invalid: true, message: "Invalid email or password" });
+      console.log("Admin not found in Staffs model with email:", email);
+
+      admin = await Superadmin.findOne({ email: email });
+      if (!admin) {
+        console.log("Admin not found in Superadmin model with email:", email);
+        return res
+          .status(400)
+          .json({ invalid: true, message: "Invalid email or password" });
+      } else {
+        isSuperAdmin = true;
+      }
     }
+
     if (admin.isBlocked) {
       console.log("Account is blocked for email:", email);
       return res
         .status(403)
         .json({ invalid: true, message: "Your account is blocked. Please contact support." });
     }
+
     const isPasswordIsMatch = await bcrypt.compare(password, admin.password);
-    if (admin && isPasswordIsMatch) {
+    if (isPasswordIsMatch) {
       const HomecareAdmin = {
         staff: admin.staff,
         email: admin.email,
         image: admin.image,
-        iqama:admin.iqama,
-        phone:admin.phone,
+        iqama: admin.iqama,
+        phone: admin.phone,
+        role: admin.role
       };
+
       const token = jwt.sign({ email: admin.email }, "myjwtsecretkey");
       admin.tokens = token;
       await admin.save();
+      
       console.log("Signin successful, token generated");
-      res.status(200).json({ token: token, HomecareAdmin: HomecareAdmin });
-    }else {
+      return res.status(200).json({ token: token, HomecareAdmin: HomecareAdmin });
+    } else {
       console.log("Password mismatch for email:", email);
       return res.status(400).json({ invalid: true, message: "Invalid email or password" });
     }
   } catch (err) {
-    console.log(err, "signin  failed");
-    return res.status(500).json({ err: "Invalid email or password" });
+    console.log(err, "signin failed");
+    return res.status(500).json({ err: "Server error" });
   }
 });
 //list staff details
@@ -112,7 +172,7 @@ exports.edit = asyncHandler(async (req, res) => {
 });
 //update staff details
 exports.update = asyncHandler(async (req, res) => {
-  const { staff, email, password ,iqama,phone} = req.body;
+  const { staff, email, password ,iqama,phone,role} = req.body;
   const { id } = req.params;
   try {
     const admin = await Staffs.findById(id);
@@ -121,6 +181,7 @@ exports.update = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: "Admin not found to update" });
     }
     admin.email = email;
+    admin.role = role;
     admin.password = password;
     admin.staff = staff;
     admin.iqama = iqama;

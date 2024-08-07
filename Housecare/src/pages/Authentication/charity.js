@@ -35,7 +35,7 @@ function Charity() {
     date: "",
     arbic: "",
     CR_NO: "",
-    role: "",
+    roles: "",
     VAT_REG_NO: "",
     authorizedperson: "",
     password:"",
@@ -75,7 +75,7 @@ function Charity() {
     formData.append("date", values.date)
     formData.append("arbic", values.arbic)
     formData.append("CR_NO", values.CR_NO)
-    formData.append("role", values.role)
+    formData.append("roles", values.roles)
     formData.append("VAT_REG_NO", values.VAT_REG_NO)
     formData.append("phone", values.phone)
     formData.append("authorizedperson", values.authorizedperson)
@@ -110,7 +110,7 @@ function Charity() {
         charity: charityDetails.charity,
         email: charityDetails.email,
         CR_NO: charityDetails.CR_NO,
-        role: charityDetails.role,
+        roles: charityDetails.roles,
         date: charityDetails.date,
         VAT_REG_NO: charityDetails.VAT_REG_NO,
         phone: charityDetails.phone,
@@ -131,7 +131,7 @@ function Charity() {
     formData.append("email", values.email)
     formData.append("date", values.date)
     formData.append("CR_NO", values.CR_NO)
-    formData.append("role", values.role)
+    formData.append("roles", values.roles)
     formData.append("VAT_REG_NO", values.VAT_REG_NO)
     formData.append("arbic", values.arbic)
     formData.append("phone", values.phone)
@@ -282,8 +282,8 @@ function Charity() {
                         <label htmlFor="Role">Role</label>
                         <select
                           className="form-control"
-                          name="role"
-                          value={values.role}
+                          name="roles"
+                          value={values.roles}
                           onChange={handleChange}
                         >
                           <option>Main_Admin</option>
@@ -470,8 +470,8 @@ function Charity() {
                               <label htmlFor="Role">Role</label>
                               <select
                                 className="form-control"
-                                name="role"
-                                value={values.role}
+                                name="roles"
+                                value={values.roles}
                                 onChange={handleChange}
                               >
                                 <option>Role</option>

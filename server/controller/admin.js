@@ -18,17 +18,20 @@ exports.signinadmin = asyncHandler(async (req, res) => {
       superadmin.password
     );
     if (superadmin && isPasswordIsMatch) {
-      const Superadmin = {
+      const  HomecareAdmin = {
+        // Superadmin
         admin: superadmin.admin,
         email: superadmin.email,
         image: superadmin.image,
-        id:superadmin._id
+        id:superadmin._id,
+        role:superadmin.role
       };
+      // const roles = superadmin.role
       const token = jwt.sign({ email: superadmin.email }, "myjwtsecretkey");
       superadmin.tokens = token;
       await superadmin.save();
       console.log("Signin successful, token generated");
-      res.status(200).json({ token: token, Superadmin: Superadmin });
+      res.status(200).json({ token: token, HomecareAdmin: HomecareAdmin });
     } else {
       console.log("Password mismatch for email:", email);
       return res
@@ -66,7 +69,7 @@ res.json(admins)
 })
 
 exports.updateAdmin = asyncHandler(async (req, res) => {
-  const { admin, email } = req.body;
+  const { admin, email ,role} = req.body;
   const { id } = req.params;
   try {
     const admins = await Superadmin.findById(id);
@@ -74,6 +77,7 @@ exports.updateAdmin = asyncHandler(async (req, res) => {
       return res.status(400).json({ message: "admin not found for update" });
     }
     admins.email = email;
+    admins.role = role;
     admins.admin = admin;
     if (req.file) {
       admins.image = req.file.filename;

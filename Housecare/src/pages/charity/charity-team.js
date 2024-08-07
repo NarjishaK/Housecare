@@ -53,7 +53,7 @@ function CharityDetails() {
     phone: "",
     password: "",
     charity: "",
-    role: "",
+    roles: "",
   })
   const [charitys, setCharitys] = useState([])
   const [showPassword, setShowPassword] = useState(false)
@@ -90,9 +90,9 @@ function CharityDetails() {
     }
     fetchData()
   }, [id])
-  const handleshowPassword = () => {
-    setShowPassword(!showPassword)
-  }
+  // const handleshowPassword = () => {
+  //   setShowPassword(!showPassword)
+  // }
   //handle image
   const handleImage = e => {
     const selectedImage = e.target.files[0]
@@ -148,7 +148,7 @@ function CharityDetails() {
       setValues({
         charity: charitystaffDetails.charity,
         email: charitystaffDetails.email,
-        role: charitystaffDetails.role,
+        roles: charitystaffDetails.roles,
         phone: charitystaffDetails.phone,
         name: charitystaffDetails.name,
         password: charitystaffDetails.password,
@@ -197,6 +197,7 @@ function CharityDetails() {
       alert("failed")
     }
   }
+  //benificiarys list
     const fetchDatas = async () => {
       try {
         const response = await fetchBenificiarys()
@@ -296,7 +297,7 @@ function CharityDetails() {
                     <br />
                     Email: {charitys.email}
                     <br />
-                    Password: {showPassword ? charitys.password : "******"}
+                    {/* Password: {showPassword ? charitys.password : "******"}
                     <button
                       style={{ backgroundColor: "transparent", border: "none" }}
                       onClick={handleshowPassword}
@@ -312,10 +313,10 @@ function CharityDetails() {
                         <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
                         <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
                       </svg>
-                    </button>
+                    </button> */}
                   </td>
                   <td>
-                    {charitys.role}
+                    {charitys.roles}
                     <br />
                     CR_NO: {charitys.CR_NO} <br />
                     VAT_REG_NO: {charitys.VAT_REG_NO}
@@ -444,8 +445,8 @@ function CharityDetails() {
                                 <label htmlFor="role">Role</label>
                                 <select
                                   className="form-control"
-                                  name="role"
-                                  value={values.role}
+                                  name="roles"
+                                  value={values.roles}
                                   onChange={handleChange}
                                 >
                                   <option>Role</option>
@@ -527,7 +528,7 @@ function CharityDetails() {
                         </td>
                         <td>{charitystaff.email}</td>
                         <td>{charitystaff.phone}</td>
-                        <td>{charitystaff.role}</td>
+                        <td>{charitystaff.roles}</td>
                         <td
                           style={{
                             textAlign: "center",
@@ -666,8 +667,8 @@ function CharityDetails() {
                                       <label htmlFor="role">Role</label>
                                       <select
                                         className="form-control"
-                                        name="role"
-                                        value={values.role}
+                                        name="roles"
+                                        value={values.roles}
                                         onChange={handleChange}
                                       >
                                         <option>Role</option>

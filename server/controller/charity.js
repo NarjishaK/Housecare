@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 exports.create = asyncHandler(async (req, res) => {
-	const { charity, email, date, arbic, CR_NO,role,password, VAT_REG_NO, authorizedperson, phone } = req.body;
+	const { charity, email, date, arbic, CR_NO,roles,password, VAT_REG_NO, authorizedperson, phone } = req.body;
 	const image = req.file.filename;
 
 	try {
@@ -19,7 +19,7 @@ exports.create = asyncHandler(async (req, res) => {
 			date: date,
 			authorizedperson: authorizedperson,
 			CR_NO: CR_NO,
-			role: role,
+			roles: roles,
 			VAT_REG_NO: VAT_REG_NO,
 			phone: phone,
 			arbic: arbic,
@@ -69,7 +69,7 @@ exports.edit = asyncHandler(async (req, res) => {
 });
 
 exports.update = asyncHandler(async (req, res) => {
-	const { charity, email, password,date, arbic, CR_NO, role,VAT_REG_NO, authorizedperson, phone } = req.body;
+	const { charity, email, password,date, arbic, CR_NO, roles,VAT_REG_NO, authorizedperson, phone } = req.body;
 	const { id } = req.params;
 	try {
 		const charities = await Charity.findById(id);
@@ -84,7 +84,7 @@ exports.update = asyncHandler(async (req, res) => {
 		charities.phone = phone;
 		charities.VAT_REG_NO = VAT_REG_NO;
 		charities.CR_NO = CR_NO;
-		charities.role = role;
+		charities.roles = roles;
 		charities.authorizedperson = authorizedperson;
 		charities.arbic = arbic;
 		if (req.file) {
@@ -150,7 +150,7 @@ exports.signin = asyncHandler(async (req, res) => {
 			image:user.image,
 			phone:user.phone,
 			id:user._id,
-			role:user.role,
+			roles:user.roles,
 			VAT_REG_NO:user.VAT_REG_NO,
 			authorizedperson:user.authorizedperson,
 			date:user.date,

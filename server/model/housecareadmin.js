@@ -7,6 +7,7 @@ const adminSchema = mongoose.Schema({
   password: { type: String, required: true },
   image: { type: String },
   tokens: { type: String, default: "" },
+  role: { type: String, required: true },
 });
 
 adminSchema.pre("save", async function (next) {

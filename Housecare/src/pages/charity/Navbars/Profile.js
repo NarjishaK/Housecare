@@ -57,7 +57,7 @@ const ProfileMenu = props => {
           </DropdownItem>
 
           <div className="dropdown-divider" />
-          <Link to="#/logout" className="dropdown-item text-danger">
+          <Link to="/logout" className="dropdown-item text-danger">
             <i className="mdi mdi-power font-size-17 text-muted align-middle me-1 text-danger" />
             <span>{props.t("Logout")}</span>
           </Link>

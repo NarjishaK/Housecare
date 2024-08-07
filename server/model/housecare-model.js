@@ -10,6 +10,7 @@ const housecareSchema = mongoose.Schema({
   phone:{type:Number,required:true},
   isBlocked: { type: Boolean, default: false },
   tokens: { type: String, default: "" },
+  role: { type: String, required: true },
 });
 
 housecareSchema.pre("save", async function (next) {

@@ -66,6 +66,10 @@ const Header = props => {
     body.classList.toggle("vertical-collpsed")
     body.classList.toggle("sidebar-enable")
   }
+  const isRoleStaff = () => {
+    const HomecareAdmin = JSON.parse(localStorage.getItem("HomecareAdmin"));
+    return HomecareAdmin && HomecareAdmin.roles === "staff";
+  };
   return (
     <React.Fragment>
       <header id="page-topbar">
@@ -111,14 +115,12 @@ const Header = props => {
                   <Button
                     className="btn btn-light"
                     tag="button"
-                    disabled={!localStorage.getItem("Superadmin")}
+                    disabled={isRoleStaff()}
                   >
                     <a
                       href="/register"
                       style={{
-                        pointerEvents: localStorage.getItem("Superadmin")
-                          ? "auto"
-                          : "none",
+                        pointerEvents: isRoleStaff() ? "none" : "auto",
                       }}
                     >
                       Create

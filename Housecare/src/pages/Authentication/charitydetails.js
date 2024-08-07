@@ -50,7 +50,7 @@ function CharityDetails() {
     phone: "",
     password: "",
     charity: "",
-    role: "",
+    roles: "",
   })
   const [datas, handleChanges, setDatas] = useForm({
     benificiary_name: "",
@@ -140,7 +140,7 @@ function CharityDetails() {
       setValues({
         charity: charitystaffDetails.charity,
         email: charitystaffDetails.email,
-        role: charitystaffDetails.role,
+        roles: charitystaffDetails.roles,
         phone: charitystaffDetails.phone,
         name: charitystaffDetails.name,
         password: charitystaffDetails.password,
@@ -265,7 +265,7 @@ function CharityDetails() {
             alt="user"
             className="avatar-xs me-2 rounded-circle"
           />{" "}
-          {charitys.authorizedperson}({charitys.role})
+          {charitys.authorizedperson}({charitys.roles})
           <div className="table-responsive">
             <Table className="align-middle table-centered table-vertical table-nowrap mb-1">
               <tbody>
@@ -400,11 +400,11 @@ function CharityDetails() {
                             </Col>
                             <Col lg={4}>
                               <div className="mb-3">
-                                <label htmlFor="role">Role</label>
+                                <label htmlFor="roles">Role</label>
                                 <select
                                   className="form-control"
-                                  name="role"
-                                  value={values.role}
+                                  name="roles"
+                                  value={values.roles}
                                   onChange={handleChange}
                                 >
                                   <option>Role</option>
@@ -486,7 +486,7 @@ function CharityDetails() {
                         </td>
                         <td>{charitystaff.email}</td>
                         <td>{charitystaff.phone}</td>
-                        <td>{charitystaff.role}</td>
+                        <td>{charitystaff.roles}</td>
                         <td
                           style={{
                             textAlign: "center",
@@ -625,8 +625,8 @@ function CharityDetails() {
                                       <label htmlFor="role">Role</label>
                                       <select
                                         className="form-control"
-                                        name="role"
-                                        value={values.role}
+                                        name="roles"
+                                        value={values.roles}
                                         onChange={handleChange}
                                       >
                                         <option>Role</option>

@@ -13,12 +13,12 @@ const Logout = () => {
     localStorage.removeItem("HomecareAdmin");
     localStorage.removeItem("Superadmin");
     localStorage.removeItem("token");
+    localStorage.removeItem("charitydetails")
 
     // Dispatch logout action
     dispatch(logoutUser());
 
-    // Redirect to login or home page
-    navigate('/housecare'); // adjust the path according to your routing
+    navigate('/housecare'); 
   }, [dispatch, navigate]);
 
   return null; // No need to return an empty fragment

@@ -137,13 +137,6 @@ const Superadmin = () => {
                 </CardBody>
               </Card>
               <div className="mt-5 text-center">
-                <p>
-                  Not you ? {" "}
-                  <Link to="/login" className=" text-primary">
-                    {" "}
-                    Are you Admin{" "}
-                  </Link>{" "}
-                </p>
                 <p>© 2024 Housecare</p>
               </div>
             </Col>

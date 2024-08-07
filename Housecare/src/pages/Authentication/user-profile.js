@@ -24,6 +24,7 @@ const UserProfile = () => {
   const [values, handleChange, setValues] = useForm({
     admin: "",
     email: "",
+    role: "",
   });
   const [image, setImage] = useState(""); 
 
@@ -35,6 +36,7 @@ const UserProfile = () => {
       setValues({
         admin: parsedSuperadmin.admin,
         email: parsedSuperadmin.email,
+        role: parsedSuperadmin.role
       });
       setImage(`${BASE_URL}/${parsedSuperadmin.image}`); // Set image URL
     }
@@ -65,6 +67,7 @@ const UserProfile = () => {
         setValues({
           admin: adminData.admin,
           email: adminData.email,
+          role: adminData.role
         });
         setImage(`${BASE_URL}/${adminData.image}`); 
         setSuperAdmin(adminData);
@@ -81,6 +84,8 @@ const UserProfile = () => {
     const formData = new FormData();
     formData.append("admin", values.admin);
     formData.append("email", values.email);
+    formData.append("role", values.role);
+
     if (values.image) {
       formData.append("image", values.image);
     }  
@@ -96,6 +101,7 @@ const UserProfile = () => {
         JSON.stringify({
           ...admins,
           email: values.email,
+          role: values.role,
           admin: values.admin,
           image: response.data.image,
         }),
@@ -164,6 +170,17 @@ const UserProfile = () => {
                     placeholder="Enter Email Address"
                     type="email"
                   />
+                  <br/>
+                  <Label className="form-label">Role</Label>
+                  <select
+                    name="role"
+                    value={values.role}
+                    onChange={handleChange}
+                    className="form-control"
+                  >
+                    <option value="company_admin">company_admin</option>
+                    <option value="staff">staff</option>
+                  </select>
                   <br />
                   <Label className="form-label">Profile Image</Label>
                   <Input
