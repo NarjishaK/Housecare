@@ -18,7 +18,7 @@ const Logout = () => {
     dispatch(logoutUser());
 
     // Redirect to login or home page
-    navigate('/login'); // adjust the path according to your routing
+    navigate('/housecare'); // adjust the path according to your routing
   }, [dispatch, navigate]);
 
   return null; // No need to return an empty fragment

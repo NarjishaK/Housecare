@@ -143,10 +143,30 @@ exports.signin = asyncHandler(async (req, res) => {
 		console.log('password not matched');  
 		return res.status(400).json({ message: 'password not matched' });
 	  }
-	  const token = jwt.sign({ id: user._id }, 'myjwtsecretkey', {
-		expiresIn: '1d',
-	  });
-	  res.json({ token, userId: user._id }); // Include userId in the response
+	  if(user && isMatch){
+		const charitydetails ={
+			charity:user.charity,
+			email:user.email,
+			image:user.image,
+			phone:user.phone,
+			id:user._id,
+			role:user.role,
+			VAT_REG_NO:user.VAT_REG_NO,
+			authorizedperson:user.authorizedperson,
+			date:user.date,
+			arbic:user.arbic,
+			CR_NO:user.CR_NO,
+		}
+		  
+	  const token = jwt.sign({ email: user.email }, 'myjwtsecretkey');
+	  user.tokens = token;
+	  await user.save();
+	  console.log('login successful, token generated');
+	  return res.status(200).json({ token: token, charitydetails:charitydetails });
+
+	  }else{
+		return res.status(400).json({ message: 'password not matched' });
+	  }
 	} catch (err) {
 	  console.log(err, 'login failed');
 	  return res.status(500).json({ err: 'login failed' });

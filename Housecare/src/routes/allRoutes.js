@@ -69,6 +69,9 @@ import Superadmin from "pages/Authentication/superadmin"
 import Beneficiarydetails from "pages/Authentication/beneficiarydetails"
 import Charity1 from "../pages/charity"
 import CharityTeam from "../pages/charity/charity-team"
+import Mainpage from "pages/charity/mainpage"
+import Dashboards from "pages/charity/dashboards"
+import BenificiariesDetails from "pages/charity/beneficiariesdetails"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -129,7 +132,7 @@ const userRoutes = [
   {
     path: "/",
     exact: true,
-    component: <Navigate to="/admin" />,
+    component: <Navigate to="/housecare" />,
   },
 ]
 
@@ -141,7 +144,9 @@ const authRoutes = [
   { path: "/admin", component: <Superadmin /> },
   {path:"/chaarity",component:<Charity1/>},
   {path:"/charityteam/:id",component:<CharityTeam/>},
-
+  {path:"/housecare",component:<Mainpage/>},
+  {path:"/dashboards",component:<Dashboards/>},
+  {path:"/beneficiariesdetails/:id",component:<BenificiariesDetails/>},
 
   { path: "/pages-404", component: <Pages404 /> },
   { path: "/pages-500", component: <Pages500 /> },

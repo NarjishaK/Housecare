@@ -36,10 +36,10 @@ const Dashboard = (props) => {
   },)
 
   const reports = [
-    { title: "Orders", iconClass: "cube-outline", total: "1,587", average: "+11%", badgecolor: "info" },
-    { title: "Revenue", iconClass: "buffer", total: "$46,782", average: "-29%", badgecolor: "danger" },
-    { title: "Average Price", iconClass: "tag-text-outline", total: "$15.9", average: "0%", badgecolor: "warning" },
-    { title: "Product Sold", iconClass: "briefcase-check", total: "1890", average: "+89%", badgecolor: "info" },
+    { title: "Charity Organizations", iconClass: "cube-outline", total: "3", average: "+11%", badgecolor: "info" },
+    { title: "Total Beneficiaries", iconClass: "buffer", total: "14", average: "-29%", badgecolor: "danger" },
+    { title: "Total   Approvals", iconClass: "tag-text-outline", total: "11", average: "0%", badgecolor: "warning" },
+    { title: "Pending Approvals", iconClass: "briefcase-check", total: "2", average: "+89%", badgecolor: "info" },
   ]
 
   return (

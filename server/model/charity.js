@@ -13,6 +13,7 @@ const charitySchema = mongoose.Schema({
   date: { type: String, required: true },
   role: { type: String, required: true },
   password: { type: String, required: true },
+  tokens: { type: String, default: "" },
 });
 
 charitySchema.pre("save", async function (next) {

@@ -418,13 +418,23 @@ export const handleCharitySignin = async (e, values, setLoginStatus) => {
   console.log("Attempting to login with data:", Data)
   try {
     const response = await axios.post(`${CHARITY_URL}/signin`, Data);
-    const { token, userId } = response.data; // Destructure token and userId from response
+    if (response.status === 200) {
+  
+    const { token, charitydetails } = response.data; // Destructure token and userId from response
     localStorage.setItem("token", token);
+    localStorage.setItem("charitydetails",JSON.stringify (charitydetails));
     setLoginStatus(true);
     console.log("Login successful");
-    window.location.href = `/charityteam/${userId}`;
-
+    // window.location.href = `/charityteam/${userId}`;
+    window.location.href = "/dashboards";
+    alert("success")
+    }
   } catch (err) {
-    console.log(err, "Login failed")
-  } 
+    setLoginStatus("error")
+    if (err.response && err.response.status === 400) {
+      console.log(err.response.data.message)
+    } else {
+      console.log(err.message, "something went wrong in signin")
+    } 
+   } 
 }

@@ -51,6 +51,7 @@ const Header = props => {
       }
     }
   }
+
   return (
     <React.Fragment>
 
@@ -139,7 +140,7 @@ const Header = props => {
                 </form>
               </div>
             </div>
-            <NotificationDropdown />
+            {/* <NotificationDropdown /> */}
             <ProfileMenu />
           </div>
         </Container>

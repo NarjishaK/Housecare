@@ -1,0 +1,46 @@
+.dashboards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .cards, .subcard {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cards {
+    flex: 1 1 calc(25% - 40px);
+    text-align: center;
+  }
+  
+  .cardtitle, .subcardtitle {
+    font-size: 1.2em;
+    color: #666;
+  }
+  
+  .cardvalue, .subcardvalue {
+    font-size: 2em;
+    color: #333;
+    margin: 10px 0;
+  }
+  
+  .cardsubtext, .subcardsubtext {
+    font-size: 0.8em;
+    color: #999;
+  }
+  
+  .subcards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .subcard {
+    flex: 1 1 calc(33.33% - 40px);
+    text-align: center;
+  }
+  

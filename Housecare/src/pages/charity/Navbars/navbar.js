@@ -71,8 +71,8 @@ const Navbar = props => {
     }
     return false
   }
-
-  return (
+  const charitydetails = JSON.parse(localStorage.getItem("charitydetails"));
+    return (
     <React.Fragment>
       <div className="container-fluid">
         <div className="topnav">
@@ -87,24 +87,24 @@ const Navbar = props => {
             >
               <ul className="navbar-nav">
                 <li className="nav-item">
-                  <Link to="#/dashboard" className="nav-link">
+                  <Link to="/dashboards" className="nav-link">
                     <i className="mdi mdi-view-dashboard"></i>
                     <span>{props.t("Dashboard")}</span>
                   </Link>
                 </li>
 
                 <li className="nav-item">
-                  <Link className="nav-link" to="#admin">
+                  <Link className="nav-link" to={`/charityteam/${charitydetails.id}`}>
                     <i className="mdi mdi-account-box"></i>
-                    {props.t("Admins")}
+                    {props.t("Team")}
                   </Link>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link to="#beneficiary" className="nav-link">
                     <i className="mdi mdi-account-box"></i>
                     <span>{props.t("Beneficiaries")}</span>
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </Collapse>
           </nav>
