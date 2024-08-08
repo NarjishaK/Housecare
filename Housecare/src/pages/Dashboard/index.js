@@ -23,11 +23,11 @@ import { setBreadcrumbItems } from "../../store/actions";
 
 const Dashboard = (props) => {
 
-  document.title = "Dashboard | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Dashboard |Housecare - Charity management";
 
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "Dashboard", link: "#" }
   ]
 

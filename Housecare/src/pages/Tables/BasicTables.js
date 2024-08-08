@@ -16,11 +16,11 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const BasicTable = (props) => {
-  document.title = "Basic Tables | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Basic Tables | Housecare";
 
   
   const breadcrumbItems = [
-    { title : "Lexa", link : "#" },
+    { title : "Housecare", link : "#" },
     { title : "Tables", link : "#" },
     { title : "Basic Tables", link : "#" },
   ]

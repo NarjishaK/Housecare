@@ -18,10 +18,10 @@ import { Link } from "react-router-dom"
 
 const FormUpload = (props) => {
 
-  document.title = "Form File Upload | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Form File Upload | Housecare";
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "Forms", link: "#" },
     { title: "File Upload", link: "#" },
   ]

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 
 const Pages404 = () => {
-    document.title = "Error 404 | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Error 403 | Housecare -Forbidden";
 
   return (
     <React.Fragment>
@@ -16,17 +16,18 @@ const Pages404 = () => {
                         <CardBody className="pt-0">
 
                             <div className="ex-page-content text-center">
-                                <h1 className="text-dark">404!</h1>
-                                <h3 className="">Sorry, page not found</h3>
+                                <h1 className="text-dark">403!</h1>
+                                {/* <h3 className="">Sorry, page not found</h3> */}
+                                <h3 className="">Forbidden</h3>
                                 <br />
 
-                                <Link className="btn btn-info mb-4 waves-effect waves-light" to="/dashboard"><i className="mdi mdi-home"></i> Back to Dashboard</Link>
+                                <Link className="btn btn-info mb-4 waves-effect waves-light" to="/housecare"><i className="mdi mdi-home"></i> Back to Login</Link>
                             </div>
 
                         </CardBody>
                     </Card>
                     <div className="mt-5 text-center">
-                        <p>©2021 Lexa - Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                        <p>©2024 Housecare </p>
                     </div>
                 </Col>
             </Row>

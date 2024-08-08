@@ -15,10 +15,10 @@ import {
 } from 'reactstrap';
 
 const UiOffcanvas = (props) => {
-    document.title = "Offcanvas | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Offcanvas | Housecare";
 
     const breadcrumbItems = [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "UI Elements", link: "#" },
         { title: "Colors", link: "#" },
     ]

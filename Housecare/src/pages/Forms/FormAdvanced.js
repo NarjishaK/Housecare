@@ -19,7 +19,7 @@ import { setBreadcrumbItems } from "../../store/actions";
 const animatedComponents = makeAnimated()
 
 const Offsymbol = (props) => {
-  document.title = "Form Advanced | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Form Advanced | Housecare";
 
   return (
     <div
@@ -118,7 +118,7 @@ const optionGroup2 = [
 const FormAdvanced = (props) => {
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "Forms", link: "#" },
     { title: "Form Advanced", link: "#" },
   ]

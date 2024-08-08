@@ -37,10 +37,10 @@ import { setBreadcrumbItems } from "../../store/actions";
 const images = [img1, img2, img3, img4, img5, img6]
 
 const UiLightbox = (props) => {
-  document.title = "Lightbox | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Lightbox |Housecare";
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "UI Elements", link: "#" },
     { title: "Lightbox", link: "#" },
   ]
@@ -140,7 +140,7 @@ const UiLightbox = (props) => {
                           setisFits(true)
                         }}
                         className="img-fluid"
-                        alt="Lexa"
+                        alt="Housecare"
                         src={img2}
                         width="145"
                       />

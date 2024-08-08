@@ -34,7 +34,7 @@ import DeleteModal from "./DeleteModal"
 
 const Calender = props => {
 
-  document.title = "Calendar | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Calendar | Housecare";
 
   const { events, categories, onGetCategories, onGetEvents } = props
   const [setCalenderView, updatedCalenderView] = useState("dayGridMonth")
@@ -202,7 +202,7 @@ const Calender = props => {
 
   //BreadCrumd add
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Houssecare", link: "#" },
     { title: "Calendar", link: "#" },
   ]
 

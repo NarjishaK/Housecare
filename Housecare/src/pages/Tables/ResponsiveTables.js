@@ -10,10 +10,10 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const ResponsiveTables = (props) => {
-  document.title = "Responsive Table | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Responsive Table | Housecare";
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "Tables", link: "#" },
     { title: "Responsive Table", link: "#" },
   ]

@@ -20,10 +20,10 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const UiCarousel = (props) => {
-  document.title = "Carousel | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Carousel |Housecare";
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "UI Elements", link: "#" },
     { title: "Carousel", link: "#" },
   ]

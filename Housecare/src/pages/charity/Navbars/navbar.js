@@ -1,17 +1,29 @@
 import PropTypes from "prop-types"
-import React, { useEffect } from "react"
-import { Collapse } from "reactstrap"
+import React, { useEffect,useState } from "react"
+import { Button, Collapse } from "reactstrap"
 import { Link } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
 // import classname from "classnames"
+import PaymentModal from "../paymentmodal"; // Import the PaymentModal component
 
 //i18n
+
 import { withTranslation } from "react-i18next"
 
 import { connect } from "react-redux"
 
+
 const Navbar = props => {
 
+  const saveAmount = (amount) => {
+    localStorage.setItem('limitedamount', amount);
+    window.location.href ="/split"
+  };
+
+  const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
+  const togglePaymentModal = () => {
+    setPaymentModalOpen(!isPaymentModalOpen);
+  };
   useEffect(() => {
     const pathName = process.env.PUBLIC_URL + props.router.location.pathname
 
@@ -105,11 +117,19 @@ const Navbar = props => {
                     <span>{props.t("Beneficiaries")}</span>
                   </Link>
                 </li> */}
+                            
+
               </ul>
             </Collapse>
+            <Button onClick={togglePaymentModal} style={{marginRight:"20px"}}>PAY NOW</Button>
           </nav>
         </div>
       </div>
+      <PaymentModal 
+        isOpen={isPaymentModalOpen} 
+        toggle={togglePaymentModal} 
+        saveAmount={saveAmount} 
+      />
     </React.Fragment>
   )
 }

@@ -15,7 +15,7 @@ import { useFormik } from "formik";
 import { userForgetPassword } from "../../store/actions";
 
 const ForgetPasswordPage = props => {
-  document.title = "Forget Password | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Forget Password | Housecare";
 
   const dispatch = useDispatch();
 
@@ -112,8 +112,7 @@ const ForgetPasswordPage = props => {
               </Card>
               <div className="mt-5 text-center">
                 <p>Remember It ? <Link to="/login" className="text-primary"> Sign In Here </Link> </p>
-                © {new Date().getFullYear()} Lexa <span className="d-none d-sm-inline-block"> - Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand.</span>
-              </div>
+                © {new Date().getFullYear()} Housecare </div>
             </Col>
           </Row>
         </Container>

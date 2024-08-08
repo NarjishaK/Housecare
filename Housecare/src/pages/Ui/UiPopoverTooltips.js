@@ -18,10 +18,10 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const UiPopoverTooltips = (props) => {
-    document.title = "Popover & Tooltips | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Popover & Tooltips |Housecare";
 
     const breadcrumbItems = [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "UI Elements", link: "#" },
         { title: "Popover & Tooltips", link: "#" },
     ]

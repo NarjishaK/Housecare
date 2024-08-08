@@ -16,11 +16,11 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const FormElements = (props) => {
-  document.title = "Form Elements | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Form Elements | Housecare";
 
   
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "Forms", link: "#" },
     { title: "Form Elements", link: "#" },
   ]

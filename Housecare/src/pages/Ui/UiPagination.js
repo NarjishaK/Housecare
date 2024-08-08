@@ -15,10 +15,10 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const UiPagination = (props) => {
-    document.title = "Pagination | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Pagination |Housecare";
 
     const breadcrumbItems = [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "UI Elements", link: "#" },
         { title: "Pagination", link: "#" },
     ]

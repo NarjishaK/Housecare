@@ -15,10 +15,10 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const UiModal = (props) => {
-  document.title = "Modals | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Modals | Housecare";
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "UI Elements", link: "#" },
     { title: "Modals", link: "#" },
   ]

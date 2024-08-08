@@ -1,29 +1,19 @@
-import React, { useState } from "react"
-import PropTypes from 'prop-types'
-
-import { connect } from "react-redux"
-
-import { Link } from "react-router-dom"
-
-// Redux Store
-import { showRightSidebarAction, toggleLeftmenu } from "store/actions"
-// reactstrap
-import { Container } from "reactstrap"
-
-// Import menuDropdown
-import NotificationDropdown from "components/CommonForBoth/TopbarDropdown/NotificationDropdown"
-import ProfileMenu from "./Profile"
-
-// import megamenuImg from "../../assets/images/megamenu-img.png"
-import logo from "assets/images/logo-sm.png"
-import logoLight from "assets/images/logo-light.png"
-import logoDark from "assets/images/logo-dark.png"
-
-//i18n
-import { withTranslation } from "react-i18next"
+import React, { useState } from "react";
+import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { showRightSidebarAction, toggleLeftmenu } from "store/actions";
+import { Container } from "reactstrap";
+// import NotificationDropdown from "components/CommonForBoth/TopbarDropdown/NotificationDropdown";
+import ProfileMenu from "./Profile";
+// import PaymentModal from "../paymentmodal"; // Import the PaymentModal component
+import logo from "assets/images/logo-sm.png";
+import logoLight from "assets/images/logo-light.png";
+import logoDark from "assets/images/logo-dark.png";
+import { withTranslation } from "react-i18next";
 
 const Header = props => {
-  const [isSearch, setSearch] = useState(false)
+  const [isSearch, setSearch] = useState(false);
 
   function toggleFullscreen() {
     if (
@@ -52,9 +42,10 @@ const Header = props => {
     }
   }
 
+
+
   return (
     <React.Fragment>
-
       <div className="navbar-header">
         <Container fluid>
           <div className="float-start">
@@ -80,25 +71,20 @@ const Header = props => {
             <button
               type="button"
               className="btn btn-sm px-3 font-size-24 d-lg-none header-item waves-effect waves-light"
-              data-toggle="collapse"
               onClick={() => {
                 props.toggleLeftmenu(!props.leftMenu)
               }}
-              data-target="#topnav-menu-content"
             >
               <i className="mdi mdi-menu"></i>
             </button>
           </div>
 
           <div className="float-end">
-
             <div className="dropdown d-none d-lg-inline-block">
               <button
                 type="button"
                 className="btn header-item noti-icon waves-effect"
-                onClick={() => {
-                  toggleFullscreen()
-                }}
+                onClick={toggleFullscreen}
                 data-toggle="fullscreen"
               >
                 <i className="mdi mdi-fullscreen font-size-24"></i>
@@ -140,15 +126,20 @@ const Header = props => {
                 </form>
               </div>
             </div>
-            {/* <NotificationDropdown /> */}
+            {/* <Button onClick={togglePaymentModal}>PAY NOW</Button> */}
             <ProfileMenu />
           </div>
         </Container>
       </div>
 
+      {/* <PaymentModal 
+        isOpen={isPaymentModalOpen} 
+        toggle={togglePaymentModal} 
+        saveAmount={saveAmount} 
+      /> */}
     </React.Fragment>
-  )
-}
+  );
+};
 
 Header.propTypes = {
   leftMenu: PropTypes.any,
@@ -156,14 +147,14 @@ Header.propTypes = {
   showRightSidebarAction: PropTypes.func,
   t: PropTypes.any,
   toggleLeftmenu: PropTypes.func
-}
+};
 
 const mapStatetoProps = state => {
-  const { layoutType, showRightSidebar, leftMenu } = state.Layout
-  return { layoutType, showRightSidebar, leftMenu }
-}
+  const { layoutType, showRightSidebar, leftMenu } = state.Layout;
+  return { layoutType, showRightSidebar, leftMenu };
+};
 
 export default connect(mapStatetoProps, {
   showRightSidebarAction,
   toggleLeftmenu,
-})(withTranslation()(Header))
+})(withTranslation()(Header));

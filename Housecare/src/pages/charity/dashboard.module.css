@@ -44,3 +44,107 @@
     text-align: center;
   }
   
+
+/* dashboard.module.css */
+
+.App {
+  padding: 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.tables {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.tables th, .tables td {
+  padding: 10px;
+  border: 1px solid #e0dddd;
+}
+
+.tables th {
+  background-color: #f5f5f5;
+}
+
+.tables td {
+  text-align: center;
+}
+
+.btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* Alert styles */
+.alert_container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+}
+
+.alert_container button {
+  margin-right: 10px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .tables th, .tables td {
+    padding: 5px;
+    font-size: 12px;
+  }
+
+  .btn {
+    padding: 3px 5px;
+    font-size: 12px;
+  }
+
+  .alert-container {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .tables th, .tables td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tables td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .tables td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .btn {
+    padding: 2px 4px;
+    font-size: 10px;
+  }
+
+  .alert-container {
+    width: 100%;
+  }
+}

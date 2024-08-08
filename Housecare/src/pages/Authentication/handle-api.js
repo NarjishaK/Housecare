@@ -33,7 +33,7 @@ export const handleLogin = async (e, values, setLoginStatus) => {
     password: values.password,
   }
 
-  console.log("Attempting to login with data:", Data)
+  console.log("Attempting to login with data:")
 
   try {
     const response = await axios.post(`${HOUSECARE_BASE_URL}/signin`, Data)
@@ -74,7 +74,6 @@ export const fetchStaff = async () => {
 export const deleteStaff = async id => {
   try {
     await axios.delete(`${HOUSECARE_BASE_URL}/${id}`)
-    console.log(`Deleted staff with id: ${id}`)
   } catch (err) {
     console.log(
       err.response ? err.response.data : err.message,
@@ -166,7 +165,6 @@ export const charityDelete = async id => {
   if (confirmation) {
     try {
       await axios.delete(`${CHARITY_URL}/${id}`)
-      console.log(`Deleted staff with id: ${id}`)
     } catch (err) {
       console.log(
         err.response ? err.response.data : err.message,
@@ -184,7 +182,7 @@ export const handleadminLogin = async (e, values, setLoginStatus) => {
     password: values.password,
   }
 
-  console.log("Attempting to login with data:", Data)
+  console.log("Attempting to login with data")
 
   try {
     const response = await axios.post(`${ADMIN_URL}`, Data)
@@ -291,7 +289,6 @@ export const charitystaffDelete = async id => {
   if (confirmation) {
     try {
       await axios.delete(`${CHARITYSTAFF_URL}/${id}`)
-      console.log(`Deleted staff with id: ${id}`)
     } catch (err) {
       console.log(
         err.response ? err.response.data : err.message,
@@ -360,6 +357,8 @@ export const handleBenificiary = async formData => {
 }
 //fetch benificiary
 export const fetchBenificiarys = async () => {
+  const token = localStorage.getItem("token")
+  axios.defaults.headers.common["Authorization"] = token
   try {
     const response = await axios.get(`${BENIFICIARY_URL}`)
     return response.data
@@ -376,7 +375,6 @@ export const benificiaryDelete = async id => {
   if (confirmation) {
     try {
       await axios.delete(`${BENIFICIARY_URL}/${id}`)
-      console.log(`Deleted staff with id: ${id}`)
     } catch (err) {
       console.log(
         err.response ? err.response.data : err.message,
@@ -417,17 +415,16 @@ export const handleCharitySignin = async (e, values, setLoginStatus) => {
     email: values.email,
     password: values.password,
   } 
-  console.log("Attempting to login with data:", Data)
+  console.log("Attempting to login with data")
   try {
     const response = await axios.post(`${CHARITY_URL}/signin`, Data);
     if (response.status === 200) {
   
-    const { token, charitydetails } = response.data; // Destructure token and userId from response
+    const { token, charitydetails } = response.data; 
     localStorage.setItem("token", token);
     localStorage.setItem("charitydetails",JSON.stringify (charitydetails));
     setLoginStatus(true);
     console.log("Login successful");
-    // window.location.href = `/charityteam/${userId}`;
     window.location.href = "/dashboards";
     alert("success")
     }

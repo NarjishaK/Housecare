@@ -5,9 +5,9 @@ import {
 const initialState={
     title : "Dashboard",
     breadcrumbItems : [
-        { title : "Lexa", link : "#" },
+        { title : "Housecare", link : "#" },
         { title : "Dashboard", link : "#" },
-        { title : "Dashboard", link : "#" },
+        
     ],
 }
 

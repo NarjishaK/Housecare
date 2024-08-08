@@ -95,7 +95,7 @@ const EmailSideBar = () => {
             <img
               className="d-flex me-3 rounded-circle"
               src={avatar2}
-              alt="lexa"
+              alt="Housecare"
               height="36"
             />
             </div>
@@ -110,7 +110,7 @@ const EmailSideBar = () => {
             <img
               className="d-flex me-3 rounded-circle"
               src={avatar3}
-              alt="lexa"
+              alt="Housecare"
               height="36"
             />
             </div>
@@ -125,7 +125,7 @@ const EmailSideBar = () => {
             <img
               className="d-flex me-3 rounded-circle"
               src={avatar4}
-              alt="lexa"
+              alt="Housecare"
               height="36"
             />
             </div>
@@ -140,7 +140,7 @@ const EmailSideBar = () => {
             <img
               className="d-flex me-3 rounded-circle"
               src={avatar6}
-              alt="lexa"
+              alt="Housecare"
               height="36"
             />
             </div>

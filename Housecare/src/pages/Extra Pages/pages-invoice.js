@@ -16,10 +16,10 @@ import { setBreadcrumbItems } from "../../store/actions";
 import imgdark from "../../assets/images/logo-dark.png";
 
 const PagesInvoice = (props) => {
-    document.title = "Invoice | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Invoice | Housecare";
 
     const breadcrumbItems = [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "Pages", link: "#" },
         { title: "Invoice", link: "#" },
     ]

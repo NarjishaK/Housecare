@@ -18,10 +18,10 @@ import user6 from "../../assets/images/users/user-6.jpg";
 import user7 from "../../assets/images/users/user-7.jpg";
 
 const PagesDirectory = (props) => {
-    document.title = "Directory | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Directory |  Housecare";
 
     const breadcrumbItems = [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "Pages", link: "#" },
         { title: "Directory", link: "#" },
     ]

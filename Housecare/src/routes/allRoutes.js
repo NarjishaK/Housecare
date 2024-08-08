@@ -58,7 +58,7 @@ import CharityDetails from "pages/Authentication/charitydetails"
 import PagesInvoice from "../pages/Extra Pages/pages-invoice"
 import PagesDirectory from "../pages/Extra Pages/pages-directory"
 import PagesBlank from "../pages/Extra Pages/pages-blank"
-import Pages404 from "../pages/Extra Pages/pages-404"
+import Pages403 from "../pages/Extra Pages/pages-403"
 import Pages500 from "../pages/Extra Pages/pages-500"
 import UiOffcanvas from "pages/Ui/UiOffcanvas"
 import Chat from "pages/Chat/Chat"
@@ -72,6 +72,7 @@ import CharityTeam from "../pages/charity/charity-team"
 import Mainpage from "pages/charity/mainpage"
 import Dashboards from "pages/charity/dashboards"
 import BenificiariesDetails from "pages/charity/beneficiariesdetails"
+import Split from "pages/charity/split"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -147,8 +148,9 @@ const authRoutes = [
   {path:"/housecare",component:<Mainpage/>},
   {path:"/dashboards",component:<Dashboards/>},
   {path:"/beneficiariesdetails/:id",component:<BenificiariesDetails/>},
+  {path:"/split",component:<Split/>},
 
-  { path: "/pages-404", component: <Pages404 /> },
+  { path: "/pages-403", component: <Pages403 /> },
   { path: "/pages-500", component: <Pages500 /> },
 
   // Authentication Inner

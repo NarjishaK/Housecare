@@ -10,11 +10,11 @@ import { setBreadcrumbItems } from "../../store/actions";
 import "./datatables.scss"
 
 const DatatableTables = (props) => {
-  document.title = "Data Table | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Data Table | Housecare";
 
   
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "Tables", link: "#" },
     { title: "Data Tables", link: "#" },
   ]

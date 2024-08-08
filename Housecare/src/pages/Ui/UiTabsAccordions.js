@@ -29,7 +29,7 @@ class UiTabsAccordions extends Component {
     super(props)
     this.state = {
       breadcrumbItems: [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "UI Elements", link: "#" },
         { title: "Tabs & Accordions", link: "#" },
       ],
@@ -172,7 +172,7 @@ class UiTabsAccordions extends Component {
 
 
   render() {
-    document.title = "Tabs & Accordions | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Tabs & Accordions | Housecare";
     return (
       <React.Fragment>
        

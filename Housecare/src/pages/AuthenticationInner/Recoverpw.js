@@ -9,7 +9,7 @@ import logoDark from "../../assets/images/logo-dark.png"
 
 const Recoverpw = (props) => {
 
-  document.title = "Recover Password | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Recover Password |Housecare";
   return (
     <React.Fragment>
       
@@ -76,7 +76,7 @@ const Recoverpw = (props) => {
                   </Link>{" "}
                 </p>
                 <p>
-                  © {new Date().getFullYear()} Lexa <span className="d-none d-sm-inline-block"> - Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand.</span>
+                  © {new Date().getFullYear()} Housecare 
                 </p>
               </div>
             </Col>

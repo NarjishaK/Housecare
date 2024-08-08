@@ -18,11 +18,11 @@ import EmailSideBar from "./email-sidebar"
 import EmailToolbar from "./email-toolbar"
 
 const EmailRead = (props) => {
-  document.title = "Email Read | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Email Read |  Housecare";
 
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "Email", link: "#" },
     { title: "Email Read", link: "#" },
   ]
@@ -50,7 +50,7 @@ const EmailRead = (props) => {
                   <img
                     className="d-flex me-3 rounded-circle avatar-sm"
                     src={avatar1}
-                    alt="lexa"
+                    alt="Housecare - charity"
                   />
                   </div>
                   <div className="flex-grow-1 align-self-center">
@@ -90,7 +90,7 @@ const EmailRead = (props) => {
                       <img
                         className="card-img-top img-fluid"
                         src={img3}
-                        alt="lexa"
+                        alt="Housecare"
                       />
                       <div className="my-2 text-center">
                         <Link to="#" className="text-muted font-weight-normal">
@@ -104,7 +104,7 @@ const EmailRead = (props) => {
                       <img
                         className="card-img-top img-fluid"
                         src={img4}
-                        alt="lexa"
+                        alt="Housecare "
                       />
                       <div className="my-2 text-center">
                         <Link to="#" className="text-muted font-weight-normal">

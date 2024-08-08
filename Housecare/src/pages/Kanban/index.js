@@ -41,10 +41,10 @@ import { setBreadcrumbItems } from "../../store/actions";
 import { connect } from "react-redux"
 
 const Kanban = (props) => {
- document.title = "Kanban Board | Lexa  - React Admin & Dashboard Template"
+ document.title = "Kanban Board | Housecare"
 
  const breadcrumbItems = [
-  { title: "Lexa", link: "#" },
+  { title: "Housecare", link: "#" },
   { title: "Kanban Board", link: "#" },
 ]
 

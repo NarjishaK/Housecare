@@ -9,7 +9,7 @@ import logoLightPng from "../../assets/images/logo-light.png"
 import logoDark from "../../assets/images/logo-dark.png"
 
 const LockScreen = () => {
-  document.title = "Lockscreen | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Lockscreen | Housecare";
 
   return (
     <React.Fragment>              
@@ -51,7 +51,7 @@ const LockScreen = () => {
                                 </Card>
                                 <div className="mt-5 text-center">
                                     <p>Not you ? return <Link to="/pages-login" className=" text-primary"> Sign In </Link> </p>
-                                    <p>© 2021 Lexa. Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                                    <p>© 2024 Housecare</p>
                                 </div>
                             </Col>
                         </Row>

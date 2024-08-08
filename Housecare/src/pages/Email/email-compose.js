@@ -11,10 +11,10 @@ import { Editor } from "react-draft-wysiwyg"
 
 const EmailCompose = (props) => {
 
-    document.title = "Email Compose | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Email Compose |Housecare";
 
     const breadcrumbItems = [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "Email", link: "#" },
         { title: "Email Compose", link: "#" },
     ]

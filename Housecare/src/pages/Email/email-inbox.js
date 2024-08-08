@@ -15,11 +15,11 @@ import EmailToolbar from "./email-toolbar"
 
 const EmailInbox = (props) => {
 
-  document.title = "Inbox | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Inbox | Housecare";
 
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "Email", link: "#" },
     { title: "Inbox", link: "#" },
   ]

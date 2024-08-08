@@ -13,7 +13,7 @@ class UiSessionTimeout extends Component {
     super(props);
     this.state = {
       breadcrumbItems: [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "UI Elements", link: "#" },
         { title: "Session Timeout", link: "#" },
       ],
@@ -66,7 +66,7 @@ class UiSessionTimeout extends Component {
   }
   
   render() {
-    document.title = "Sessions timeout | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Sessions timeout | Housecare";
 
     return (
       <React.Fragment>

@@ -56,7 +56,7 @@ function CharityDetails() {
     roles: "",
   })
   const [charitys, setCharitys] = useState([])
-  const [showPassword, setShowPassword] = useState(false)
+  // const [showPassword, setShowPassword] = useState(false)
   const { id } = useParams()
   const [image, setImage] = useState(null)
   const [modal, setmodal] = useState(false)
@@ -84,7 +84,7 @@ function CharityDetails() {
       } catch (error) {
         console.error("Error fetching charity details:", error)
         if (error.response) {
-          console.error("Response data:", error.response.data)
+          console.error("Response data:")
         }
       }
     }
@@ -261,7 +261,6 @@ function CharityDetails() {
     }
     //benificiary details and transactions
     const handleShow =(_id)=>{
-      console.log(_id , "Benificiary id")
       navigate(`/beneficiariesdetails/${_id}`)
     }
 

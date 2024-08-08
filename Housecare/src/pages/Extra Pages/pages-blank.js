@@ -6,10 +6,10 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const PagesBlank = (props) => {
-    document.title = "Blank Page | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+    document.title = "Blank Page | Housecare";
 
     const breadcrumbItems = [
-        { title: "Lexa", link: "#" },
+        { title: "Housecare", link: "#" },
         { title: "Pages", link: "#" },
         { title: "Blank page", link: "#" },
     ]

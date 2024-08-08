@@ -27,10 +27,10 @@ import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
 
 const UiImages = (props) => {
-  document.title = "Images | Lexa - Responsive Bootstrap 5 Admin Dashboard";
+  document.title = "Images | Housecare ";
 
   const breadcrumbItems = [
-    { title: "Lexa", link: "#" },
+    { title: "Housecare", link: "#" },
     { title: "UI Elements", link: "#" },
     { title: "Images", link: "#" },
   ]
@@ -54,7 +54,7 @@ const UiImages = (props) => {
               <div className="">
                 <img
                   className="img-thumbnail"
-                  alt="Lexa"
+                  alt="Housecare"
                   width="200"
                   src={img3}
                 />
@@ -71,13 +71,13 @@ const UiImages = (props) => {
               <div className="">
                 <img
                   className="rounded me-4"
-                  alt="Lexa"
+                  alt="Housecare"
                   width="200"
                   src={img4}
                 />{" "}
                 <img
                   className="rounded-circle mt-4 mt-sm-0"
-                  alt="Lexa"
+                  alt="Housecare"
                   src={avatar4}
                 />
               </div>
@@ -88,7 +88,7 @@ const UiImages = (props) => {
         <Col lg={6}>
           <Card>
             <CardBody>
-              <CardTitle className="h4">Lexas</CardTitle>
+              <CardTitle className="h4">Housecares</CardTitle>
               <p className="card-title-desc">
                 Images in Bootstrap are made responsive with{" "}
                 <code className="highlighter-rouge">.img-fluid</code>.{" "}
@@ -97,7 +97,7 @@ const UiImages = (props) => {
                     are applied to the image so that it scales with the parent
                     element.
                  </p>
-              <CardImg className="img-fluid" src={img2} alt="Lexa" />
+              <CardImg className="img-fluid" src={img2} alt="Housecare" />
             </CardBody>
           </Card>
         </Col>
@@ -114,7 +114,7 @@ const UiImages = (props) => {
                     <Col lg={4}>
                       <CardImg
                         src={avatar3}
-                        alt="LexaLexa"
+                        alt="Housecare"
                         className="rounded avatar-sm"
                       />
                       <CardText className="mt-2 mb-lg-0">
@@ -124,7 +124,7 @@ const UiImages = (props) => {
                     <Col lg={4}>
                       <CardImg
                         src={avatar4}
-                        alt="Lexa"
+                        alt="Housecare"
                         className="rounded avatar-md"
                       />
                       <CardText className="mt-2  mb-lg-0">
@@ -134,7 +134,7 @@ const UiImages = (props) => {
                     <Col lg={4}>
                       <CardImg
                         src={avatar5}
-                        alt="Lexa"
+                        alt="Housecare"
                         className="rounded avatar-lg"
                       />
                       <CardText className="mt-2 mb-lg-0">
@@ -148,7 +148,7 @@ const UiImages = (props) => {
                     <Col lg={4}>
                       <CardImg
                         src={avatar3}
-                        alt="Lexa"
+                        alt="Housecare"
                         className="rounded-circle avatar-sm"
                       />
                       <CardText className="mt-2 mb-lg-0">
@@ -168,7 +168,7 @@ const UiImages = (props) => {
                     <Col lg={4}>
                       <CardImg
                         src={avatar5}
-                        alt="Lexa"
+                        alt="Housecare"
                         className="rounded-circle avatar-lg"
                       />
                       <CardText className="mt-2 mb-lg-0">
@@ -196,7 +196,7 @@ const UiImages = (props) => {
                 <img
                   className="d-flex me-3 rounded-circle"
                   src={avatar6}
-                  alt="Lexa"
+                  alt="Housecare"
                   height="64"
                 />
                 <div className="media-body">
@@ -213,7 +213,7 @@ const UiImages = (props) => {
                 <img
                   className="d-flex me-3 rounded-circle"
                   src={avatar2}
-                  alt="Lexa"
+                  alt="Housecare"
                   height="64"
                 />
                 <div className="media-body">
@@ -227,7 +227,7 @@ const UiImages = (props) => {
                     <Link className="d-flex pe-3" to="#">
                       <img
                         src={avatar3}
-                        alt="Lexa"
+                        alt="Housecare"
                         height="64"
                         className="rounded-circle"
                       />
@@ -256,7 +256,7 @@ const UiImages = (props) => {
                 <img
                   className="d-flex me-3 rounded-circle"
                   src={avatar4}
-                  alt="Lexa"
+                  alt="Housecare"
                   height="64"
                 />
               </div>
@@ -279,7 +279,7 @@ const UiImages = (props) => {
                 <img
                   className="d-flex align-self-start rounded me-3"
                   src={avatar3}
-                  alt="Lexa"
+                  alt="Housecare"
                   height="64"
                 />
                 <div className="media-body">
@@ -303,7 +303,7 @@ const UiImages = (props) => {
                 <img
                   className="d-flex align-self-center rounded me-3"
                   src={avatar5}
-                  alt="Lexa"
+                  alt="Housecare"
                   height="64"
                 />
                 <div className="media-body">
@@ -327,7 +327,7 @@ const UiImages = (props) => {
                 <img
                   className="d-flex align-self-end rounded me-3"
                   src={avatar1}
-                  alt="Lexa"
+                  alt="Housecare"
                   height="64"
                 />
                 <div className="media-body">

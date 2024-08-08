@@ -7,7 +7,7 @@ const Authmiddleware = (props) => {
   if (isAdmin) {
     return <React.Fragment>{props.children}</React.Fragment>;
   } else {
-    return <Navigate to="/housecare" />;
+    return <Navigate to="/pages-403" />;
   }
 };
 
