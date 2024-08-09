@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var housecareRouter = require('./routes/housecare');
 var charityRouter = require("./routes/charity")
 var adminRouter = require("./routes/admin")
+var categoryRouter = require("./routes/category")
 var charitystaffRouter = require("./routes/charitystaff")
 var benificiaryRouter = require("./routes/benificiary")
 
@@ -37,6 +38,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/housecare', housecareRouter);
 app.use('/charity',charityRouter);
+app.use('/category',categoryRouter);
 app.use('/admin',adminRouter);
 app.use('/charitystaff',charitystaffRouter);
 app.use('/benificiary',benificiaryRouter);

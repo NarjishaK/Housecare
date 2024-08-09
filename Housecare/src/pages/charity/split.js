@@ -31,7 +31,9 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchDatas();
+    if (benificiarys.length === 0) {
+      fetchDatas();
+    }
     const charitydetails = JSON.parse(localStorage.getItem("charitydetails"));
     if (charitydetails) {
       const filteredBenificiarys = benificiarys.filter(
@@ -45,7 +47,7 @@ const App = () => {
         Nav_Number: benificiary.navision_linked_no,
         Number: benificiary.number,
         category: benificiary.physically_challenged,
-        age: 56,
+        age: benificiary.age,
         amount:
           savedData.find(item => item.id === benificiary._id)?.amount || 0, 
       }));
@@ -194,7 +196,7 @@ const App = () => {
                 </>
               )}
               <div style={{ flexGrow: 1, textAlign: "center" }}>
-                <h4 style={{ margin: 0 }}>PAY NOW</h4>
+                <h4 style={{ margin: 0 }}>Beneficiary Distribution Panel</h4>
               </div>
             </div>
           </Card>

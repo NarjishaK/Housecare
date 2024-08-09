@@ -4,6 +4,8 @@ const asyncHandler = require("express-async-handler");
 exports.create = asyncHandler(async (req, res) => {
   const {
     benificiary_name,
+    category,
+    age,
     charity_name,
     email_id,
     number,
@@ -29,6 +31,8 @@ exports.create = asyncHandler(async (req, res) => {
       charity_name: charity_name,
       email_id: email_id,
       benificiary_name: benificiary_name,
+      category: category,
+      age: age,
       number: number,
       nationality: nationality,
       sex: sex,
@@ -90,6 +94,8 @@ exports.edit = asyncHandler(async (req, res) => {
 exports.update = asyncHandler(async (req, res) => {
     const {
         benificiary_name,
+        category,
+        age,
         charity_name,
         email_id,
         number,
@@ -110,6 +116,8 @@ exports.update = asyncHandler(async (req, res) => {
 			return res.status(400).json({ message: 'benificiary not found' });
 		}
 		charity.benificiary_name = benificiary_name;
+    charity.category = category;
+    charity.age = age;
 		charity.email_id = email_id;
 		charity.number = number;
 		charity.marital = marital;

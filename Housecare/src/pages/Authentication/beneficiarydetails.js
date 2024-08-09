@@ -78,6 +78,10 @@ const BenificiaryDetails = props => {
                     <Col xs="6" className="mt-4">
                       <address>
                         <strong>Personal info</strong>
+                        <br/>
+                        Age: {beneficiarys.age}
+                        <br/>
+                        {beneficiarys.category}
                         <br />
                         Physically challenged:{" "}
                         {beneficiarys.physically_challenged}

@@ -227,6 +227,8 @@ function CharityDetails() {
         family_members: benificiaryDetails.family_members,
         account_status: benificiaryDetails.account_status,
         benificiary_name: benificiaryDetails.benificiary_name,
+        category: benificiaryDetails.category,
+        age: benificiaryDetails.age,
       })
     } catch (err) {
       console.log("an error occured", err)
@@ -948,7 +950,33 @@ function CharityDetails() {
                             </Col>
                           </Row>
                           <Row>
-                            <Col lg={12}>
+                            <Col lg={4}>
+                              <div className="mb-3">
+                                <label htmlFor="Age">Age</label>
+                                <input
+                                  className="form-control"
+                                  name="age"
+                                  value={datas.age}
+                                  onChange={handleChanges}
+                                  placeholder="Age"
+                                  type="number"
+                                />
+                                </div>
+                            </Col>
+                            <Col lg={4}>
+                              <div className="mb-3">
+                                <label htmlFor="Category">Category</label>
+                                <input
+                                  className="form-control"
+                                  name="category"
+                                  value={datas.category}
+                                  onChange={handleChanges}
+                                  placeholder="Category"
+                                  type="text"
+                                />
+                                </div>
+                            </Col>
+                            <Col lg={4}>
                               <div className="mb-3">
                                 <label htmlFor="Balance">Balance</label>
                                 <input
@@ -1272,7 +1300,33 @@ function CharityDetails() {
                                   </Col>
                                 </Row>
                                 <Row>
-                                  <Col lg={12}>
+                                <Col lg={4}>
+                              <div className="mb-3">
+                                <label htmlFor="Age">Age</label>
+                                <input
+                                  className="form-control"
+                                  name="age"
+                                  value={datas.age}
+                                  onChange={handleChanges}
+                                  placeholder="Age"
+                                  type="number"
+                                />
+                                </div>
+                            </Col>
+                            <Col lg={4}>
+                              <div className="mb-3">
+                                <label htmlFor="Category">Category</label>
+                                <input
+                                  className="form-control"
+                                  name="category"
+                                  value={datas.category}
+                                  onChange={handleChanges}
+                                  placeholder="Category"
+                                  type="text"
+                                />
+                                </div>
+                            </Col>
+                                  <Col lg={4}>
                                     <div className="mb-3">
                                       <label htmlFor="Balance">Balance</label>
                                       <input

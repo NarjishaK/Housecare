@@ -14,6 +14,8 @@ const benificiarySchema = mongoose.Schema({
   family_members: { type: Number, required: true },
   account_status: { type: String, required: true },
   Balance: { type: Number, required: true },
+  category: { type: String, required: true },
+  age: { type: Number, required: true },
 });
 
 const Benficiaries = mongoose.model("Benficiaries", benificiarySchema);

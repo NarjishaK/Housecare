@@ -17,7 +17,7 @@ import { useForm } from "helpers/useForms";
 import { BASE_URL } from "./handle-api";
 
 const UserProfile = () => {
-  document.title = "Profile | Admin Profile";
+  document.title = "Profile |Housecare Admin Profile";
 
   const [superadmin, setSuperAdmin] = useState(null);
   const { id } = useParams();
@@ -79,6 +79,7 @@ const UserProfile = () => {
     fetchData();
   }, [id, setValues]);
   const [admins, setAdmin] = useState([])
+  //update profile
   const handleUpdate = async (e) => {
     e.preventDefault();
     const formData = new FormData();

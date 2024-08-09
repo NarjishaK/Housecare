@@ -14,7 +14,7 @@ const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
 
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}>YOUR PAYMENT</ModalHeader>
+      <ModalHeader toggle={toggle}>BENEFICIARY PAYMENT DISTRIBUTION</ModalHeader>
       <ModalBody>
         <p>Enter your limited amount:</p>
         <Input

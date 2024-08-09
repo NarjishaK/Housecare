@@ -11,7 +11,7 @@ import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions"
 import { Container } from "reactstrap"
 
 // Import menuDropdown
-import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
+// import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 
 // import megamenuImg from "../../assets/images/megamenu-img.png"

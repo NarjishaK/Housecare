@@ -16,7 +16,7 @@ import withRouter from "components/Common/withRouter"
 
 // users
 import user1 from "../../../assets/images/users/user-1.jpg"
-
+const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
@@ -41,7 +41,7 @@ const ProfileMenu = props => {
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem
             tag="a"
-            href="#/profile"
+            href={`/profiles/${charitydetails.id}`}
           >
             {" "}
             <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1" />

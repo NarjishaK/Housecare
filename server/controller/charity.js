@@ -69,7 +69,7 @@ exports.edit = asyncHandler(async (req, res) => {
 });
 
 exports.update = asyncHandler(async (req, res) => {
-	const { charity, email, password,date, arbic, CR_NO, roles,VAT_REG_NO, authorizedperson, phone } = req.body;
+	const { charity, email,date, arbic, CR_NO, roles,VAT_REG_NO, authorizedperson, phone } = req.body;
 	const { id } = req.params;
 	try {
 		const charities = await Charity.findById(id);
@@ -78,7 +78,7 @@ exports.update = asyncHandler(async (req, res) => {
 			return res.status(400).json({ message: 'charity not found to update' });
 		}
 		charities.email = email;
-		charities.password = password;
+		// charities.password = password;
 		charities.charity = charity;
 		charities.date = date;
 		charities.phone = phone;

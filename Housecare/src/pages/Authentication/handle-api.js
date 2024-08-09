@@ -5,6 +5,7 @@ const CHARITY_URL= `${process.env.REACT_APP_BASE_URL}/charity`;
 const ADMIN_URL = `${process.env.REACT_APP_BASE_URL}/admin`;
 const CHARITYSTAFF_URL = `${process.env.REACT_APP_BASE_URL}/charitystaff`;
 const BENIFICIARY_URL = `${process.env.REACT_APP_BASE_URL}/benificiary`;
+const CATEGORY_URL = `${process.env.REACT_APP_BASE_URL}/category`;
 export const BASE_URL = `${process.env.REACT_APP_BASE_URL}`
 
 
@@ -437,3 +438,24 @@ export const handleCharitySignin = async (e, values, setLoginStatus) => {
     } 
    } 
 }
+//category create
+export const handleCategory = async formData => {
+  try {
+    const response = await axios.post(`${CATEGORY_URL}`, formData)
+    return response.data
+  } catch (err) {
+    console.log(err, "Category Adding Failed")
+    throw err
+  }
+}
+
+// category listing
+export const fetchCategory = async () => {
+  try {
+    const response = await axios.get(`${CATEGORY_URL}`)
+    return response.data
+  } catch (err) {
+    console.log(err, "Category listing failed")
+  }
+}
+

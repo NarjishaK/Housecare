@@ -20,8 +20,13 @@ import user1 from "../../../assets/images/users/user-1.jpg"
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
-  const isSuperadmin = !!localStorage.getItem("Superadmin")
-  const admins = JSON.parse(localStorage.getItem("Superadmin"))
+  // const isSuperadmin = !!localStorage.getItem("Superadmin")
+  // const admins = JSON.parse(localStorage.getItem("Superadmin"))
+  const admin = JSON.parse(localStorage.getItem("HomecareAdmin"))
+  const isRoleStaff = () => {
+    const HomecareAdmin = JSON.parse(localStorage.getItem("HomecareAdmin"))
+    return HomecareAdmin && HomecareAdmin.roles === "staff"
+  }
   return (
     <React.Fragment>
       <Dropdown
@@ -43,8 +48,10 @@ const ProfileMenu = props => {
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem
             tag="a"
-            href={isSuperadmin ? `/profile/${admins.id}` : "#"}
-            disabled={!isSuperadmin}
+            href={`/profile/${admin.id}`}
+            disabled={!isRoleStaff}
+            // href={isSuperadmin ? `/profile/${admin.id}` : "#"}
+            // disabled={!isSuperadmin}
           >
             {" "}
             <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1" />

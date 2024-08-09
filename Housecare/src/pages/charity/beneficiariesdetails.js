@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Col, Row, Card, CardBody } from "reactstrap"
 import { Link, useParams } from "react-router-dom"
-import Navbar from "../charity/Navbars"
 
 //Import Images
 import imgdark from "../../assets/images/1.JPG"
@@ -75,6 +74,10 @@ const BenificiariesDetails = props => {
                     <Col xs="6" className="mt-4">
                       <address>
                         <strong>Personal info</strong>
+                        <br/>
+                        Age: {beneficiarys.age}
+                        <br/>
+                        {beneficiarys.category}
                         <br />
                         Physically challenged:{" "}
                         {beneficiarys.physically_challenged}

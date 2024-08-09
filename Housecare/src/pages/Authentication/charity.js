@@ -63,8 +63,6 @@ function Charity() {
       console.log(err)
     }
   }
-  console.log(charity1,"rerrrrrrrr");
-  console.log(values.charity,"ggggggggggg");
   //handle charity organaization Add
 
   const charityCreate = async e => {
@@ -116,7 +114,7 @@ function Charity() {
         phone: charityDetails.phone,
         arbic: charityDetails.arbic,
         authorizedperson: charityDetails.authorizedperson,
-        password:charityDetails.password,
+        // password:charityDetails.password,
       })
       setmodal_center(true)
     } catch (err) {
@@ -136,7 +134,7 @@ function Charity() {
     formData.append("arbic", values.arbic)
     formData.append("phone", values.phone)
     formData.append("authorizedperson", values.authorizedperson)
-    formData.append("password", values.password)
+    // formData.append("password", values.password)
     formData.append("charity", values.charity)
 
     if (image) {
@@ -593,7 +591,7 @@ function Charity() {
                             </div>
                           </Col>
                         </Row>
-                        <Row>
+                        {/* <Row>
                           <Col lg={12}>
                             <div className="mb-3">
                               <label htmlFor="password">Password</label>
@@ -607,7 +605,7 @@ function Charity() {
                               />
                             </div>
                           </Col>
-                        </Row>
+                        </Row> */}
                         <Button onClick={handleUpdate}>Update</Button>
                       </div>
                     </Modal>

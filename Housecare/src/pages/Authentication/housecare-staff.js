@@ -217,7 +217,7 @@ function Staff() {
                         >
                           <Button
                             onClick={() => handleEdit(staffs._id)}
-                            disabled={isRoleStaff}
+                            disabled={!isRoleStaff}
                             style={{
                               backgroundColor: "transparent",
                               border: "none",
@@ -380,7 +380,7 @@ function Staff() {
                         }}
                         className="waves-effect waves-light"
                         onClick={() => handleDelete(staffs._id)}
-                        disabled={isRoleStaff}
+                        disabled={!isRoleStaff}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -397,7 +397,7 @@ function Staff() {
                         // color="danger"
                         style={{ paddingInline: "10px", width: "75px" }}
                         className="waves-effect waves-light"
-                        disabled={isRoleStaff}
+                        disabled={!isRoleStaff}
                         onClick={() =>
                           handleBlock(staffs._id, staffs.isBlocked)
                         }

@@ -93,7 +93,7 @@ exports.signin = asyncHandler(async (req, res) => {
 
       admin = await Superadmin.findOne({ email: email });
       if (!admin) {
-        console.log("Admin not found in Superadmin model with email:", email);
+        console.log("Admin not found in Superadmin model with email:", );
         return res
           .status(400)
           .json({ invalid: true, message: "Invalid email or password" });
@@ -103,31 +103,31 @@ exports.signin = asyncHandler(async (req, res) => {
     }
 
     if (admin.isBlocked) {
-      console.log("Account is blocked for email:", email);
+      console.log("Account is blocked for email:", );
       return res
         .status(403)
         .json({ invalid: true, message: "Your account is blocked. Please contact support." });
     }
 
     const isPasswordIsMatch = await bcrypt.compare(password, admin.password);
-    if (isPasswordIsMatch) {
+    if (isPasswordIsMatch && admin) {
       const HomecareAdmin = {
         staff: admin.staff,
         email: admin.email,
         image: admin.image,
         iqama: admin.iqama,
         phone: admin.phone,
-        role: admin.role
+        role: admin.role,
+        id:admin._id
       };
 
       const token = jwt.sign({ email: admin.email }, "myjwtsecretkey");
       admin.tokens = token;
-      await admin.save();
-      
+      await admin.save();      
       console.log("Signin successful, token generated");
       return res.status(200).json({ token: token, HomecareAdmin: HomecareAdmin });
     } else {
-      console.log("Password mismatch for email:", email);
+      console.log("Password mismatch for email:",);
       return res.status(400).json({ invalid: true, message: "Invalid email or password" });
     }
   } catch (err) {

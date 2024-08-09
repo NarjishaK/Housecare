@@ -16,7 +16,7 @@ const Dashboards = () => {
       }
     }
     fetchDatas()
-  }, [benificiarys])
+  }, [])
   const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
 
   // filter benificiarys based on the selected charity

@@ -121,7 +121,7 @@ const Navbar = props => {
 
               </ul>
             </Collapse>
-            <Button onClick={togglePaymentModal} style={{marginRight:"20px"}}>PAY NOW</Button>
+            <Button onClick={togglePaymentModal} style={{marginRight:"20px"}}>DISBURSEMENT</Button>
           </nav>
         </div>
       </div>
