@@ -16,7 +16,7 @@ import withRouter from "components/Common/withRouter"
 
 // users
 import user1 from "../../../assets/images/users/user-1.jpg"
-const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
+// const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
