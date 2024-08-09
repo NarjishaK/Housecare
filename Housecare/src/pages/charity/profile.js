@@ -15,7 +15,6 @@ import { useParams } from "react-router-dom"
 import { useForm } from "helpers/useForms"
 import { BASE_URL } from "../Authentication/handle-api"
 import Navbar from "./Navbars"
-import charity from "."
 
 const Profile = () => {
   document.title = "Profile | Admin Profile"
