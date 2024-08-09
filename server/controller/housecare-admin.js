@@ -89,7 +89,7 @@ exports.signin = asyncHandler(async (req, res) => {
     let isSuperAdmin = false;
 
     if (!admin) {
-      console.log("Admin not found in Staffs model with email:", email);
+      console.log("Admin not found in Staffs model with email:");
 
       admin = await Superadmin.findOne({ email: email });
       if (!admin) {

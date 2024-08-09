@@ -41,7 +41,8 @@ const ProfileMenu = props => {
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem
             tag="a"
-            href={`/profiles/${charitydetails.id}`}
+            // href={`/profiles/${charitydetails.id}`}
+            href="#"
           >
             {" "}
             <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1" />

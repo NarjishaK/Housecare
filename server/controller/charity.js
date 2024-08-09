@@ -1,5 +1,6 @@
 const Charity = require('../model/charity');
 const asyncHandler = require('express-async-handler');
+const Charitystaffs = require('../model/charitystaff');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -130,48 +131,101 @@ exports.details = asyncHandler(async (req, res) => {
 	}
 });
 
-exports.signin = asyncHandler(async (req, res) => {
-	const { email, password } = req.body;
-	try {
-	  const user = await Charity.findOne({ email });
-	  if (!user) {
-		console.log('user not found');
-		return res.status(400).json({ message: 'user not found' });
-	  }
-	  const isMatch = await bcrypt.compare(password, user.password);
-	  if (!isMatch) {
-		console.log('password not matched');  
-		return res.status(400).json({ message: 'password not matched' });
-	  }
-	  if(user && isMatch){
-		const charitydetails ={
-			charity:user.charity,
-			email:user.email,
-			image:user.image,
-			phone:user.phone,
-			id:user._id,
-			roles:user.roles,
-			VAT_REG_NO:user.VAT_REG_NO,
-			authorizedperson:user.authorizedperson,
-			date:user.date,
-			arbic:user.arbic,
-			CR_NO:user.CR_NO,
-		}
+// exports.signin = asyncHandler(async (req, res) => {
+// 	const { email, password } = req.body;
+// 	try {
+// 	  const user = await Charity.findOne({ email });
+// 	  if (!user) {
+// 		console.log('user not found');
+// 		return res.status(400).json({ message: 'user not found' });
+// 	  }
+// 	  const isMatch = await bcrypt.compare(password, user.password);
+// 	  if (!isMatch) {
+// 		console.log('password not matched');  
+// 		return res.status(400).json({ message: 'password not matched' });
+// 	  }
+// 	  if(user && isMatch){
+// 		const charitydetails ={
+// 			charity:user.charity,
+// 			email:user.email,
+// 			image:user.image,
+// 			phone:user.phone,
+// 			id:user._id,
+// 			roles:user.roles,
+// 			VAT_REG_NO:user.VAT_REG_NO,
+// 			authorizedperson:user.authorizedperson,
+// 			date:user.date,
+// 			arbic:user.arbic,
+// 			CR_NO:user.CR_NO,
+// 		}
 		  
-	  const token = jwt.sign({ email: user.email }, 'myjwtsecretkey');
-	  user.tokens = token;
-	  await user.save();
-	  console.log('login successful, token generated');
-	  return res.status(200).json({ token: token, charitydetails:charitydetails });
+// 	  const token = jwt.sign({ email: user.email }, 'myjwtsecretkey');
+// 	  user.tokens = token;
+// 	  await user.save();
+// 	  console.log('login successful, token generated');
+// 	  return res.status(200).json({ token: token, charitydetails:charitydetails });
 
-	  }else{
-		return res.status(400).json({ message: 'password not matched' });
-	  }
-	} catch (err) {
-	  console.log(err, 'login failed');
-	  return res.status(500).json({ err: 'login failed' });
-	}
-  });
+// 	  }else{
+// 		return res.status(400).json({ message: 'password not matched' });
+// 	  }
+// 	} catch (err) {
+// 	  console.log(err, 'login failed');
+// 	  return res.status(500).json({ err: 'login failed' });
+// 	}
+//   });
+
+
+exports.signin = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    let user = await Charitystaffs.findOne({ email:email });
+    let isSuperAdmin = false;
+    if (!user) {
+      user = await Charity.findOne({ email : email });
+    
+      if (!user) {
+        console.log('User not found');
+        return res.status(400).json({ message: 'User not found' });
+      }else {
+        isSuperAdmin = true;
+      }
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.log('Password not matched');  
+      return res.status(400).json({ message: 'Password not matched' });
+    }
+
+    if (user && isMatch) {
+      const charitydetails = {
+        charity: user.charity,
+        email: user.email,
+        image: user.image,
+        phone: user.phone,
+        id: user._id,
+        roles: user.roles,
+        VAT_REG_NO: user.VAT_REG_NO,
+        authorizedperson: user.authorizedperson,
+        date: user.date,
+        arbic: user.arbic,
+        CR_NO: user.CR_NO,
+      };
+
+      const token = jwt.sign({ email: user.email }, 'myjwtsecretkey');
+      user.tokens = token;
+      await user.save();
+      console.log('Login successful, token generated');
+      return res.status(200).json({ token: token, charitydetails: charitydetails });
+    } else {
+      return res.status(400).json({ message: 'Password not matched' });
+    }
+  } catch (err) {
+    console.log(err, 'Login failed');
+    return res.status(500).json({ err: 'Login failed' });
+  }
+});
+
 
   exports.detailses = asyncHandler(async (req, res) => {
 	const { id } = req.params;

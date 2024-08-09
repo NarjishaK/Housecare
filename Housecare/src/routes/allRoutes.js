@@ -74,6 +74,7 @@ import Dashboards from "pages/charity/dashboards"
 import BenificiariesDetails from "pages/charity/beneficiariesdetails"
 import Split from "pages/charity/split"
 import Profile from "pages/charity/profile"
+import Beneficiary from "pages/charity/beneficiary"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -151,7 +152,7 @@ const authRoutes = [
   {path:"/beneficiariesdetails/:id",component:<BenificiariesDetails/>},
   {path:"/split",component:<Split/>},
   {path:"/profiles/:id",component:<Profile/>},
-
+  {path:"/beneficiaries",component:<Beneficiary/>},
   { path: "/pages-403", component: <Pages403 /> },
   { path: "/pages-500", component: <Pages500 /> },
 
