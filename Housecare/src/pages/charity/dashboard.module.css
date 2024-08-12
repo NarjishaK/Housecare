@@ -11,7 +11,17 @@
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
+  .positiveChange {
+    color: green; /* Change this to your desired shade of green */
+  }
   
+  .negativeChange {
+    color: red; /* Change this to your desired shade of red */
+  }
+  .cardsubtext {
+    font-size: 14px;
+    /* Add any other general styles for cardsubtext here */
+  }
   .cards {
     flex: 1 1 calc(25% - 40px);
     text-align: center;

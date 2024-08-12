@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Modal, ModalHeader, ModalBody, ModalFooter, Button, Input
+  Modal, ModalHeader, ModalBody, ModalFooter, Button, Input, FormFeedback
 } from 'reactstrap';
 
 const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
   const [amount, setAmount] = useState('');
+  const [isInvalid, setIsInvalid] = useState(false);
 
   const handleSave = () => {
-    saveAmount(amount);
-    toggle();
+    if (amount >= 100) {
+      saveAmount(amount);
+      toggle();
+    } else {
+      setIsInvalid(true);
+    }
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setAmount(value);
+    if (value >= 100) {
+      setIsInvalid(false);
+    } else {
+      setIsInvalid(true);
+    }
   };
 
   return (
@@ -20,9 +35,15 @@ const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
         <Input
           type="number"
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={handleChange}
           placeholder="Enter amount"
+          min="3"
+          required
+          invalid={isInvalid}  // This adds visual feedback if the value is invalid
         />
+        <FormFeedback>
+          Please enter an amount of at least 100.
+        </FormFeedback>
       </ModalBody>
       <ModalFooter>
         <Button color="primary" onClick={handleSave}>OK</Button>{' '}

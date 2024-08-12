@@ -7,7 +7,7 @@ const Miniwidget = props => {
       <Row>
         {props.reports.map((report, key) => (
           <Col xl={3} sm={6} key={key}>
-            <Card className="mini-stat bg-primary">
+            <Card className="mini-stat bg-primary" style={{height:"170px"}}>
               <CardBody className="card-body mini-stat-img">
                 <div className="mini-stat-icon">
                   <i className={"float-end mdi mdi-" + report.iconClass}></i>

@@ -1,144 +1,176 @@
-import React, { useState, useEffect } from "react";
-import styles from "./dashboard.module.css";
-import { Button, Card, Input } from "reactstrap";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import { fetchBenificiarys } from "pages/Authentication/handle-api";
-
+import React, { useState, useEffect } from "react"
+import styles from "./dashboard.module.css"
+import { Button, Card, Input } from "reactstrap"
+import html2canvas from "html2canvas"
+import jsPDF from "jspdf"
+import { fetchBenificiarys } from "pages/Authentication/handle-api"
+import { useNavigate } from "react-router-dom"
 const App = () => {
-  // States
-  const [benificiarys, setBenificiarys] = useState([]);
-  const [data, setData] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
-  const [amount, setAmount] = useState("");
+  const [benificiarys, setBenificiarys] = useState([])
+  const [data, setData] = useState([])
+  const [editIndex, setEditIndex] = useState(null)
+  const [amount, setAmount] = useState("")
   const [limitedAmount, setLimitedAmount] = useState(
     JSON.parse(localStorage.getItem("limitedamount")) || 0
-  );
-  const [isEditingLimitedAmount, setIsEditingLimitedAmount] = useState(false);
-  const [newLimitedAmount, setNewLimitedAmount] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [confirmAction, setConfirmAction] = useState(null);
+  )
+  const [isEditingLimitedAmount, setIsEditingLimitedAmount] = useState(false)
+  const [newLimitedAmount, setNewLimitedAmount] = useState("")
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertMessage, setAlertMessage] = useState("")
+  const [confirmAction, setConfirmAction] = useState(null)
+  const [searchQuery, setSearchQuery] = useState("")
 
-  // Fetch data
   const fetchDatas = async () => {
     try {
-      const response = await fetchBenificiarys();
-      setBenificiarys(response);
+      const response = await fetchBenificiarys()
+      setBenificiarys(response)
     } catch (error) {
-      console.error("Error fetching benificiary details:", error);
+      console.error("Error fetching benificiary details:", error)
     }
-  };
+  }
 
   useEffect(() => {
     if (benificiarys.length === 0) {
-      fetchDatas();
+      fetchDatas()
     }
-    const charitydetails = JSON.parse(localStorage.getItem("charitydetails"));
+    const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
     if (charitydetails) {
       const filteredBenificiarys = benificiarys.filter(
         benificiary => benificiary.charity_name === charitydetails.charity
-      );
+      )
 
-      const savedData = JSON.parse(localStorage.getItem("data")) || [];
+      const savedData = JSON.parse(localStorage.getItem("data")) || []
       const initialData = filteredBenificiarys.map(benificiary => ({
         Name: benificiary.benificiary_name,
         id: benificiary._id,
         Nav_Number: benificiary.navision_linked_no,
         Number: benificiary.number,
-        category: benificiary.physically_challenged,
+        category: benificiary.category,
         age: benificiary.age,
         amount:
-          savedData.find(item => item.id === benificiary._id)?.amount || 0, 
-      }));
+          savedData.find(item => item.id === benificiary._id)?.amount || 0,
+      }))
 
-      setData(initialData);
+      setData(initialData)
     }
-  }, [benificiarys]);
+  }, [benificiarys])
 
-  // Handle edit and save actions
   const handleEditClick = index => {
-    setEditIndex(index);
-    setAmount(data[index].amount);
-  };
+    setEditIndex(index)
+    setAmount(data[index].amount)
+  }
 
   const handleAmountChange = event => {
-    setAmount(event.target.value);
-  };
+    setAmount(event.target.value)
+  }
 
   const handleSaveClick = () => {
-    const updatedData = [...data];
-    updatedData[editIndex].amount = amount;
-    setData(updatedData);
-    localStorage.setItem("data", JSON.stringify(updatedData));
-    setEditIndex(null);
-    setAmount("");
-  };
+    const updatedData = [...data]
+    updatedData[editIndex].amount = amount
+    setData(updatedData)
+    localStorage.setItem("data", JSON.stringify(updatedData))
+    setEditIndex(null)
+    setAmount("")
+  }
 
   const handleCancelClick = () => {
-    setEditIndex(null);
-    setAmount("");
-  };
+    setEditIndex(null)
+    setAmount("")
+  }
 
-  // Handle limited amount edit
   const handleLimitedAmountEdit = () => {
-    setIsEditingLimitedAmount(true);
-    setNewLimitedAmount(limitedAmount);
-  };
+    setIsEditingLimitedAmount(true)
+    setNewLimitedAmount(limitedAmount)
+  }
 
   const handleLimitedAmountChange = event => {
-    setNewLimitedAmount(event.target.value);
-  };
+    setNewLimitedAmount(event.target.value)
+  }
 
   const handleLimitedAmountSave = () => {
-    const updatedLimitedAmount = parseFloat(newLimitedAmount);
-    setLimitedAmount(updatedLimitedAmount);
-    localStorage.setItem("limitedamount", updatedLimitedAmount);
-    setIsEditingLimitedAmount(false);
-  };
+    const updatedLimitedAmount = parseFloat(newLimitedAmount)
+    setLimitedAmount(updatedLimitedAmount)
+    localStorage.setItem("limitedamount", updatedLimitedAmount)
+    setIsEditingLimitedAmount(false)
+  }
 
   const handleLimitedAmountCancel = () => {
-    setIsEditingLimitedAmount(false);
-  };
+    setIsEditingLimitedAmount(false)
+  }
 
-  // Handle clear and send actions
   const handleClear = () => {
-    setAlertMessage("Are you sure you want to clear all amounts?");
+    setAlertMessage("Are you sure you want to clear all amounts?")
     setConfirmAction(() => () => {
       const clearedData = data.map(item => ({
         ...item,
         amount: 0,
-      }));
-      setData(clearedData);
-      localStorage.setItem("data", JSON.stringify(clearedData));
-      setShowAlert(false);
-    });
-    setShowAlert(true);
-  };
+      }))
+      setData(clearedData)
+      localStorage.setItem("data", JSON.stringify(clearedData))
+      setShowAlert(false)
+    })
+    setShowAlert(true)
+  }
 
+  const navigate = useNavigate()
+  
+  const generatePdfAndNavigate = () => {
+    html2canvas(document.body).then(canvas => {
+      const imgData = canvas.toDataURL("image/png")
+      const pdf = new jsPDF("p", "mm", "a4")
+      const imgWidth = 210
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight)
+  
+      const pdfDataUrl = pdf.output("datauristring")
+      console.log("Generated PDF Data URL:", pdfDataUrl) 
+      navigate("/new", { state: { pdfDataUrl } })
+    })
+  }
   const handleSend = () => {
     if (totalAmount > limitedAmount) {
-      setAlertMessage(`The total amount exceeds the limited amount of ${balanceAmount}. Do you want to continue with the split?`);
-      setConfirmAction(() => downloadPage);
-      setShowAlert(true);
+      setAlertMessage(
+        `The total amount exceeds the limited amount of ${balanceAmount}. Do you want to continue with the split?`
+      )
+      setConfirmAction(() => downloadPage)
+      setShowAlert(true)
     } else {
-      downloadPage();
+      downloadPage()
     }
-  };
+  }
 
-  const totalAmount = data.reduce((total, item) => total + parseFloat(item.amount || 0), 0).toFixed(2);
-  const balanceAmount = (limitedAmount - totalAmount).toFixed(2);
+  const handleSearchChange = event => {
+    setSearchQuery(event.target.value)
+  }
+
+  const totalAmount = data
+    .reduce((total, item) => total + parseFloat(item.amount || 0), 0)
+    .toFixed(2)
+  const balanceAmount = (limitedAmount - totalAmount).toFixed(2)
 
   const downloadPage = () => {
     html2canvas(document.body).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save('page.pdf');
-    });
-  };
+      const imgData = canvas.toDataURL("image/png")
+      const pdf = new jsPDF("p", "mm", "a4")
+      const imgWidth = 210
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight)
+      pdf.save("page.pdf")
+    })
+  }
+
+  const filteredData = data.filter(
+    row =>
+      String(row.Name).toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(row.id).toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(row.Nav_Number)
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      String(row.Number).toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(row.category).toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(row.age).toLowerCase().includes(searchQuery.toLowerCase()) ||
+      String(row.amount).toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <>
@@ -149,7 +181,11 @@ const App = () => {
           <Card>
             <div
               className="card-body"
-              style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+              }}
             >
               {isEditingLimitedAmount ? (
                 <>
@@ -198,6 +234,14 @@ const App = () => {
               <div style={{ flexGrow: 1, textAlign: "center" }}>
                 <h4 style={{ margin: 0 }}>Beneficiary Distribution Panel</h4>
               </div>
+              <div style={{ textAlign: "right" }}>
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+              </div>
             </div>
           </Card>
 
@@ -215,7 +259,7 @@ const App = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((row, index) => (
+              {filteredData.map((row, index) => (
                 <tr key={row.id}>
                   <td>{row.Name}</td>
                   <td>{row.id}</td>
@@ -290,9 +334,15 @@ const App = () => {
           <Card>
             <div
               className="card-body"
-              style={{ display: "flex", justifyContent: "end", flexWrap: "wrap" }}
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                flexWrap: "wrap",
+              }}
             >
-              <Button onClick={handleSend} style={{ marginRight: "10px" }}>Download</Button>
+              <Button onClick={handleSend} style={{ marginRight: "10px" }}>
+                Download
+              </Button>
               <Button onClick={handleClear}>Clear</Button>
             </div>
           </Card>
@@ -304,8 +354,8 @@ const App = () => {
           <p>{alertMessage}</p>
           <Button
             onClick={() => {
-              if (confirmAction) confirmAction();
-              setShowAlert(false);
+              if (confirmAction) confirmAction()
+              setShowAlert(false)
             }}
             style={{ marginRight: "10px" }}
           >
@@ -315,7 +365,7 @@ const App = () => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App

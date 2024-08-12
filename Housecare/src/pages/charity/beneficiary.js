@@ -18,7 +18,6 @@ import { Link } from "react-router-dom"
 import { useForm } from "helpers/useForms"
 import {
   fetchBenificiarys,
-  fetchCharity,
   handleBenificiary,
   benificiaryDelete,
   benificiaryEdit,
@@ -52,12 +51,12 @@ const Beneficiary = () => {
   const [benificiarys, setBenificiarys] = useState([])
   const [modals, setmodals] = useState(false)
   const [editedId, setEditedId] = useState(null)
-  const [allcharity, setAllCharity] = useState([])
+  // const [allcharity, setAllCharity] = useState([])
   const navigate = useNavigate()
 
   //charity details
   useEffect(() => {
-    loadData()
+    // loadData()
     fetchDatas()
     const fetchData = async () => {
       const token = localStorage.getItem("token")
@@ -76,14 +75,14 @@ const Beneficiary = () => {
     fetchData()
   }, [id])
 
-  const loadData = async () => {
-    try {
-      const response = await fetchCharity()
-      setAllCharity(response)
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  // const loadData = async () => {
+  //   try {
+  //     const response = await fetchCharity()
+  //     setAllCharity(response)
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
   //benificiary create
   const benificiaryCreate = async e => {
@@ -270,17 +269,18 @@ const Beneficiary = () => {
                                   className="form-control"
                                 >
                                   <option>select charity</option>
-                                  {allcharity.map(charities => (
+                                  {/* {allcharity.map(charities => (
                                     <option
                                       key={charities._id}
                                       value={charities.charity}
                                       disabled={
-                                        charities.charity !== charitys.charity
+                                        charities.charity !== filteredBenificiarys.charity
                                       }
                                     >
                                       {charities.charity}
                                     </option>
-                                  ))}
+                                  ))} */}
+                                  <option>{charitydetails.charity}</option>
                                 </select>
                               </div>
                             </Col>
@@ -615,18 +615,9 @@ const Beneficiary = () => {
                                         className="form-control"
                                       >
                                         <option>select charity</option>
-                                        {allcharity.map(charities => (
-                                          <option
-                                            key={charities._id}
-                                            value={charities.charity}
-                                            disabled={
-                                              charities.charity !==
-                                              charitys.charity
-                                            }
-                                          >
-                                            {charities.charity}
-                                          </option>
-                                        ))}
+                                        <option>
+                                          {charitydetails.charity}
+                                        </option>
                                       </select>
                                     </div>
                                   </Col>

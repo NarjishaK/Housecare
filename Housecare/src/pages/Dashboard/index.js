@@ -1,6 +1,4 @@
-import React , {useEffect} from "react"
-
-import { connect } from "react-redux";
+import React , {useEffect, useState} from "react"
 import {
   Row,
   Col,
@@ -19,26 +17,36 @@ import LatestTransactions from "./latest-transactions";
 import LatestOrders from "./latest-orders";
 
 //Import Action to copy breadcrumb items from local state to redux state
-import { setBreadcrumbItems } from "../../store/actions";
+import { fetchBenificiarys, fetchCharity } from "pages/Authentication/handle-api";
 
-const Dashboard = (props) => {
+const Dashboard = () => {
 
   document.title = "Dashboard |Housecare - Charity management";
 
 
-  const breadcrumbItems = [
-    { title: "Housecare", link: "#" },
-    { title: "Dashboard", link: "#" }
-  ]
+const [charitys,setCharitys] =useState([])
+const [benificiarys,setBenificiarys] =useState([])
+ 
 
   useEffect(() => {
-    props.setBreadcrumbItems('Dashboard' , breadcrumbItems)
-  },)
+    loadData()
+  }, [])
 
+  //fetch charity organaization deatils
+  const loadData = async () => {
+    try {
+      const response = await fetchCharity()
+      setCharitys(response)
+      const respond = await fetchBenificiarys()
+      setBenificiarys(respond)
+    } catch (err) {
+      console.log(err)
+    }
+  }
   const reports = [
-    { title: "Charity Organizations", iconClass: "cube-outline", total: "3", average: "+11%", badgecolor: "info" },
-    { title: "Total Beneficiaries", iconClass: "buffer", total: "14", average: "-29%", badgecolor: "danger" },
-    { title: "Total   Approvals", iconClass: "tag-text-outline", total: "11", average: "0%", badgecolor: "warning" },
+    { title: "Charity Organizations", iconClass: "cube-outline", total: `${charitys.length}`, average: "+11%", badgecolor: "info" },
+    { title: "Total Beneficiaries", iconClass: "buffer", total: `${benificiarys.length}`, average: "-29%", badgecolor: "danger" },
+    { title: "Total  Approvals", iconClass: "tag-text-outline", total: "11", average: "0%", badgecolor: "warning" },
     { title: "Pending Approvals", iconClass: "briefcase-check", total: "2", average: "+89%", badgecolor: "info" },
   ]
 
@@ -100,4 +108,4 @@ const Dashboard = (props) => {
   )
 }
 
-export default connect(null, { setBreadcrumbItems })(Dashboard);
+export default Dashboard;

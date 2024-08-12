@@ -11,11 +11,11 @@ const MonthlyEarnings = props => {
 
                     <Row className="text-center mt-4">
                         <div className="col-6">
-                            <h5 className="font-size-20">$56241</h5>
+                            <h5 className="font-size-20">$000.00</h5>
                             <p className="text-muted">Marketplace</p>
                         </div>
                         <div className="col-6">
-                            <h5 className="font-size-20">$23651</h5>
+                            <h5 className="font-size-20">$0000.00</h5>
                             <p className="text-muted">Total Income</p>
                         </div>
                     </Row>

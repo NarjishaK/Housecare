@@ -7,6 +7,7 @@ const Dashboards = () => {
   //benificiarys list
   const [benificiarys, setBenificiarys] = useState([])
   useEffect(() => {
+    
     const fetchDatas = async () => {
       try {
         const response = await fetchBenificiarys()
@@ -17,6 +18,7 @@ const Dashboards = () => {
     }
     fetchDatas()
   }, [])
+  // const limitedamount = JSON.parse(localStorage.getItem("limitedamount"))
   const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
 
   // filter benificiarys based on the selected charity
@@ -24,14 +26,60 @@ const Dashboards = () => {
     benificiary => benificiary.charity_name === charitydetails.charity
   )
 
+  const [currentAmount, setCurrentAmount] = useState(0)
+  const [previousAmount, setPreviousAmount] = useState(0)
+  const [percentageChange, setPercentageChange] = useState(0)
+
+  const updateLimitedAmount = (newAmount) => {
+    const currentAmount = JSON.parse(localStorage.getItem("limitedamount")) || 0;
+    localStorage.setItem("previousLimitedAmount", JSON.stringify(currentAmount));
+    localStorage.setItem("limitedamount", JSON.stringify(newAmount));
+    setCurrentAmount(newAmount);
+  };
+  
+  useEffect(() => {
+    const storedCurrentAmount =
+      JSON.parse(localStorage.getItem("limitedamount")) || 0;
+    const storedPreviousAmount =
+      JSON.parse(localStorage.getItem("previousLimitedAmount")) || 0;
+  
+    console.log("Stored Current Amount:", storedCurrentAmount);
+    console.log("Stored Previous Amount:", storedPreviousAmount);
+  
+    setCurrentAmount(storedCurrentAmount);
+    setPreviousAmount(storedPreviousAmount);
+  
+    // Calculate percentage change if previous amount is greater than 0
+    if (storedPreviousAmount > 0) {
+      const change =
+        ((storedCurrentAmount - storedPreviousAmount) / storedPreviousAmount) *
+        100;
+      setPercentageChange(change.toFixed(2));
+    } else {
+      // Handle cases where there is no previous amount
+      setPercentageChange(0);
+    }
+  }, []);
+  
+
   return (
     <>
       <Navbar />
       <div className={styles.dashboards}>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Fund Size</div>
-          <div className={styles.cardvalue}> $ 1,587</div>
-          <div className={styles.cardsubtext}>+11% From previous period</div>
+          <div className={styles.cardvalue}>$ {currentAmount || "000"}</div>
+          <div
+            className={styles.cardsubtext}
+            style={{
+              color: percentageChange >= 0 ? "green" : "red",
+            }}
+          >
+            {percentageChange >= 0
+              ? `+${percentageChange}%`
+              : `${percentageChange}%`}{" "}
+            From previous period
+          </div>
         </div>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Invested</div>

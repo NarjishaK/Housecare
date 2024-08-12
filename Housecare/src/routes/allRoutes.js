@@ -75,6 +75,7 @@ import BenificiariesDetails from "pages/charity/beneficiariesdetails"
 import Split from "pages/charity/split"
 import Profile from "pages/charity/profile"
 import Beneficiary from "pages/charity/beneficiary"
+import New from "pages/charity/new"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -155,7 +156,7 @@ const authRoutes = [
   {path:"/beneficiaries",component:<Beneficiary/>},
   { path: "/pages-403", component: <Pages403 /> },
   { path: "/pages-500", component: <Pages500 /> },
-
+{path: "new" , component: <New/>},
   // Authentication Inner
   { path: "/page-recoverpw", component: <Recoverpw /> },
   { path: "/auth-lock-screen", component: <LockScreen /> },
