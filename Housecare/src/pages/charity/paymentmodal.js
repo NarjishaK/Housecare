@@ -37,7 +37,7 @@ const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
           value={amount}
           onChange={handleChange}
           placeholder="Enter amount"
-          min="3"
+          min="100"
           required
           invalid={isInvalid}  // This adds visual feedback if the value is invalid
         />

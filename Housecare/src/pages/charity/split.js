@@ -3,8 +3,8 @@ import styles from "./dashboard.module.css"
 import { Button, Card, Input } from "reactstrap"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
+import axios from "axios"
 import { fetchBenificiarys } from "pages/Authentication/handle-api"
-import { useNavigate } from "react-router-dom"
 const App = () => {
   const [benificiarys, setBenificiarys] = useState([])
   const [data, setData] = useState([])
@@ -112,30 +112,30 @@ const App = () => {
     setShowAlert(true)
   }
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   
-  const generatePdfAndNavigate = () => {
-    html2canvas(document.body).then(canvas => {
-      const imgData = canvas.toDataURL("image/png")
-      const pdf = new jsPDF("p", "mm", "a4")
-      const imgWidth = 210
-      const imgHeight = (canvas.height * imgWidth) / canvas.width
-      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight)
+  // const generatePdfAndNavigate = () => {
+  //   html2canvas(document.body).then(canvas => {
+  //     const imgData = canvas.toDataURL("image/png")
+  //     const pdf = new jsPDF("p", "mm", "a4")
+  //     const imgWidth = 210
+  //     const imgHeight = (canvas.height * imgWidth) / canvas.width
+  //     pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight)
   
-      const pdfDataUrl = pdf.output("datauristring")
-      console.log("Generated PDF Data URL:", pdfDataUrl) 
-      navigate("/new", { state: { pdfDataUrl } })
-    })
-  }
+  //     const pdfDataUrl = pdf.output("datauristring")
+  //     console.log("Generated PDF Data URL:", pdfDataUrl) 
+  //     navigate("/new", { state: { pdfDataUrl } })
+  //   })
+  // }
   const handleSend = () => {
     if (totalAmount > limitedAmount) {
       setAlertMessage(
         `The total amount exceeds the limited amount of ${balanceAmount}. Do you want to continue with the split?`
       )
-      setConfirmAction(() => downloadPage)
+      setConfirmAction(() => downloadPages)
       setShowAlert(true)
     } else {
-      downloadPage()
+      downloadPages()
     }
   }
 
@@ -148,7 +148,7 @@ const App = () => {
     .toFixed(2)
   const balanceAmount = (limitedAmount - totalAmount).toFixed(2)
 
-  const downloadPage = () => {
+  const downloadPages = () => {
     html2canvas(document.body).then(canvas => {
       const imgData = canvas.toDataURL("image/png")
       const pdf = new jsPDF("p", "mm", "a4")
@@ -172,6 +172,70 @@ const App = () => {
       String(row.amount).toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+
+  //Data History
+  const handleSaveData = async () => {
+    try {
+      const charityDetails = JSON.parse(localStorage.getItem("charitydetails"))
+      if (!charityDetails) return
+
+      const splits = data.map(item => ({
+        totalamount: limitedAmount,
+        splitamount: parseFloat(item.amount),
+        beneficiary: item.id,
+        date: new Date().toISOString(),
+      }))
+
+      await axios.post("http://localhost:8000/api/splits", { splits })
+
+      setAlertMessage("Data saved successfully!")
+      setShowAlert(true)
+      console.log("Splits saved successfully", splits)
+      window.location.href = "/history"
+    } catch (error) {
+      console.error("Error saving data:", error)
+      setAlertMessage("Failed to save data. Please try again.")
+      setShowAlert(true)
+    }
+  }
+
+  //share pdf
+  const downloadPage = () => {
+    html2canvas(document.body).then(canvas => {
+      const imgData = canvas.toDataURL("image/png")
+      const pdf = new jsPDF("p", "mm", "a4")
+      const imgWidth = 210
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight)
+      const pdfBlob = pdf.output("blob")
+
+      // Create FormData to send PDF to the backend
+      const formData = new FormData()
+      formData.append("pdf", pdfBlob, "page.pdf")
+
+      axios
+        .post("http://localhost:8000/send-pdf", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(response => {
+          setShowAlert(false)
+          console.log(response.data.message)
+          alert("success")
+        })
+        .catch(error => {
+          console.error("Error sending PDF:", error)
+          alert("Failed")
+        })
+
+      // pdf.save("page.pdf");
+    })
+  }
+
+  const handleShare = () => {
+    downloadPage()
+  }
   return (
     <>
       {/* <Navbars /> */}
@@ -240,7 +304,14 @@ const App = () => {
                   placeholder="Search"
                   value={searchQuery}
                   onChange={handleSearchChange}
-                />
+                  style={{ marginRight: "2px", height: "30px" }}
+                  />
+                  <Button
+                    onClick={handleSaveData}
+                    style={{ backgroundColor: "transparent", color: "black" }}
+                  >
+                    Save
+                  </Button>
               </div>
             </div>
           </Card>
@@ -340,10 +411,69 @@ const App = () => {
                 flexWrap: "wrap",
               }}
             >
-              <Button onClick={handleSend} style={{ marginRight: "10px" }}>
-                Download
+               <Button
+                onClick={handleShare}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "none",
+                  color: "black",
+                }}
+              >
+                {" "}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  color="black"
+                  class="bi bi-envelope-arrow-up"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4.5a.5.5 0 0 1-1 0V5.383l-7 4.2-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h5.5a.5.5 0 0 1 0 1H2a2 2 0 0 1-2-1.99zm1 7.105 4.708-2.897L1 5.383zM1 4v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1" />
+                  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.354 1.25 1.25a.5.5 0 0 1-.708.708L13 12.207V14a.5.5 0 0 1-1 0v-1.717l-.28.305a.5.5 0 0 1-.737-.676l1.149-1.25a.5.5 0 0 1 .722-.016" />
+                </svg>
               </Button>
-              <Button onClick={handleClear}>Clear</Button>
+              <Button
+                onClick={handleSend}
+                style={{ backgroundColor: "transparent", border: "none" }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  color="black"
+                  class="bi bi-box-arrow-down"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1z"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708z"
+                  />
+                </svg>
+              </Button>
+              <Button
+                onClick={handleClear}
+                style={{ backgroundColor: "transparent", border: "none" }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  color="black"
+                  class="bi bi-arrow-clockwise"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                  />
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                </svg>
+              </Button>
+              {/* <Button onClick={handleClear}>Clear</Button> */}
             </div>
           </Card>
         </Card>
