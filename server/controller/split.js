@@ -2,6 +2,7 @@ const Splits = require("../model/split");
 
 const nodemailer = require('nodemailer');
 const fs = require('fs');
+require('dotenv').config();  // Load environment variables
 
 exports.sendPdf = async (req, res) => {
   try {
@@ -11,14 +12,14 @@ exports.sendPdf = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'narjishakuniyil@gmail.com',
-        pass: 'uizijtixkxgvcvmw',
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     // Send email with the PDF attachment
     await transporter.sendMail({
-      from: 'narjishakuniyil@gmail.com',
+      from: process.env.EMAIL_USER,
       to: 'navaskuniyil6@gmail.com',
       subject: 'PDF Document',
       text: 'Please find the attached PDF document.',

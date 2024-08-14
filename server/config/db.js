@@ -2,12 +2,8 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const dblink = process.env.MONGODB_URI;
-console.log("helooo",dblink);
 function connectDB() {
-    mongoose.connect(dblink, {
-        // useNewUrlParser: true,
-        // useUnifiedTopology: true,
-    })
+    mongoose.connect(dblink, {})
     .then(() => {
         console.log("Database connected successfully");
         console.log("http://localhost:8000");
