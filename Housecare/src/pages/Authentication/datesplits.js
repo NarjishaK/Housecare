@@ -1,7 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Button, Card, CardDeck, CardText } from "reactstrap"
-
+import * as XLSX from "xlsx"
 const Datesplits = () => {
   const [splits, setSplits] = useState([])
   const charityName = JSON.parse(localStorage.getItem("charityname"))
@@ -27,7 +27,31 @@ const Datesplits = () => {
     localStorage.setItem("selectedDate", date)
     window.location.href = "/histories"
   }
+  const exportSplitDetails = date => {
+    const splitData = splits
+      .filter(split => new Date(split.date).toLocaleDateString() === date)
+      .map(split => ({
+        Date: new Date(split.date).toLocaleDateString(),
+        Name: split.beneficiary.benificiary_name,
+        Number: split.beneficiary.number,
+        Category: split.beneficiary.category,
+        Age: split.beneficiary.age,
+        Charity: split.beneficiary.charity_name,
+        Amount: split.splitamount,
+      }))
 
+    if (splitData.length === 0) {
+      alert("No data to export for this date")
+      return
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(splitData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Split Details")
+
+    // Generate Excel file
+    XLSX.writeFile(workbook, `SplitDetails_${date}.xlsx`)
+  }
   const renderedDates = new Set()
 
   return (
@@ -59,7 +83,8 @@ const Datesplits = () => {
                 >
                   Show
                 </Button>
-                <Button style={{ marginRight: "10px" }}>Export</Button>
+                <Button style={{ marginRight: "10px" }}   onClick={() => exportSplitDetails(splitDate)}
+                >Export</Button>
               </div>
             </Card>
           )
