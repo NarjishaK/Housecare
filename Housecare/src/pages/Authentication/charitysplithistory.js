@@ -1,38 +1,40 @@
-import React, { useEffect, useState } from "react"
-import axios from "axios"
-import styles from "../../pages/charity/split.module.css"
-import { Button, Card } from "reactstrap"
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import styles from "../../pages/charity/split.module.css";
+import { Button, Card } from "reactstrap";
 
 const SplitedHistory = () => {
-  const [splits, setSplits] = useState([])
-  const charityName = JSON.parse(localStorage.getItem("charityname"))
+  const [splits, setSplits] = useState([]);
+  const charityName = JSON.parse(localStorage.getItem("charityname"));
+  const selectedDate = localStorage.getItem("selectedDate");
+
   useEffect(() => {
     const fetchSplits = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/splits")
+        const response = await axios.get("http://localhost:8000/api/splits");
         const filteredSplits = response.data.filter(
-          split => split.beneficiary.charity_name === charityName
-        )
-        setSplits(filteredSplits)
-        console.log(filteredSplits, "Ffffffffffffffff")
-
-        console.log(splits, "Filtered Splits")
+          (split) =>
+            split.beneficiary.charity_name === charityName &&
+            new Date(split.date).toLocaleDateString() === selectedDate
+        );
+        setSplits(filteredSplits);
+        console.log(filteredSplits, "Filtered Splits");
       } catch (error) {
-        console.error("Error fetching splits:", error)
+        console.error("Error fetching splits:", error);
       }
-    }
+    };
 
-    fetchSplits()
-  }, [charityName])
+    fetchSplits();
+  }, [charityName, selectedDate]);
 
-  const handleDelete = async id => {
-    try {
-      await axios.delete(`http://localhost:8000/api/splits/${id}`)
-      setSplits(splits.filter(split => split._id !== id))
-    } catch (error) {
-      console.error("Error deleting split:", error)
-    }
-  }
+//   const handleDelete = async (id) => {
+//     try {
+//       await axios.delete(`http://localhost:8000/api/splits/${id}`);
+//       setSplits(splits.filter((split) => split._id !== id));
+//     } catch (error) {
+//       console.error("Error deleting split:", error);
+//     }
+//   };
 
   return (
     <React.Fragment>
@@ -61,7 +63,7 @@ const SplitedHistory = () => {
               <th>Category</th>
               <th>Age</th>
               <th>Amount</th>
-              <th>Action</th>
+              {/* <th>Action</th> */}
             </tr>
           </thead>
           <tbody>
@@ -74,7 +76,7 @@ const SplitedHistory = () => {
                 <td>{split.beneficiary.category}</td>
                 <td>{split.beneficiary.age}</td>
                 <td>{split.splitamount}</td>
-                <td>
+                {/* <td>
                   <button
                     onClick={() => handleDelete(split._id)}
                     style={{ border: "none", backgroundColor: "transparent" }}
@@ -90,7 +92,7 @@ const SplitedHistory = () => {
                       <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
                     </svg>
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

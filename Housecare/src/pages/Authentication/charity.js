@@ -160,7 +160,7 @@ function Charity() {
   }
   const handleHistory = charity => {
     localStorage.setItem("charityname", JSON.stringify(charity))
-    window.location.href = `histories/${charity}`
+    window.location.href = `datesplits/${charity}`
   }
   return (
     <React.Fragment>
