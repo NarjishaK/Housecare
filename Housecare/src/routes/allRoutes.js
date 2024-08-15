@@ -77,6 +77,8 @@ import Profile from "pages/charity/profile"
 import Beneficiary from "pages/charity/beneficiary"
 // import New from "pages/charity/new"
 import New from "pages/charity/splitDetails"
+import SplitHistory from "pages/Authentication/splithistory"
+import Charitysplithistory from "pages/Authentication/charitysplithistory"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -85,7 +87,8 @@ const userRoutes = [
   { path: "/admin", component: <Charity /> },
   { path: "/charitydetails/:id", component: <CharityDetails /> },
   { path: "/beneficiarydetails/:id", component: <Beneficiarydetails /> },
-
+{ path: "/splithistory", component: <SplitHistory /> },
+  { path: "/histories/:id", component: <Charitysplithistory /> },
   // //calendar
   { path: "/calendar", component: <Calendar /> },
 

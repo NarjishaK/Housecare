@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import styles from "./split.module.css";
+import styles from "../../pages/charity/split.module.css";
 import { Button, Card } from "reactstrap";
 
-const SplitedDetails = () => {
+const SplitedHistory = () => {
   const [splits, setSplits] = useState([]);
 
-  const charitydetails = JSON.parse(localStorage.getItem("charitydetails"));
-  const charityName = charitydetails?.charity;
+//   const charitydetails = JSON.parse(localStorage.getItem("charitydetails"));
+//   const charityName = charitydetails?.charity;
 
   useEffect(() => {
     const fetchSplits = async () => {
       try {
         const response = await axios.get("http://localhost:8000/api/splits");
-        const filteredSplits = response.data.filter(
-          split => split.beneficiary.charity_name === charityName
-        );
-        setSplits(filteredSplits);
+        // const filteredSplits = response.data.filter(
+        //   split => split.beneficiary.charity_name === charityName
+        // );
+        setSplits(response.data);
       } catch (error) {
         console.error("Error fetching splits:", error);
       }
     };
 
     fetchSplits();
-  }, [charityName]);
+  }, []);
 
   const handleDelete = async id => {
     try {
@@ -93,4 +93,4 @@ const SplitedDetails = () => {
   );
 };
 
-export default SplitedDetails;
+export default SplitedHistory;

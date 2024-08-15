@@ -108,6 +108,7 @@ const Navbar = props => {
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
+                
 
 
                 <li className="nav-item">
@@ -122,6 +123,14 @@ const Navbar = props => {
                 <span>{props.t("Charity Organaization")}</span>
               </Link>
             </li>
+            <li className="nav-item">
+                <Link to="/splithistory" className="nav-link">
+                <i className="mdi mdi-view-dashboard"></i>
+                <span className="badge rounded-pill bg-primary float-end">2</span>
+                <span>{props.t("History")}</span>
+              </Link>
+            </li>
+            
             {/* ////////////////////////////////// */}
                 {/* <li className="nav-item dropdown">
                   <Link

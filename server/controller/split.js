@@ -79,6 +79,3 @@ exports.deleteSplit = async (req, res) => {
     }
   };
 
-
-
-  

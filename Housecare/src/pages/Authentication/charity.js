@@ -16,7 +16,7 @@ import {
   charityDelete,
   charityEdit,
   charityUpdate,
-  BASE_URL
+  BASE_URL,
 } from "./handle-api"
 
 import { useForm } from "helpers/useForms"
@@ -24,8 +24,7 @@ import { useForm } from "helpers/useForms"
 function Charity() {
   const [modal, setmodal] = useState(false)
   const [charity1, setCharity1] = useState([])
-  
-  
+
   const [image, setImage] = useState([])
   const [editId, setEditId] = useState(null)
   const [modal_center, setmodal_center] = useState(false)
@@ -38,7 +37,7 @@ function Charity() {
     roles: "",
     VAT_REG_NO: "",
     authorizedperson: "",
-    password:"",
+    password: "",
     phone: "",
   })
 
@@ -158,6 +157,10 @@ function Charity() {
   //charity details
   const handleView = charity => {
     window.location.href = `charitydetails/${charity}`
+  }
+  const handleHistory = charity => {
+    localStorage.setItem("charityname", JSON.stringify(charity))
+    window.location.href = `histories/${charity}`
   }
   return (
     <React.Fragment>
@@ -626,6 +629,27 @@ function Charity() {
                       >
                         <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
                         <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
+                      </svg>
+                    </Button>
+
+                    <Button
+                      onClick={() => handleHistory(details.charity)}
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        color="black"
+                        class="bi bi-clipboard-data"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0z" />
+                        <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z" />
+                        <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z" />
                       </svg>
                     </Button>
                     <Button

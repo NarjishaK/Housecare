@@ -4,6 +4,7 @@ import { Button, Card, Input } from "reactstrap"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 import axios from "axios"
+import Navbar from "./Navbars"
 import { fetchBenificiarys } from "pages/Authentication/handle-api"
 const App = () => {
   const [benificiarys, setBenificiarys] = useState([])
@@ -112,21 +113,7 @@ const App = () => {
     setShowAlert(true)
   }
 
-  // const navigate = useNavigate()
-  
-  // const generatePdfAndNavigate = () => {
-  //   html2canvas(document.body).then(canvas => {
-  //     const imgData = canvas.toDataURL("image/png")
-  //     const pdf = new jsPDF("p", "mm", "a4")
-  //     const imgWidth = 210
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width
-  //     pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight)
-  
-  //     const pdfDataUrl = pdf.output("datauristring")
-  //     console.log("Generated PDF Data URL:", pdfDataUrl) 
-  //     navigate("/new", { state: { pdfDataUrl } })
-  //   })
-  // }
+  // Download pdf
   const handleSend = () => {
     if (totalAmount > limitedAmount) {
       setAlertMessage(
@@ -138,6 +125,7 @@ const App = () => {
       downloadPages()
     }
   }
+
 
   const handleSearchChange = event => {
     setSearchQuery(event.target.value)
@@ -173,33 +161,45 @@ const App = () => {
   )
 
 
-  //Data History
+  //Data History and get notification exceed amount
   const handleSaveData = async () => {
+    if (totalAmount > limitedAmount) {
+      alert(
+        `The total amount exceeds the limited amount of ${balanceAmount}. Do you want to continue with the split?`
+      );
+    }
     try {
-      const charityDetails = JSON.parse(localStorage.getItem("charitydetails"))
-      if (!charityDetails) return
-
-      const splits = data.map(item => ({
-        totalamount: limitedAmount,
-        splitamount: parseFloat(item.amount),
-        beneficiary: item.id,
-        date: new Date().toISOString(),
-      }))
-
-      await axios.post("http://localhost:8000/api/splits", { splits })
-
-      setAlertMessage("Data saved successfully!")
-      setShowAlert(true)
-      console.log("Splits saved successfully", splits)
-      window.location.href = "/history"
+      const charityDetails = JSON.parse(localStorage.getItem("charitydetails"));
+      if (!charityDetails) return;
+  
+      // Filter out beneficiaries with an amount of 0
+      const splits = data
+        .filter(item => parseFloat(item.amount) > 0)
+        .map(item => ({
+          totalamount: limitedAmount,
+          splitamount: parseFloat(item.amount),
+          beneficiary: item.id,
+          date: new Date().toISOString(),
+        }));
+  
+      if (splits.length === 0) {
+        alert("No beneficiaries with non-zero amounts to save.");
+        return;
+      }
+  
+      await axios.post("http://localhost:8000/api/splits", { splits });
+  
+      alert("Data saved successfully!");
+      console.log("Splits saved successfully");
+      window.location.href = "/history";
     } catch (error) {
-      console.error("Error saving data:", error)
-      setAlertMessage("Failed to save data. Please try again.")
-      setShowAlert(true)
+      console.error("Error saving data:", error);
+      setAlertMessage("Failed to save data. Please try again.");
+      setShowAlert(true);
     }
   }
-
-  //share pdf
+  
+  //share pdf through mail
   const downloadPage = () => {
     html2canvas(document.body).then(canvas => {
       const imgData = canvas.toDataURL("image/png")
@@ -208,8 +208,6 @@ const App = () => {
       const imgHeight = (canvas.height * imgWidth) / canvas.width
       pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight)
       const pdfBlob = pdf.output("blob")
-
-      // Create FormData to send PDF to the backend
       const formData = new FormData()
       formData.append("pdf", pdfBlob, "page.pdf")
 
@@ -229,7 +227,7 @@ const App = () => {
           alert("Failed")
         })
 
-      // pdf.save("page.pdf");
+      pdf.save("page.pdf");
     })
   }
 
@@ -238,7 +236,7 @@ const App = () => {
   }
   return (
     <>
-      {/* <Navbars /> */}
+      <Navbar />
       <br />
       <div className={styles.App}>
         <Card className="container">
@@ -263,7 +261,7 @@ const App = () => {
                     onClick={handleLimitedAmountSave}
                     style={{ marginRight: "10px" }}
                   >
-                    Save
+                    Save 
                   </Button>
                   <Button onClick={handleLimitedAmountCancel}>Cancel</Button>
                 </>
@@ -310,7 +308,7 @@ const App = () => {
                     onClick={handleSaveData}
                     style={{ backgroundColor: "transparent", color: "black" }}
                   >
-                    Save
+                    Save Data
                   </Button>
               </div>
             </div>
@@ -473,7 +471,6 @@ const App = () => {
                   <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
                 </svg>
               </Button>
-              {/* <Button onClick={handleClear}>Clear</Button> */}
             </div>
           </Card>
         </Card>
