@@ -24,9 +24,9 @@ import { BASE_URL } from "./handle-api"
 function Staff() {
   // const isSuperadmin = !!localStorage.getItem("HomecareAdmin")
   const isRoleStaff = () => {
-    const HomecareAdmin = JSON.parse(localStorage.getItem("HomecareAdmin"))
-    return HomecareAdmin && HomecareAdmin.roles === "staff"
-  }
+    const HomecareAdmin = JSON.parse(localStorage.getItem("HomecareAdmin"));
+    return HomecareAdmin && HomecareAdmin.role === "staff"; // Return true if role is 'staff'
+};
   const [modal, setModal] = useState(false)
   const [staff, setStaff] = useState([])
   const [values, handleChange, setValues] = useForm({
@@ -210,14 +210,14 @@ function Staff() {
                         <Link
                           onClick={() => {
                             
-                            if (!isRoleStaff) {
+                            if (isRoleStaff()) {
                               setModal(!modal);
                             }
                           }}
                         >
                           <Button
                             onClick={() => handleEdit(staffs._id)}
-                            disabled={!isRoleStaff}
+                            disabled={isRoleStaff()}
                             style={{
                               backgroundColor: "transparent",
                               border: "none",
@@ -380,7 +380,7 @@ function Staff() {
                         }}
                         className="waves-effect waves-light"
                         onClick={() => handleDelete(staffs._id)}
-                        disabled={!isRoleStaff}
+                        disabled={isRoleStaff()}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -397,7 +397,7 @@ function Staff() {
                         // color="danger"
                         style={{ paddingInline: "10px", width: "75px" }}
                         className="waves-effect waves-light"
-                        disabled={!isRoleStaff}
+                        disabled={isRoleStaff()}
                         onClick={() =>
                           handleBlock(staffs._id, staffs.isBlocked)
                         }

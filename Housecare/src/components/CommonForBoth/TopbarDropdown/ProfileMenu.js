@@ -25,7 +25,7 @@ const ProfileMenu = props => {
   const admin = JSON.parse(localStorage.getItem("HomecareAdmin"))
   const isRoleStaff = () => {
     const HomecareAdmin = JSON.parse(localStorage.getItem("HomecareAdmin"))
-    return HomecareAdmin && HomecareAdmin.roles === "staff"
+    return HomecareAdmin && HomecareAdmin.role === "staff"
   }
   return (
     <React.Fragment>
@@ -49,9 +49,7 @@ const ProfileMenu = props => {
           <DropdownItem
             tag="a"
             href={`/profile/${admin.id}`}
-            disabled={!isRoleStaff}
-            // href={isSuperadmin ? `/profile/${admin.id}` : "#"}
-            // disabled={!isSuperadmin}
+            disabled={isRoleStaff()}
           >
             {" "}
             <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1" />
