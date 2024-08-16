@@ -61,7 +61,7 @@ const SplitedHistory = () => {
             <tbody key={index}>
               <tr>
                 <td>{new Date(split.date).toLocaleDateString()}</td>
-                <td>{split._id}</td>
+                <td>{split.beneficiary.benificiary_id}</td>
                 <td>{split.beneficiary.benificiary_name}</td>
                 <td>{split.beneficiary.number}</td>
                 <td>{split.beneficiary.category}</td>

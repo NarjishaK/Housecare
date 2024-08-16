@@ -49,6 +49,7 @@ const SplitedDetails = () => {
             <tr>
               <th>Date</th>
               <th>Id</th>
+              <th>benificiary_id</th>
               <th>Name</th>
               <th>Number</th>
               <th>Category</th>
@@ -62,6 +63,7 @@ const SplitedDetails = () => {
               <tr>
                 <td>{new Date(split.date).toLocaleDateString()}</td>
                 <td>{split._id}</td>
+                <td>{split.beneficiary.benificiary_id}</td>
                 <td>{split.beneficiary.benificiary_name}</td>
                 <td>{split.beneficiary.number}</td>
                 <td>{split.beneficiary.category}</td>

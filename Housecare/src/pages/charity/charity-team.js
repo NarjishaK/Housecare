@@ -1049,7 +1049,7 @@ function CharityDetails() {
                     {filteredBenificiarys.map(benificiary => (
                       <tr className="table-light">
                         <td>{benificiary.benificiary_name}</td>
-                        <td>{benificiary._id}</td>
+                        <td>{benificiary.benificiary_id}</td>
                         <td>{benificiary.number}</td>
                         <td>{benificiary.email_id}</td>
                         <td>{benificiary.nationality}</td>

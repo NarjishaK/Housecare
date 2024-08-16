@@ -44,6 +44,7 @@ const App = () => {
       const initialData = filteredBenificiarys.map(benificiary => ({
         Name: benificiary.benificiary_name,
         id: benificiary._id,
+        benificiary_id: benificiary.benificiary_id,
         Nav_Number: benificiary.navision_linked_no,
         Number: benificiary.number,
         category: benificiary.category,

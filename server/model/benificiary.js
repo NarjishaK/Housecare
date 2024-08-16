@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const benificiarySchema = mongoose.Schema({
+  benificiary_id: { type: String, unique: true }, // Add the unique benificiary_id field
   benificiary_name: { type: String, required: true },
   number: { type: Number, required: true },
   email_id: { type: String, required: true },
@@ -16,6 +17,30 @@ const benificiarySchema = mongoose.Schema({
   Balance: { type: Number, required: true },
   category: { type: String, required: true },
   age: { type: Number, required: true },
+}, { timestamps: true });
+
+// Pre-save middleware to generate unique beneficiary_id
+benificiarySchema.pre("save", async function (next) {
+  const benificiary = this;
+
+  if (benificiary.isNew) {
+    // Find the last created benificiary to determine the next ID
+    const lastBenificiary = await this.constructor.findOne({}).sort({ createdAt: -1 });
+
+    let newId = "BENF00001"; // Default to the first ID
+
+    if (lastBenificiary && lastBenificiary.benificiary_id) {
+      // Extract the numeric part and increment it
+      const lastId = lastBenificiary.benificiary_id;
+      const lastNum = parseInt(lastId.substring(4), 10); // Get the numeric part
+      const nextNum = (lastNum + 1).toString().padStart(5, "0"); // Increment and pad with leading zeros
+      newId = `BENF${nextNum}`;
+    }
+
+    benificiary.benificiary_id = newId; // Set the new ID
+  }
+
+  next(); // Continue with the save operation
 });
 
 const Benficiaries = mongoose.model("Benficiaries", benificiarySchema);

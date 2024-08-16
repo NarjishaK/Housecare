@@ -30,6 +30,7 @@
     "bootstrap-icons": "^1.11.3",
     "c3": "^0.7.20",
     "draft-js": "^0.11.7",
+    "exceljs": "^4.4.0",
     "firebase": "^10.12.4",
     "flatpickr": "^4.6.13",
     "formik": "^2.4.6",

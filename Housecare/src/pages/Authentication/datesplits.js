@@ -1,8 +1,8 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Button, Card, CardDeck, CardText } from "reactstrap"
-import * as XLSX from "xlsx"
-
+// import * as XLSX from "xlsx"
+import ExcelJS from "exceljs";
 const Datesplits = () => {
   const [splits, setSplits] = useState([])
   const charityName = JSON.parse(localStorage.getItem("charityname"))
@@ -29,33 +29,74 @@ const Datesplits = () => {
     window.location.href = "/histories"
   }
 
-  const exportSplitDetails = date => {
+
+  const exportSplitDetails = async (date) => {
     const splitData = splits
       .filter(split => new Date(split.date).toLocaleDateString() === date)
       .map(split => ({
         Date: new Date(split.date).toLocaleDateString(),
-        ID: split._id,
-        Name: split.beneficiary.benificiary_name,
-        Number: split.beneficiary.number,
-        Category: split.beneficiary.category,
-        Age: split.beneficiary.age,
-        Charity: split.beneficiary.charity_name,
-        Amount: split.splitamount,
-        SecurityID: "", 
-      }))
-
+        _id: split._id,
+        benificiary_name: split.beneficiary.benificiary_name,
+        benificiary_id: split.beneficiary.benificiary_id,
+        number: split.beneficiary.number,
+        category: split.beneficiary.category,
+        age: split.beneficiary.age,
+        charity_name: split.beneficiary.charity_name,
+        splitamount: split.splitamount,
+        SecurityID: "", // This field should be editable
+      }));
+  
     if (splitData.length === 0) {
-      alert("No data to export for this date")
-      return
+      alert("No data to export for this date");
+      return;
     }
-
-    const worksheet = XLSX.utils.json_to_sheet(splitData)
-    const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Split Details")
-    // Generate Excel file
-    XLSX.writeFile(workbook, `SplitDetails_${date}.xlsx`)
-  }
-
+  
+    // Create a new Excel workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Split Details");
+  
+    // Define columns
+    worksheet.columns = [
+      { header: "Date", key: "Date", width: 15 },
+      { header: "_id", key: "_id", width: 30 },
+      { header: "benificiary_name", key: "benificiary_name", width: 30 },
+      { header: "benificiary_id", key: "benificiary_id", width: 30 },
+      { header: "number", key: "number", width: 15 },
+      { header: "category", key: "category", width: 20 },
+      { header: "age", key: "age", width: 10 },
+      { header: "charity_name", key: "charity_name", width: 20 },
+      { header: "splitamount", key: "splitamount", width: 15 },
+      { header: "SecurityID", key: "SecurityID", width: 20 },
+    ];
+  
+    // Add rows
+    splitData.forEach(data => {
+      worksheet.addRow(data);
+    });
+  
+    // Protect the _id column
+    worksheet.getColumn("_id").eachCell({ includeEmpty: true }, (cell) => {
+      cell.protection = { locked: true }; // Lock the _id column
+    });
+  
+    // Protect the worksheet with a password (optional)
+    worksheet.protect("yourPasswordHere", { selectLockedCells: false, selectUnlockedCells: true });
+  
+    // Save the workbook
+    await workbook.xlsx.writeBuffer().then(buffer => {
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `SplitDetails_${date}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    });
+  };
+  
+  
   const renderedDates = new Set()
 
   return (

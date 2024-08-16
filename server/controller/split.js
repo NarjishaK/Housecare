@@ -1,4 +1,5 @@
 const Splits = require("../model/split");
+const Benificiary = require("../model/benificiary");
 
 const nodemailer = require('nodemailer');
 const fs = require('fs');
@@ -78,4 +79,37 @@ exports.deleteSplit = async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   };
+
+// upload
+
+exports.updateSplitById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { beneficiary, ...splitData } = req.body;
+
+    // Update the Split
+    const updatedSplit = await Splits.findByIdAndUpdate(id, splitData, { new: true });
+    
+    if (!updatedSplit) {
+      return res.status(404).send('Split not found');
+    }
+    
+    // Update the Benificiary
+    const benfID = await Splits.findById(id).populate("beneficiary");
+    const beneficiar = await Benificiary.findById(benfID.beneficiary);
+    const updatedBeneficiary = await Benificiary.findByIdAndUpdate(beneficiar._id, beneficiary);
+
+    if (!updatedBeneficiary) {
+      return res.status(404).send('Beneficiary not found');
+    }
+
+    res.json({
+      split: updatedSplit,
+      beneficiary: updatedBeneficiary
+    });
+  } catch (error) {
+    console.error("Error updating split and beneficiary:", error);
+    res.status(500).send('Server Error');
+  }
+};
 

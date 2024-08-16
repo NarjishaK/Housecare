@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import styles from "../../pages/charity/split.module.css"
 import { Button, Card } from "reactstrap"
+import * as XLSX from 'xlsx' // Add this import
 
 const SplitedHistory = () => {
   const [splits, setSplits] = useState([])
+  const [file, setFile] = useState(null) // Add state for the file
   const charityName = JSON.parse(localStorage.getItem("charityname"))
   const selectedDate = localStorage.getItem("selectedDate")
 
@@ -27,6 +29,63 @@ const SplitedHistory = () => {
     fetchSplits()
   }, [charityName, selectedDate])
 
+  // Handle file change
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0])
+  }
+
+  // Handle file upload
+ // Handle file upload
+ const handleUpload = async () => {
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const binaryStr = event.target.result;
+        const workbook = XLSX.read(binaryStr, { type: 'binary' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const data = XLSX.utils.sheet_to_json(sheet);
+        console.log("Parsed data:", data);
+
+        for (const row of data) {
+          console.log("Updating row:", row); // Log each row being updated
+          
+          // Construct the request payload
+          const payload = {
+            splitamount: row.splitamount,
+            SecurityID: row.SecurityID, // Assuming SecurityID is a field in the split model or used for some logic
+            beneficiary: {
+              _id: row.beneficiary,
+              benificiary_id: row.benificiary_id,
+              benificiary_name: row.benificiary_name,
+              number: row.number,
+              category: row.category,
+              age: row.age,
+              charity_name: row.charity_name,
+              // Add more fields if required
+            },
+            // Add more fields for the split data if required
+          };
+
+          try {
+            const response = await axios.put(`http://localhost:8000/splits/${row._id}`, payload);
+            console.log("Update response:", response.data); // Log the response data
+          } catch (error) {
+            console.error(`Error updating split with id ${row._id}:`, error.response ? error.response.data : error.message);
+          }
+        }
+      } catch (error) {
+        console.error("Error reading or parsing the file:", error);
+      }
+    };
+    reader.readAsBinaryString(file);
+  } else {
+    alert('Please select a file first!');
+  }
+};
+
+
   return (
     <React.Fragment>
       <br />
@@ -38,7 +97,16 @@ const SplitedHistory = () => {
           <h5 style={{ textAlign: "center", marginLeft: "20px" }}>
             SPLITED DETAILS
           </h5>
-          <Button style={{ marginLeft: "auto", marginRight: "20px" }}>
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleFileChange}
+            style={{ marginLeft: 'auto', marginRight: '20px' }}
+          />
+          <Button
+            style={{ marginLeft: "10px" }}
+            onClick={handleUpload}
+          >
             Upload
           </Button>
         </div>
@@ -49,6 +117,7 @@ const SplitedHistory = () => {
             <tr>
               <th>Date</th>
               <th>Id</th>
+              <th>benificiary_id</th>
               <th>Name</th>
               <th>Number</th>
               <th>Category</th>
@@ -62,6 +131,7 @@ const SplitedHistory = () => {
               <tr key={index}>
                 <td>{new Date(split.date).toLocaleDateString()}</td>
                 <td>{split._id}</td>
+                <td>{split.beneficiary.benificiary_id}</td>
                 <td>{split.beneficiary.benificiary_name}</td>
                 <td>{split.beneficiary.number}</td>
                 <td>{split.beneficiary.category}</td>

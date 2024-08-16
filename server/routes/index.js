@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { saveSplits, getSplits,sendPdf } = require("../controller/split")
+const { saveSplits, getSplits,sendPdf,updateSplitById } = require("../controller/split")
 const splitsController = require("../controller/split")
 const multer = require('multer');
 
@@ -24,7 +24,6 @@ router.get('/', function(req, res, next) {
 router.post("/api/splits", saveSplits);
 router.get("/api/splits", getSplits);
 router.delete('/:id', splitsController.deleteSplit);
-
 router.post('/send-pdf', upload.single('pdf'), sendPdf);
-
+router.put('/splits/:id', updateSplitById);
 module.exports = router;
