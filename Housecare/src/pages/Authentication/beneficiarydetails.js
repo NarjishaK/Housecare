@@ -69,7 +69,7 @@ const BenificiaryDetails = props => {
                         <br />
                         Navision No. {beneficiarys.navision_linked_no}
                         <br />
-                        {beneficiarys._id}<br/>
+                        {beneficiarys.benificiary_id}<br/>
                         {beneficiarys.nationality}
                       </address>
                     </Col>

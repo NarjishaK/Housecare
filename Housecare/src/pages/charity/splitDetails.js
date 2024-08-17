@@ -13,17 +13,22 @@ const SplitedDetails = () => {
     const fetchSplits = async () => {
       try {
         const response = await axios.get("http://localhost:8000/api/splits");
+        console.log(response.data, "All Splits Data");
+  
         const filteredSplits = response.data.filter(
-          split => split.beneficiary.charity_name === charityName
+          split => split.beneficiary && split.beneficiary.charity_name === charityName
         );
+  
         setSplits(filteredSplits);
+        console.log(filteredSplits, "Filtered Splits");
       } catch (error) {
         console.error("Error fetching splits:", error);
       }
     };
-
+  
     fetchSplits();
   }, [charityName]);
+  
 
   const handleDelete = async id => {
     try {

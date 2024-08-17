@@ -1,46 +1,53 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import styles from "../../pages/charity/split.module.css";
-import { Button, Card } from "reactstrap";
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import styles from "../../pages/charity/split.module.css"
+import { Button, Card } from "reactstrap"
 
 const SplitedHistory = () => {
-  const [splits, setSplits] = useState([]);
+  const [splits, setSplits] = useState([])
 
-//   const charitydetails = JSON.parse(localStorage.getItem("charitydetails"));
-//   const charityName = charitydetails?.charity;
+  //   const charitydetails = JSON.parse(localStorage.getItem("charitydetails"));
+  //   const charityName = charitydetails?.charity;
 
   useEffect(() => {
     const fetchSplits = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/splits");
+        const response = await axios.get("http://localhost:8000/api/splits")
         // const filteredSplits = response.data.filter(
         //   split => split.beneficiary.charity_name === charityName
         // );
-        setSplits(response.data);
+        setSplits(response.data)
       } catch (error) {
-        console.error("Error fetching splits:", error);
+        console.error("Error fetching splits:", error)
       }
-    };
+    }
 
-    fetchSplits();
-  }, []);
+    fetchSplits()
+  }, [])
 
   const handleDelete = async id => {
     try {
-      await axios.delete(`http://localhost:8000/${id}`);
-      setSplits(splits.filter(split => split._id !== id));
+      await axios.delete(`http://localhost:8000/${id}`)
+      setSplits(splits.filter(split => split._id !== id))
     } catch (error) {
-      console.error("Error deleting split:", error);
+      console.error("Error deleting split:", error)
     }
-  };
+  }
 
   return (
     <React.Fragment>
       <br />
       <Card className="container">
-        <div className="card-body" style={{ display: "flex", justifyContent: "center" }}>
-          <h5 style={{ textAlign: "center", marginLeft: "20px"}}>SPLITED DETAILS</h5>
-          <Button style={{ marginLeft: "auto", marginRight: "20px" }}>Share</Button>
+        <div
+          className="card-body"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <h5 style={{ textAlign: "center", marginLeft: "20px" }}>
+            SPLITED DETAILS
+          </h5>
+          <Button style={{ marginLeft: "auto", marginRight: "20px" }}>
+            Share
+          </Button>
         </div>
       </Card>
       <div className={styles.table_container}>
@@ -61,11 +68,11 @@ const SplitedHistory = () => {
             <tbody key={index}>
               <tr>
                 <td>{new Date(split.date).toLocaleDateString()}</td>
-                <td>{split.beneficiary.benificiary_id}</td>
-                <td>{split.beneficiary.benificiary_name}</td>
-                <td>{split.beneficiary.number}</td>
-                <td>{split.beneficiary.category}</td>
-                <td>{split.beneficiary.age}</td>
+                <td>{split.beneficiary?.benificiary_id || "N/A"}</td>
+                <td>{split.beneficiary?.benificiary_name || "N/A"}</td>
+                <td>{split.beneficiary?.number || "N/A"}</td>
+                <td>{split.beneficiary?.category || "N/A"}</td>
+                <td>{split.beneficiary?.age || "N/A"}</td>
                 <td>{split.splitamount}</td>
                 <td>
                   <button
@@ -90,7 +97,7 @@ const SplitedHistory = () => {
         </table>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default SplitedHistory;
+export default SplitedHistory
