@@ -26,4 +26,8 @@ router.get("/api/splits", getSplits);
 router.delete('/:id', splitsController.deleteSplit);
 router.post('/send-pdf', upload.single('pdf'), sendPdf);
 router.put('/splits/:id', updateSplitById);
+router.post("/increment", splitsController.incrementNotification);
+router.get("/count", splitsController.getNotificationCount);
+router.post("/reset", splitsController.resetNotificationCount);
+
 module.exports = router;

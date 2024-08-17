@@ -38,14 +38,22 @@ const SplitedDetails = () => {
       console.error("Error deleting split:", error);
     }
   };
-
+  const handleSaveData = async () => {
+    try {
+      alert("Data saved successfully!");
+      await axios.post("http://localhost:8000/increment");
+      console.log("Notification count incremented successfully");
+    } catch (error) {
+      console.error("Error incrementing notification count:", error);
+    }
+  };
   return (
     <React.Fragment>
       <br />
       <Card className="container">
         <div className="card-body" style={{ display: "flex", justifyContent: "center" }}>
           <h5 style={{ textAlign: "center", marginLeft: "20px"}}>SPLITED DETAILS</h5>
-          <Button style={{ marginLeft: "auto", marginRight: "20px" }}>Share</Button>
+          <Button style={{ marginLeft: "auto", marginRight: "20px" }} onClick={handleSaveData}>SaveData</Button>
         </div>
       </Card>
       <div className={styles.table_container}>

@@ -262,7 +262,7 @@ const App = () => {
                     onClick={handleLimitedAmountSave}
                     style={{ marginRight: "10px" }}
                   >
-                    Save 
+                    Save  Data
                   </Button>
                   <Button onClick={handleLimitedAmountCancel}>Cancel</Button>
                 </>

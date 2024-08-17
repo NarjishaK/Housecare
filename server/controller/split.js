@@ -1,6 +1,6 @@
 const Splits = require("../model/split");
 const Benificiary = require("../model/benificiary");
-
+const Notifications = require("../model/notification");
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 require('dotenv').config();  // Load environment variables
@@ -113,3 +113,56 @@ exports.updateSplitById = async (req, res) => {
   }
 };
 
+//////////////
+
+
+// Increment notification count
+exports.incrementNotification = async (req, res) => {
+  try {
+    let notification = await Notifications.findOne();
+
+    if (!notification) {
+      notification = new Notifications({ notificationcount: 0 });
+    }
+
+    notification.notificationcount += 1;
+    await notification.save();
+
+    res.status(200).json({ success: true, count: notification.notificationcount });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error incrementing notification count", error });
+  }
+};
+
+// Get notification count
+exports.getNotificationCount = async (req, res) => {
+  try {
+    const notification = await Notifications.findOne();
+
+    if (!notification) {
+      return res.status(200).json({ success: true, count: 0 });
+    }
+
+    res.status(200).json({ success: true, count: notification.notificationcount });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error getting notification count", error });
+  }
+};
+
+// Reset notification count
+exports.resetNotificationCount = async (req, res) => {
+  try {
+    let notification = await Notifications.findOne();
+
+    if (!notification) {
+      notification = new Notifications({ notificationcount: 0 });
+    }
+
+    notification.notificationcount = 0;
+    await notification.save();
+
+    res.status(200).json({ success: true, message: "Notification count reset", count: notification.notificationcount });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error resetting notification count", error });
+  }
+};
