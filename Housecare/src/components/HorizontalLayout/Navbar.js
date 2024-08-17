@@ -7,7 +7,7 @@ import withRouter from "components/Common/withRouter"
 
 //i18n
 import { withTranslation } from "react-i18next"
-
+import { BASE_URL } from "../../pages/Authentication/handle-api"
 import { connect } from "react-redux"
 import axios from "axios"
 
@@ -86,7 +86,7 @@ const Navbar = props => {
   useEffect(() => {
     const fetchNotificationCount = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/count");
+        const response = await axios.get(`${BASE_URL}/count`);
         setNotificationCount(response.data.count);
       } catch (error) {
         console.error("Error fetching notification count:", error);
@@ -98,7 +98,7 @@ const Navbar = props => {
 
   const handleResetNotifications = async () => {
     try {
-      await axios.post("http://localhost:8000/reset");
+      await axios.post(`${BASE_URL}/reset`);
       setNotificationCount(0);
       console.log("Notification count reset successfully");
     } catch (error) {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./split.module.css";
 import { Button, Card } from "reactstrap";
-
+import { BASE_URL } from "../Authentication/handle-api";
 const SplitedDetails = () => {
   const [splits, setSplits] = useState([]);
 
@@ -12,7 +12,7 @@ const SplitedDetails = () => {
   useEffect(() => {
     const fetchSplits = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/splits");
+        const response = await axios.get(`${BASE_URL}/api/splits`);
         console.log(response.data, "All Splits Data");
   
         const filteredSplits = response.data.filter(
@@ -32,7 +32,7 @@ const SplitedDetails = () => {
 
   const handleDelete = async id => {
     try {
-      await axios.delete(`http://localhost:8000/${id}`);
+      await axios.delete(`${BASE_URL}/${id}`);
       setSplits(splits.filter(split => split._id !== id));
     } catch (error) {
       console.error("Error deleting split:", error);
@@ -41,7 +41,7 @@ const SplitedDetails = () => {
   const handleSaveData = async () => {
     try {
       alert("Data saved successfully!");
-      await axios.post("http://localhost:8000/increment");
+      await axios.post(`${BASE_URL}/increment`);
       console.log("Notification count incremented successfully");
     } catch (error) {
       console.error("Error incrementing notification count:", error);

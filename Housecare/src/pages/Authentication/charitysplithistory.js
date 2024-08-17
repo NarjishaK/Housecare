@@ -3,7 +3,7 @@ import axios from "axios"
 import styles from "../../pages/charity/split.module.css"
 import { Button, Card } from "reactstrap"
 import * as XLSX from 'xlsx' // Add this import
-
+import { BASE_URL } from "./handle-api"
 const SplitedHistory = () => {
   const [splits, setSplits] = useState([])
   const [file, setFile] = useState(null) // Add state for the file
@@ -13,7 +13,7 @@ const SplitedHistory = () => {
   useEffect(() => {
     const fetchSplits = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/splits")
+        const response = await axios.get(`${BASE_URL}/api/splits`)
         const filteredSplits = response.data.filter(
           split =>
             split.beneficiary.charity_name === charityName &&
@@ -69,7 +69,7 @@ const SplitedHistory = () => {
           };
 
           try {
-            const response = await axios.put(`http://localhost:8000/splits/${row._id}`, payload);
+            const response = await axios.put(`${BASE_URL}/splits/${row._id}`, payload);
             console.log("Update response:", response.data); // Log the response data
           } catch (error) {
             console.error(`Error updating split with id ${row._id}:`, error.response ? error.response.data : error.message);

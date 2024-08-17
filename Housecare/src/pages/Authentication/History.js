@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../../pages/charity/split.module.css";
 import { Button, Card, CardBody, CardTitle, Col, Collapse, Row } from "reactstrap";
 import axios from "axios";
-
+import { BASE_URL } from "./handle-api"
 const UiTabsAccordions = () => {
   const [activeDate, setActiveDate] = useState(null);
   const [splits, setSplits] = useState([]);
@@ -13,7 +13,7 @@ const UiTabsAccordions = () => {
   useEffect(() => {
     const fetchSplits = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/splits");
+        const response = await axios.get(`${BASE_URL}/api/splits`);
         setSplits(response.data);
       } catch (error) {
         console.error("Error fetching splits:", error);
@@ -30,9 +30,9 @@ const UiTabsAccordions = () => {
   const handleStatusChange = async (splitIds, status) => {
     try {
       await Promise.all(
-        splitIds.map(splitId => axios.put(`http://localhost:8000/splits/${splitId}/status`, { status }))
+        splitIds.map(splitId => axios.put(`${BASE_URL}/splits/${splitId}/status`, { status }))
       );
-      const response = await axios.get("http://localhost:8000/api/splits");
+      const response = await axios.get(`${BASE_URL}/api/splits`);
       setSplits(response.data);
       setSelectedSplits({}); // Reset selected splits after action
       setSelectAll({}); // Reset select all checkboxes

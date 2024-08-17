@@ -6,20 +6,20 @@ import {
 
 // Pages Components
 import Miniwidget from "./Miniwidget"
-import MonthlyEarnings from "./montly-earnings";
-import EmailSent from "./email-sent";
-import MonthlyEarnings2 from "./montly-earnings2";
-import Inbox from "./inbox";
-import RecentActivity from "./recent-activity";
-import WidgetUser from "./widget-user";
-import YearlySales from "./yearly-sales";
-import LatestTransactions from "./latest-transactions";
-import LatestOrders from "./latest-orders";
+// import MonthlyEarnings from "./montly-earnings";
+// import EmailSent from "./email-sent";
+// import MonthlyEarnings2 from "./montly-earnings2";
+// import Inbox from "./inbox";
+// import RecentActivity from "./recent-activity";
+// import WidgetUser from "./widget-user";
+// import YearlySales from "./yearly-sales";
+// import LatestTransactions from "./latest-transactions";
+// import LatestOrders from "./latest-orders";
 
 //Import Action to copy breadcrumb items from local state to redux state
 import { fetchBenificiarys, fetchCharity } from "pages/Authentication/handle-api";
 import axios from "axios";
-
+import { BASE_URL } from "../Authentication/handle-api"
 const Dashboard = () => {
 
   document.title = "Dashboard |Housecare - Charity management";
@@ -50,7 +50,7 @@ const [pendingApprovals, setPendingApprovals] = useState(0);
  
   const fetchPendingApprovals = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/pending-approvals");
+      const response = await axios.get(`${BASE_URL}/pending-approvals`);
       setPendingApprovals(response.data.count);
     } catch (error) {
       console.error("Error fetching pending approvals:", error);

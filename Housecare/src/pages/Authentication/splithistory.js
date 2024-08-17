@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import styles from "../../pages/charity/split.module.css"
 import { Button, Card } from "reactstrap"
+import { BASE_URL } from "./handle-api"
 
 const SplitedHistory = () => {
   const [splits, setSplits] = useState([])
   useEffect(() => {
     const fetchSplits = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/splits")
+        const response = await axios.get(`${BASE_URL}/api/splits`)
         setSplits(response.data)
       } catch (error) {
         console.error("Error fetching splits:", error)
@@ -20,7 +21,7 @@ const SplitedHistory = () => {
 
   const handleDelete = async id => {
     try {
-      await axios.delete(`http://localhost:8000/${id}`)
+      await axios.delete(`${BASE_URL}/${id}`)
       setSplits(splits.filter(split => split._id !== id))
     } catch (error) {
       console.error("Error deleting split:", error)

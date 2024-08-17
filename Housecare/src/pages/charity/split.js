@@ -5,6 +5,7 @@ import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 import axios from "axios"
 import Navbar from "./Navbars"
+import { BASE_URL } from "../Authentication/handle-api"
 import { fetchBenificiarys } from "pages/Authentication/handle-api"
 const App = () => {
   const [benificiarys, setBenificiarys] = useState([])
@@ -188,7 +189,7 @@ const App = () => {
         return;
       }
   
-      await axios.post("http://localhost:8000/api/splits", { splits });
+      await axios.post(`${BASE_URL}/api/splits`, { splits });
   
       alert("Data saved successfully!");
       console.log("Splits saved successfully");
@@ -213,7 +214,7 @@ const App = () => {
       formData.append("pdf", pdfBlob, "page.pdf")
 
       axios
-        .post("http://localhost:8000/send-pdf", formData, {
+        .post(`${BASE_URL}/send-pdf`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

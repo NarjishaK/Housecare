@@ -1,6 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
 import { Button, Card, CardDeck, CardText } from "reactstrap"
+import { BASE_URL } from "./handle-api"
 // import * as XLSX from "xlsx"
 import ExcelJS from "exceljs";
 const Datesplits = () => {
@@ -10,7 +11,7 @@ const Datesplits = () => {
   useEffect(() => {
     const fetchSplits = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/splits")
+        const response = await axios.get(`${BASE_URL}/api/splits`)
         const filteredSplits = response.data.filter(
           split => split.beneficiary.charity_name === charityName
         )
