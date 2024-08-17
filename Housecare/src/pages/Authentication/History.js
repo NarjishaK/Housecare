@@ -91,8 +91,7 @@ const UiTabsAccordions = () => {
         <Col xl={12}>
           <Card>
             <CardBody>
-              <CardTitle className="h4">Split Details</CardTitle>
-              <p className="card-title-desc">Details of split Based on Date</p>
+              <CardTitle className="h4" style={{textAlign: "center"}}>SPLIT DETAILS</CardTitle>
 
               <div className="accordion" id="accordion">
                 {sortedDates.map((splitDate) => (
