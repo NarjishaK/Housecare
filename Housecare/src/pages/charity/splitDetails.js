@@ -68,6 +68,7 @@ const SplitedDetails = () => {
               <th>Category</th>
               <th>Age</th>
               <th>Amount</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -82,6 +83,7 @@ const SplitedDetails = () => {
                 <td>{split.beneficiary.category}</td>
                 <td>{split.beneficiary.age}</td>
                 <td>{split.splitamount}</td>
+                <td>{split.status}</td>
                 <td>
                   <button
                     onClick={() => handleDelete(split._id)}

@@ -80,6 +80,7 @@ import New from "pages/charity/splitDetails"
 import SplitHistory from "pages/Authentication/splithistory"
 import Charitysplithistory from "pages/Authentication/charitysplithistory"
 import Datesplits from "pages/Authentication/datesplits"
+import History from "pages/Authentication/History"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -91,6 +92,8 @@ const userRoutes = [
 { path: "/splithistory", component: <SplitHistory /> },
   { path: "/histories", component: <Charitysplithistory /> },
   { path: "/datesplits/:id", component: <Datesplits /> },
+  {path: "/history-split" , component: <History/>},
+
   // //calendar
   { path: "/calendar", component: <Calendar /> },
 

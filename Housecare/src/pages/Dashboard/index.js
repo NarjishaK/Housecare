@@ -18,6 +18,7 @@ import LatestOrders from "./latest-orders";
 
 //Import Action to copy breadcrumb items from local state to redux state
 import { fetchBenificiarys, fetchCharity } from "pages/Authentication/handle-api";
+import axios from "axios";
 
 const Dashboard = () => {
 
@@ -26,10 +27,12 @@ const Dashboard = () => {
 
 const [charitys,setCharitys] =useState([])
 const [benificiarys,setBenificiarys] =useState([])
+const [pendingApprovals, setPendingApprovals] = useState(0);
  
 
   useEffect(() => {
     loadData()
+    fetchPendingApprovals();
   }, [])
 
   //fetch charity organaization deatils
@@ -43,11 +46,22 @@ const [benificiarys,setBenificiarys] =useState([])
       console.log(err)
     }
   }
+
+ 
+  const fetchPendingApprovals = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/pending-approvals");
+      setPendingApprovals(response.data.count);
+    } catch (error) {
+      console.error("Error fetching pending approvals:", error);
+    }
+  };
+  
   const reports = [
     { title: "Charity Organizations", iconClass: "cube-outline", total: `${charitys.length}`, average: "+11%", badgecolor: "info" },
     { title: "Total Beneficiaries", iconClass: "buffer", total: `${benificiarys.length}`, average: "-29%", badgecolor: "danger" },
     { title: "Total  Approvals", iconClass: "tag-text-outline", total: "11", average: "0%", badgecolor: "warning" },
-    { title: "Pending Approvals", iconClass: "briefcase-check", total: "2", average: "+89%", badgecolor: "info" },
+    { title: "Pending Approvals", iconClass: "briefcase-check", total: `${pendingApprovals}`, average: "+89%", badgecolor: "info" },
   ]
 
   return (

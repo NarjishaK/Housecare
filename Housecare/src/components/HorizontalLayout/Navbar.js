@@ -149,12 +149,18 @@ const Navbar = props => {
               </Link>
             </li>
             <li className="nav-item">
-                <Link to="/splithistory" className="nav-link" onClick={handleResetNotifications}>
+                <Link to="/history-split" className="nav-link" onClick={handleResetNotifications}>
                 <i className="mdi mdi-view-dashboard"></i>
                 <span className="badge rounded-pill bg-primary float-end">  {notificationCount}</span>
                 <span>{props.t("History")}</span>
               </Link>
             </li>
+            {/* <li className="nav-item">
+                <Link to="/splithistory" className="nav-link" >
+                <i className="mdi mdi-view-dashboard"></i>
+                <span>{props.t("Split")}</span>
+              </Link>
+            </li> */}
             
               </ul>
             </Collapse>

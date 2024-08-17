@@ -29,5 +29,7 @@ router.put('/splits/:id', updateSplitById);
 router.post("/increment", splitsController.incrementNotification);
 router.get("/count", splitsController.getNotificationCount);
 router.post("/reset", splitsController.resetNotificationCount);
+router.put('/splits/:id/status', splitsController.updateSplitStatus);
+router.get("/pending-approvals",splitsController.getPendingApprovalsCount);
 
 module.exports = router;

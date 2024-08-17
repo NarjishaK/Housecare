@@ -112,7 +112,38 @@ exports.updateSplitById = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+//split status
+exports.updateSplitStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
 
+  try {
+      const split = await Splits.findById(id);
+
+      if (!split) {
+          return res.status(404).json({ message: 'Split not found' });
+      }
+
+      split.status = status;
+      await split.save();
+
+      res.json({ message: 'Status updated successfully', split });
+  } catch (error) {
+      res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+
+
+//pending approvals
+exports.getPendingApprovalsCount = async (req, res) => {
+  try {
+    const count = await Splits.countDocuments({ status: "Pending" });
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching pending approvals", error: err });
+  }
+};
 //////////////
 
 
