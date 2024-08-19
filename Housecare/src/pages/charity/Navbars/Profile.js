@@ -48,10 +48,10 @@ const ProfileMenu = props => {
             <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1" />
             {props.t("Profile")}{" "}
           </DropdownItem>
-          <DropdownItem tag="a" href="#">
+          {/* <DropdownItem tag="a" href="#">
             <i className="mdi mdi-wallet font-size-17 text-muted align-middle me-1" />
             {props.t("My Wallets")}
-          </DropdownItem>
+          </DropdownItem> */}
           <DropdownItem tag="a" href="#/auth-lock-screen">
             <i className="mdi mdi-lock-open-outline font-size-17 text-muted align-middle me-1" />
             {props.t("Lock screen")}

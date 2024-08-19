@@ -11,7 +11,7 @@ import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions"
 import { Container } from "reactstrap"
 
 // Import menuDropdown
-// import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
+import NotificationDropdown from "../CommonForBoth/TopbarDropdown/NotificationDropdown"
 import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 
 // import megamenuImg from "../../assets/images/megamenu-img.png"
@@ -90,7 +90,7 @@ const Header = props => {
           </div>
 
           <div className="float-end">
-            <form className="app-search d-none d-lg-inline-block">
+            {/* <form className="app-search d-none d-lg-inline-block">
               <div className="position-relative">
                 <input
                   type="text"
@@ -99,7 +99,7 @@ const Header = props => {
                 />
                 <span className="fa fa-search"></span>
               </div>
-            </form>
+            </form> */}
             {/* <LanguageDropdown /> */}
 
             <div className="dropdown d-none d-lg-inline-block">
@@ -151,7 +151,7 @@ const Header = props => {
               </div>
             </div>
 
-            {/* <NotificationDropdown /> */}
+            <NotificationDropdown />
             
             <ProfileMenu />
             <div className="dropdown d-inline-block">

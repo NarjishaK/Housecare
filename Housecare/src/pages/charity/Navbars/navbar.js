@@ -122,6 +122,12 @@ const Navbar = props => {
                     <span>{props.t("Beneficiary")}</span>
                   </Link>
                 </li>
+                 <li className="nav-item">
+                  <Link to="/email" className="nav-link">
+                  <i className="mdi mdi-email-open-multiple"></i>
+                    <span>{props.t("Email")}</span>
+                  </Link>
+                </li>
               </ul>
             </Collapse>
             <Button onClick={togglePaymentModal} style={{ marginRight: "20px" }}>

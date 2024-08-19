@@ -151,13 +151,13 @@ const SidebarContent = props => {
             </li>
             <li>
               <Link to="/housecarestaffs" className="waves-effect">
-                <i className="mdi mdi-account-box"></i>
+                <i className="mdi mdi-account-tie"></i>
                 <span>{props.t("Housecare Staffs")}</span>
               </Link>
             </li>
             <li>
               <Link to="/charity" className="waves-effect">
-                <i className="mdi mdi-account-box"></i>
+                <i className="mdi mdi-account-group"></i>
                 <span>{props.t("Charity Organaization")}</span>
               </Link>
             </li>

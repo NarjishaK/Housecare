@@ -14,6 +14,7 @@ var adminRouter = require("./routes/admin")
 var categoryRouter = require("./routes/category")
 var charitystaffRouter = require("./routes/charitystaff")
 var benificiaryRouter = require("./routes/benificiary")
+var emailRouter = require("./routes/email")
 
 connectDB()
 
@@ -42,6 +43,7 @@ app.use('/category',categoryRouter);
 app.use('/admin',adminRouter);
 app.use('/charitystaff',charitystaffRouter);
 app.use('/benificiary',benificiaryRouter);
+app.use('/email',emailRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -81,6 +81,7 @@ import SplitHistory from "pages/Authentication/splithistory"
 import Charitysplithistory from "pages/Authentication/charitysplithistory"
 import Datesplits from "pages/Authentication/datesplits"
 import History from "pages/Authentication/History"
+import Email from "pages/charity/email"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -166,6 +167,7 @@ const authRoutes = [
   { path: "/pages-403", component: <Pages403 /> },
   { path: "/pages-500", component: <Pages500 /> },
   {path: "/history" , component: <New/>},
+  {path: "/email" , component: <Email/>},
   // Authentication Inner
   { path: "/page-recoverpw", component: <Recoverpw /> },
   { path: "/auth-lock-screen", component: <LockScreen /> },

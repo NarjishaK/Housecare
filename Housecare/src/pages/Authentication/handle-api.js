@@ -6,6 +6,7 @@ const ADMIN_URL = `${process.env.REACT_APP_BASE_URL}/admin`;
 const CHARITYSTAFF_URL = `${process.env.REACT_APP_BASE_URL}/charitystaff`;
 const BENIFICIARY_URL = `${process.env.REACT_APP_BASE_URL}/benificiary`;
 const CATEGORY_URL = `${process.env.REACT_APP_BASE_URL}/category`;
+const EMAIL_URL = `${process.env.REACT_APP_BASE_URL}/email`;
 export const BASE_URL = `${process.env.REACT_APP_BASE_URL}`
 
 
@@ -459,3 +460,12 @@ export const fetchCategory = async () => {
   }
 }
 
+//email listing
+export const fetchEmail = async () => {
+  try {
+    const response = await axios.get(`${EMAIL_URL}`)
+    return response.data
+  } catch (err) {
+    console.log(err, "Email listing failed")
+  }
+}

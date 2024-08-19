@@ -57,11 +57,17 @@ const [pendingApprovals, setPendingApprovals] = useState(0);
     }
   };
   
+  // const reports = [
+  //   { title: "Charity Organizations", iconClass: "cube-outline", total: `${charitys.length}`, average: "+11%", badgecolor: "info" },
+  //   { title: "Total Beneficiaries", iconClass: "buffer", total: `${benificiarys.length}`, average: "-29%", badgecolor: "danger" },
+  //   { title: "Total  Approvals", iconClass: "briefcase-check", total: "11", average: "0%", badgecolor: "warning" },
+  //   { title: "Pending Approvals", iconClass: "tag-text-outline", total: `${pendingApprovals}`, average: "+89%", badgecolor: "info" },
+  // ]
   const reports = [
-    { title: "Charity Organizations", iconClass: "cube-outline", total: `${charitys.length}`, average: "+11%", badgecolor: "info" },
-    { title: "Total Beneficiaries", iconClass: "buffer", total: `${benificiarys.length}`, average: "-29%", badgecolor: "danger" },
-    { title: "Total  Approvals", iconClass: "tag-text-outline", total: "11", average: "0%", badgecolor: "warning" },
-    { title: "Pending Approvals", iconClass: "briefcase-check", total: `${pendingApprovals}`, average: "+89%", badgecolor: "info" },
+    { title: "Charity Organizations", iconClass: "mdi mdi-account-group", total: `${charitys.length}`},
+    { title: "Total Beneficiaries", iconClass: "mdi mdi-account-supervisor", total: `${benificiarys.length}`},
+    { title: `Total   Approvals`, iconClass: "mdi mdi-account-check", total: "11", },
+    { title: "Pending Approvals", iconClass: "mdi mdi-account-clock", total: `${pendingApprovals}`, },
   ]
 
   return (

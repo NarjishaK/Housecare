@@ -1,5 +1,5 @@
 import PropTypes from "prop-types"
-import React, {  useEffect,useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Collapse } from "reactstrap"
 import { Link } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
@@ -81,30 +81,30 @@ const Navbar = props => {
     return false
   }
 
-  const [notificationCount, setNotificationCount] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0)
 
   useEffect(() => {
     const fetchNotificationCount = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/count`);
-        setNotificationCount(response.data.count);
+        const response = await axios.get(`${BASE_URL}/count`)
+        setNotificationCount(response.data.count)
       } catch (error) {
-        console.error("Error fetching notification count:", error);
+        console.error("Error fetching notification count:", error)
       }
-    };
+    }
 
-    fetchNotificationCount();
-  }, []);
+    fetchNotificationCount()
+  }, [])
 
   const handleResetNotifications = async () => {
     try {
-      await axios.post(`${BASE_URL}/reset`);
-      setNotificationCount(0);
-      console.log("Notification count reset successfully");
+      await axios.post(`${BASE_URL}/reset`)
+      setNotificationCount(0)
+      console.log("Notification count reset successfully")
     } catch (error) {
-      console.error("Error resetting notification count:", error);
+      console.error("Error resetting notification count:", error)
     }
-  };
+  }
   return (
     <React.Fragment>
       <div className="container-fluid">
@@ -127,41 +127,45 @@ const Navbar = props => {
                 </li> */}
 
                 <li className="nav-item">
-                <Link to="/dashboard" className="nav-link">
-                <i className="mdi mdi-view-dashboard"></i>
-                {/* <span className="badge rounded-pill bg-primary float-end">2</span> */}
-                <span>{props.t("Dashboard")}</span>
-              </Link>
-            </li>
-                
-
+                  <Link to="/dashboard" className="nav-link">
+                    <i className="mdi mdi-view-dashboard"></i>
+                    {/* <span className="badge rounded-pill bg-primary float-end">2</span> */}
+                    <span>{props.t("Dashboard")}</span>
+                  </Link>
+                </li>
 
                 <li className="nav-item">
                   <Link className="nav-link" to="/housecarestaffs">
-                  <i className="mdi mdi-account-box"></i>
+                    <i className="mdi mdi-account-tie"></i>
                     {props.t("Housecare Staffs")}
                   </Link>
                 </li>
                 <li className="nav-item">
-              <Link to="/charity" className="nav-link">
-                <i className="mdi mdi-account-box"></i>
-                <span>{props.t("Charity Organaization")}</span>
-              </Link>
-            </li>
-            <li className="nav-item">
-                <Link to="/history-split" className="nav-link" onClick={handleResetNotifications}>
-                <i className="mdi mdi-view-dashboard"></i>
-                <span className="badge rounded-pill bg-primary float-end">  {notificationCount}</span>
-                <span>{props.t("History")}</span>
-              </Link>
-            </li>
-            {/* <li className="nav-item">
+                  <Link to="/charity" className="nav-link">
+                    <i className="mdi mdi-account-group"></i>
+                    <span>{props.t("Charity Organaization")}</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/history-split"
+                    className="nav-link"
+                    onClick={handleResetNotifications}
+                  >
+                    <i className="mdi mdi-format-line-weight"></i>
+                    <span className="badge rounded-pill bg-primary float-end">
+                      {" "}
+                      {notificationCount}
+                    </span>
+                    <span>{props.t("History")}</span>
+                  </Link>
+                </li>
+                {/* <li className="nav-item">
                 <Link to="/splithistory" className="nav-link" >
                 <i className="mdi mdi-view-dashboard"></i>
                 <span>{props.t("Split")}</span>
               </Link>
             </li> */}
-            
               </ul>
             </Collapse>
           </nav>
@@ -184,5 +188,5 @@ const mapStatetoProps = state => {
 }
 
 export default withRouter(
-  connect(mapStatetoProps, {})(withTranslation()(Navbar)),
+  connect(mapStatetoProps, {})(withTranslation()(Navbar))
 )
