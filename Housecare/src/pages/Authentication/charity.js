@@ -62,10 +62,27 @@ function Charity() {
       console.log(err)
     }
   }
+  //password strong
+  const [passwordError, setPasswordError] = useState("")
+  const validatePassword = password => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.")
+      return false
+    } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+      setPasswordError("Password must contain both letters and numbers.")
+      return false
+    } else {
+      setPasswordError("")
+      return true
+    }
+  }
   //handle charity organaization Add
 
   const charityCreate = async e => {
     e.preventDefault()
+    if (!validatePassword(values.password)) {
+      return
+    }
     const formData = new FormData()
     formData.append("charity", values.charity)
     formData.append("email", values.email)
@@ -333,6 +350,9 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="Password"
                         />
+                        {passwordError && (
+                          <small className="text-danger">{passwordError}</small>
+                        )}
                       </div>
                     </Col>
                     <Col lg={6}>

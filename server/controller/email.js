@@ -1,6 +1,39 @@
 const Emails = require("../model/emails");
 const asyncHandler = require("express-async-handler");
 
+// const nodemailer = require("nodemailer");
+
+// exports.sendEmail = async (req, res) => {
+//   const { to, cc, subject, message } = req.body;
+
+//   // Create a Nodemailer transporter using your SMTP server details
+//   const transporter = nodemailer.createTransport({
+//     service: "gmail", // or your email provider
+//     auth: {
+//       user: "narjishakuniyil@gmail.com", // your email
+//       pass: "uizijtixkxgvcvmw", // your email password
+//     },
+//   });
+
+//   try {
+//     // Send the email
+//     const info = await transporter.sendMail({
+//       from: "narjishakuniyil@gmail.com", // sender address
+//       to: to, // list of receivers
+//       cc: cc, // CC addresses
+//       subject: subject, // Subject line
+//       html: message, // HTML body content
+//     });
+
+//     console.log("Message sent: %s", info.messageId);
+//     res.status(200).send({ message: "Email sent successfully" });
+//   } catch (error) {
+//     console.error("Error sending email:", error);
+//     res.status(500).send({ message: "Failed to send email" });
+//   }
+// };
+
+
 exports.create = asyncHandler(async (req, res) => {
   const {email,category } = req.body;
 

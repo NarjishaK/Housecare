@@ -20,14 +20,14 @@ import { Createstaff } from "./handle-api"
 
 const Register = props => {
   document.title = "Register | Housecare"
-
+  const [passwordError, setPasswordError] = useState("")
   const [values, handleChange] = useForm({
     staff: "",
-    role:"",
+    role: "",
     email: "",
     password: "",
-    iqama:"",
-    phone:"",
+    iqama: "",
+    phone: "",
   })
   const [image, setImage] = useState("")
   const [registrationStatus, setRegistrationStatus] = useState(null)
@@ -36,6 +36,19 @@ const Register = props => {
     const selectedImage = e.target.files[0]
     setImage(selectedImage)
   }
+  //password validation
+  const validatePassword = password => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.")
+      return false
+    } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+      setPasswordError("Password must contain both letters and numbers.")
+      return false
+    } else {
+      setPasswordError("")
+      return true
+    }
+  }
 
   const handleCreate = async e => {
     e.preventDefault()
@@ -43,6 +56,9 @@ const Register = props => {
     //   setRegistrationStatus("error");
     //   return;
     // }
+    if (!validatePassword(values.password)) {
+      return
+    }
     let formData = new FormData()
     formData.append("staff", values.staff)
     formData.append("password", values.password)
@@ -51,12 +67,12 @@ const Register = props => {
     formData.append("role", values.role)
     formData.append("image", image)
     formData.append("phone", values.phone)
-    
+
     try {
       const response = await Createstaff(formData)
       setRegistrationStatus("success")
       console.log(response.data)
-      window.location.href='/login'
+      window.location.href = "/login"
     } catch (err) {
       console.log(err)
       setRegistrationStatus("error")
@@ -154,14 +170,22 @@ const Register = props => {
                           value={values.password}
                           onChange={handleChange}
                         />
+                        {passwordError && (
+                          <small className="text-danger">{passwordError}</small>
+                        )}
                       </div>
                       <div className="mb-3">
                         <Label htmlFor="role">Role</Label>
-                        <select name="role" id="role" value={values.role} onChange={handleChange} className="form-select">
-                          <option >select role</option>
+                        <select
+                          name="role"
+                          id="role"
+                          value={values.role}
+                          onChange={handleChange}
+                          className="form-select"
+                        >
+                          <option>select role</option>
                           <option value="staff">staff</option>
                         </select>
-
                       </div>
                       <div className="mb-3">
                         <Label htmlFor="iqama">Iqama No</Label>

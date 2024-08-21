@@ -75,6 +75,21 @@ function Staff() {
       }
     }
   }
+  //password validation
+  const [passwordError, setPasswordError] = useState("");
+  const validatePassword = (password) => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+      return false;
+    } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+      setPasswordError("Password must contain both letters and numbers.");
+      return false;
+    } else {
+      setPasswordError(""); 
+      return true;
+    }
+  };
+  
   //staff editing By Id
   const handleEdit = async id => {
     try {
@@ -97,6 +112,9 @@ function Staff() {
 
   const handleUpdate = async e => {
     e.preventDefault()
+    if (!validatePassword(values.password)) {
+      return; 
+    }
     const formData = new FormData()
     formData.append("staff", values.staff)
     formData.append("email", values.email)
@@ -316,6 +334,9 @@ function Staff() {
                                     value={values.password}
                                     onChange={handleChange}
                                   />
+                                  {passwordError && (
+                                    <small className="text-danger">{passwordError}</small>
+                                  )}
                                 </div>
                               </Col>
                               <Col lg={4}>

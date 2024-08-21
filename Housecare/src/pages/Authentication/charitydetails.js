@@ -106,9 +106,26 @@ function CharityDetails() {
   const filteredCharityStaffs = charitystaffs.filter(
     staff => staff.charity === charitys.charity
   )
+  //password validation
+  const [passwordError, setPasswordError] = useState("");
+  const validatePassword = (password) => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+      return false;
+    } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+      setPasswordError("Password must contain both letters and numbers.");
+      return false;
+    } else {
+      setPasswordError(""); 
+      return true;
+    }
+  };
   //charity staff create
   const charitystaffCreate = async e => {
     e.preventDefault()
+    if (!validatePassword(values.password)) {
+      return; 
+    }
     const formData = new FormData()
     Object.keys(values).forEach(key => {
       formData.append(key, values[key])
@@ -153,6 +170,9 @@ function CharityDetails() {
   //charity staff update
   const handleUpdate = async e => {
     e.preventDefault()
+    if (!validatePassword(values.password)) {
+      return; 
+    }
     const formData = new FormData()
     Object.keys(values).forEach(key => {
       formData.append(key, values[key])
@@ -426,6 +446,9 @@ function CharityDetails() {
                                   value={values.password}
                                   onChange={handleChange}
                                 />
+                                {passwordError && (
+                                    <small className="text-danger">{passwordError}</small>
+                                  )}
                               </div>
                             </Col>
                           </Row>
@@ -648,6 +671,9 @@ function CharityDetails() {
                                         value={values.password}
                                         onChange={handleChange}
                                       />
+                                      {passwordError && (
+                                    <small className="text-danger">{passwordError}</small>
+                                  )}
                                     </div>
                                   </Col>
                                 </Row>

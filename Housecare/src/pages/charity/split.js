@@ -233,7 +233,14 @@ const App = () => {
     })
   }
 
-  const handleShare = () => {
+  const handleShare = async() => {
+    try {
+      alert("Data saved successfully!");
+      await axios.post(`${BASE_URL}/increment`);
+      console.log("Notification count incremented successfully");
+    } catch (error) {
+      console.error("Error incrementing notification count:", error);
+    }
     downloadPage()
   }
   return (
