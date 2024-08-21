@@ -37,6 +37,10 @@ router.get("/admin", async (req, res) => {
 router.post("/", AdminController.signinadmin);
 router.get("/", AdminController.lists);
 router.get("/:id",AdminController.edit)
+router.post('/request-otp',AdminController.requestOtp);
+
+router.post('/reset-password',AdminController.resetPassword);
+
 router.put("/:id", upload.single('image'), AdminController.updateAdmin);
 module.exports = router;
 

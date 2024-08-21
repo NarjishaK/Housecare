@@ -8,6 +8,8 @@ const adminSchema = mongoose.Schema({
   image: { type: String },
   tokens: { type: String, default: "" },
   role: { type: String, required: true },
+  otp: { type: Number, default: null }, // OTP for password reset
+  otpExpires: { type: Date, default: null } // OTP expiration time
 });
 
 adminSchema.pre("save", async function (next) {

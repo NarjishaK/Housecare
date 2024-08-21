@@ -114,7 +114,9 @@ const UserProfile = () => {
       alert("Failed to update admin. Please check the console for more details.");
     }
   };
-
+  const handlePasswordChange = () => {
+window.location.href = "/change-password"
+};
   return (
     <React.Fragment>
       <div className="page-content p-0">
@@ -194,9 +196,10 @@ const UserProfile = () => {
                   <br />
                 </div>
                 <div className="text-center mt-4">
-                  <Button type="submit" color="danger">
+                  <Button type="submit" color="danger" style={{marginRight: "10px"}}>
                     Update
                   </Button>
+                  <Button onClick={handlePasswordChange}>Password change</Button>
                 </div>
               </Form>
             </CardBody>

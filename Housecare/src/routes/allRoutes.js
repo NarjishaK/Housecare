@@ -82,6 +82,7 @@ import Charitysplithistory from "pages/Authentication/charitysplithistory"
 import Datesplits from "pages/Authentication/datesplits"
 import History from "pages/Authentication/History"
 import Email from "pages/charity/email"
+import Resetpassword from "pages/Authentication/resetpassword"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -153,6 +154,8 @@ const userRoutes = [
 const authRoutes = [
   { path: "/logout", component: <Logout /> },
   { path: "/login", component: <Login /> },
+  {path:"/change-password",component:<Resetpassword/>},
+
   { path: "/forgot-password", component: <ForgetPwd /> },
   { path: "/register", component: <Register /> },
   { path: "/admin", component: <Superadmin /> },
