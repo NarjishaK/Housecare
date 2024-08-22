@@ -629,7 +629,8 @@ function Charity() {
                             </div>
                           </Col>
                         </Row> */}
-                        <Button onClick={handleUpdate}>Update</Button>
+                        <Button onClick={handleUpdate} style={{marginRight:"5px"}}>Update</Button>
+                        <Button>Password change</Button>
                       </div>
                     </Modal>
                     <Button
