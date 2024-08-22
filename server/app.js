@@ -21,7 +21,7 @@ connectDB()
 var app = express();
 
 app.use(cors({
-  origin: ["http://localhost:3000",'http://housecare.tecnavis.com'],
+  origin: ["http://localhost:3000",'https://housecare.tecnavis.com'],
   method:["PUT","DELETE","PUSH","GET"],
   credential:true
 }))
