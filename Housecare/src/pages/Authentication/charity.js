@@ -304,9 +304,10 @@ function Charity() {
                           value={values.roles}
                           onChange={handleChange}
                         >
+                          <option>Select Role</option>
                           <option>Main_Admin</option>
-                          <option>DATA_ENTRY</option>
-                          <option>DATA_VERIFY</option>
+                          {/* <option>DATA_ENTRY</option>
+                          <option>DATA_VERIFY</option> */}
                         </select>
                       </div>
                     </Col>
