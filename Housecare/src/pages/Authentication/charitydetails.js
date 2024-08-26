@@ -44,6 +44,7 @@ function CharityDetails() {
   const [allcharity, setAllCharity] = useState([])
   const [benificiarys, setBenificiarys] = useState([])
   const [charitystaffs, setCharitystaffs] = useState([])
+  const [validationErrors, setValidationErrors] = useState({})
   const [values, handleChange, setValues] = useForm({
     name: "",
     email: "",
@@ -123,6 +124,20 @@ function CharityDetails() {
   //charity staff create
   const charitystaffCreate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!values.email) errors.email = "Email is required."
+    if (!values.name) errors.name = "Name is required."
+    if (!values.charity) errors.charity = "Charity is required."
+    if (!values.roles) errors.roles = "Role is required."
+    if (!values.phone) errors.phone = "Phone Number is required."
+    if (!values.password) errors.password = "Password is required."
+    if (!image) errors.image = "Image is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     if (!validatePassword(values.password)) {
       return; 
     }
@@ -135,8 +150,9 @@ function CharityDetails() {
       await handleCharitystaff(formData)
       alert("success")
       loadData()
+      setmodal(false)
     } catch (err) {
-      alert("failed")
+      alert("Email is already exist")
       console.log(err, "Charity staffs adding failed")
     }
   }
@@ -170,6 +186,20 @@ function CharityDetails() {
   //charity staff update
   const handleUpdate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!values.email) errors.email = "Email is required."
+    if (!values.name) errors.name = "Name is required."
+    if (!values.charity) errors.charity = "Charity is required."
+    if (!values.roles) errors.roles = "Role is required."
+    if (!values.phone) errors.phone = "Phone Number is required."
+    if (!values.password) errors.password = "Password is required."
+    if (!image) errors.image = "Image is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     if (!validatePassword(values.password)) {
       return; 
     }
@@ -186,6 +216,8 @@ function CharityDetails() {
       await charityStaffUpdate(editId, formData)
       loadData()
       alert("Update successful")
+      setEdit(false)
+      
     } catch (err) {
       console.error("Error updating charitystaff:", err)
       alert("Update failed")
@@ -204,7 +236,7 @@ function CharityDetails() {
       alert("success")
     } catch (err) {
       console.log(err, "benificiary adding failed")
-      alert("failed")
+      alert("Failed to add benificiary Please try again. Do not Use existing Email Id")
     }
   }
   const fetchData = async () => {
@@ -366,6 +398,11 @@ function CharityDetails() {
                                   value={values.name}
                                   onChange={handleChange}
                                 />
+                                {validationErrors.name && (
+                                  <small className="text-danger">
+                                    {validationErrors.name}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -379,6 +416,11 @@ function CharityDetails() {
                                   value={values.email}
                                   onChange={handleChange}
                                 />
+                                {validationErrors.email && (
+                                  <small className="text-danger">
+                                    {validationErrors.email}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -392,6 +434,11 @@ function CharityDetails() {
                                   value={values.phone}
                                   onChange={handleChange}
                                 />
+                                {validationErrors.phone && (
+                                  <small className="text-danger">
+                                    {validationErrors.phone}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -418,6 +465,11 @@ function CharityDetails() {
                                     </option>
                                   ))}
                                 </select>
+                                {validationErrors.charity && (
+                                  <small className="text-danger">
+                                    {validationErrors.charity}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -433,6 +485,11 @@ function CharityDetails() {
                                   <option>DATA_ENTRY</option>
                                   <option>DATA_VERIFY</option>
                                 </select>
+                                {validationErrors.roles && (
+                                  <small className="text-danger">
+                                    {validationErrors.roles}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -449,6 +506,11 @@ function CharityDetails() {
                                 {passwordError && (
                                     <small className="text-danger">{passwordError}</small>
                                   )}
+                                {validationErrors.password && (
+                                  <small className="text-danger">
+                                    {validationErrors.password}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -464,6 +526,11 @@ function CharityDetails() {
                                   onChange={handleImage}
                                   rows="3"
                                 />
+                                {validationErrors.image && (
+                                  <small className="text-danger">
+                                    {validationErrors.image}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -590,6 +657,11 @@ function CharityDetails() {
                                         value={values.name}
                                         onChange={handleChange}
                                       />
+                                      {validationErrors.name && (
+                                        <small className="text-danger">
+                                          {validationErrors.name}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -603,6 +675,11 @@ function CharityDetails() {
                                         value={values.email}
                                         onChange={handleChange}
                                       />
+                                      {validationErrors.email && (
+                                        <small className="text-danger">
+                                          {validationErrors.email}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -616,6 +693,11 @@ function CharityDetails() {
                                         value={values.phone}
                                         onChange={handleChange}
                                       />
+                                      {validationErrors.phone && (
+                                        <small className="text-danger">
+                                          {validationErrors.phone}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -643,6 +725,11 @@ function CharityDetails() {
                                           </option>
                                         ))}
                                       </select>
+                                      {validationErrors.charity && (
+                                        <small className="text-danger">
+                                          {validationErrors.charity}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -658,6 +745,11 @@ function CharityDetails() {
                                         <option>DATA_ENTRY</option>
                                         <option>DATA_VERIFY</option>
                                       </select>
+                                      {validationErrors.roles && (
+                                        <small className="text-danger">
+                                          {validationErrors.roles}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -674,6 +766,11 @@ function CharityDetails() {
                                       {passwordError && (
                                     <small className="text-danger">{passwordError}</small>
                                   )}
+                                      {validationErrors.password && (
+                                        <small className="text-danger">
+                                          {validationErrors.password}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -689,6 +786,11 @@ function CharityDetails() {
                                         onChange={handleImage}
                                         rows="3"
                                       />
+                                      {validationErrors.image && (
+                                        <small className="text-danger">
+                                          {validationErrors.image}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>

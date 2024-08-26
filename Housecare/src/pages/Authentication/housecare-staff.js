@@ -29,6 +29,7 @@ function Staff() {
 };
   const [modal, setModal] = useState(false)
   const [staff, setStaff] = useState([])
+  const [validationErrors, setValidationErrors] = useState({})
   const [values, handleChange, setValues] = useForm({
     staff: "",
     email: "",
@@ -109,9 +110,25 @@ function Staff() {
       console.log(err, "staff fetching error")
     }
   }
+//staff update
 
   const handleUpdate = async e => {
     e.preventDefault()
+    // Validate all fields
+    const errors = {}
+    if (!values.staff) errors.staff = "Staff name is required."
+    if (!values.email) errors.email = "Email is required."
+    if (!values.password) errors.password = "Password is required."
+    if (!values.role) errors.role = "Role is required."
+    if (!values.iqama) errors.iqama = "Iqama No is required."
+    if (!values.phone) errors.phone = "Phone Number is required."
+    if (!image) errors.image = "Image is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     if (!validatePassword(values.password)) {
       return; 
     }
@@ -267,7 +284,7 @@ function Staff() {
                             setModal(!modal)
                           }}
                         >
-                          Edit Homecare staff Details
+                          Edit Housecare staff Details
                         </ModalHeader>
                         <ModalBody>
                           <form>
@@ -283,6 +300,11 @@ function Staff() {
                                     value={values.staff}
                                     onChange={handleChange}
                                   />
+                                  {validationErrors.staff && (
+                                    <div className="text-danger">
+                                      {validationErrors.staff}
+                                    </div>
+                                  )}
                                 </div>
                               </Col>
                               <Col lg={4}>
@@ -296,6 +318,11 @@ function Staff() {
                                     value={values.email}
                                     onChange={handleChange}
                                   />
+                                  {validationErrors.email && (
+                                    <div className="text-danger">
+                                      {validationErrors.email}
+                                    </div>
+                                  )}
                                 </div>
                               </Col>
                               <Col lg={4}>
@@ -308,6 +335,11 @@ function Staff() {
                                     value={values.iqama}
                                     onChange={handleChange}
                                   />
+                                  {validationErrors.iqama && (
+                                    <div className="text-danger">
+                                      {validationErrors.iqama}
+                                    </div>
+                                  )}
                                 </div>
                               </Col>
                             </Row>
@@ -322,6 +354,11 @@ function Staff() {
                                     value={values.phone}
                                     onChange={handleChange}
                                   />
+                                  {validationErrors.phone && (
+                                    <div className="text-danger">
+                                      {validationErrors.phone}
+                                    </div>
+                                  )}
                                 </div>
                               </Col>
                               <Col lg={4}>
@@ -334,6 +371,11 @@ function Staff() {
                                     value={values.password}
                                     onChange={handleChange}
                                   />
+                                  {validationErrors.password && (
+                                    <div className="text-danger">
+                                      {validationErrors.password}
+                                    </div>
+                                  )}
                                   {passwordError && (
                                     <small className="text-danger">{passwordError}</small>
                                   )}
@@ -349,12 +391,17 @@ function Staff() {
                                     onChange={handleChange}
                                     className="form-select"
                                   >
-                                    <option>select role</option>
+                                    {/* <option>select role</option> */}
                                     <option value="staff">staff</option>
-                                    <option value="company_admin">
+                                    {/* <option value="company_admin">
                                       company_admin
-                                    </option>
+                                    </option> */}
                                   </select>
+                                  {validationErrors.role && (
+                                    <div className="text-danger">
+                                      {validationErrors.role}
+                                    </div>
+                                  )}
                                 </div>
                               </Col>
                             </Row>
@@ -369,6 +416,11 @@ function Staff() {
                                     accept="image/*"
                                     onChange={handleImage}
                                   />
+                                  {validationErrors.image && (
+                                    <div className="text-danger">
+                                      {validationErrors.image}
+                                    </div>
+                                  )}
                                 </div>
                               </Col>
                             </Row>

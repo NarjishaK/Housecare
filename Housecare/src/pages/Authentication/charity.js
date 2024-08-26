@@ -77,9 +77,27 @@ function Charity() {
     }
   }
   //handle charity organaization Add
-
+const [validationErrors, setValidationErrors] = useState({})
   const charityCreate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!values.phone) errors.phone = "Phone Number is required."
+    if (!values.authorizedperson) errors.authorizedperson = "Authorized person is required."
+    if (!values.charity) errors.charity = "Charity name is required."
+    if (!values.email) errors.email = "Email is required."
+    if (!values.password) errors.password = "Password is required."
+    if (!values.date) errors.date = "Date is required."
+    if (!values.arbic) errors.arbic = "Arbic name is required."
+    if (!values.CR_NO) errors.CR_NO = "CR_NO is required."
+    if (!values.roles) errors.roles = "Roles is required."
+    if (!values.VAT_REG_NO) errors.VAT_REG_NO = "VAT_REG_NO is required."
+    if (!image) errors.image = "Image is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     if (!validatePassword(values.password)) {
       return
     }
@@ -100,7 +118,7 @@ function Charity() {
       alert("success")
       loadData()
     } catch (err) {
-      alert("failed")
+      alert("Failed creation, Email already exists")
       console.log(err, "Charity organaization adding failed")
     }
   }
@@ -141,6 +159,24 @@ function Charity() {
   //handle update charity
   const handleUpdate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!values.phone) errors.phone = "Phone Number is required."
+    if (!values.authorizedperson) errors.authorizedperson = "Authorized person is required."
+    if (!values.charity) errors.charity = "Charity name is required."
+    if (!values.email) errors.email = "Email is required."
+    // if (!values.password) errors.password = "Password is required."
+    if (!values.date) errors.date = "Date is required."
+    if (!values.arbic) errors.arbic = "Arbic name is required."
+    if (!values.CR_NO) errors.CR_NO = "CR_NO is required."
+    if (!values.roles) errors.roles = "Roles is required."
+    if (!values.VAT_REG_NO) errors.VAT_REG_NO = "VAT_REG_NO is required."
+    if (!image) errors.image = "Image is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     const formData = new FormData()
     formData.append("email", values.email)
     formData.append("date", values.date)
@@ -150,7 +186,6 @@ function Charity() {
     formData.append("arbic", values.arbic)
     formData.append("phone", values.phone)
     formData.append("authorizedperson", values.authorizedperson)
-    // formData.append("password", values.password)
     formData.append("charity", values.charity)
 
     if (image) {
@@ -159,11 +194,12 @@ function Charity() {
 
     try {
       await charityUpdate(editId, formData)
-      loadData()
       alert("Update successful")
+      loadData()
+      setmodal_center(false)
     } catch (err) {
       console.error("Error updating charity:", err)
-      alert("Update failed")
+      alert("Update failed ")
     }
   }
   //image handle
@@ -224,6 +260,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="Charity Organaization"
                         />
+                        {validationErrors.charity && (
+                          <small className="text-danger">
+                            {validationErrors.charity}
+                          </small>
+                        )}
                       </div>
                     </Col>
                     <Col lg={4}>
@@ -237,6 +278,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="اسم الجمعية الخيرية"
                         />
+                        {validationErrors.arbic && (
+                          <small className="text-danger">
+                            {validationErrors.arbic}
+                          </small>
+                        )}
                       </div>
                     </Col>
                     <Col lg={4}>
@@ -250,6 +296,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="Enter Email"
                         />
+                        {validationErrors.email && (
+                          <small className="text-danger">
+                            {validationErrors.email}
+                          </small>
+                        )}
                       </div>
                     </Col>
                   </Row>
@@ -265,6 +316,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="CR_NO"
                         />
+                        {validationErrors.CR_NO && (
+                          <small className="text-danger">
+                            {validationErrors.CR_NO}
+                          </small>
+                        )}
                       </div>
                     </Col>
                     <Col lg={4}>
@@ -278,6 +334,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="VAT_REG_NO"
                         />
+                        {validationErrors.VAT_REG_NO && (
+                          <small className="text-danger">
+                            {validationErrors.VAT_REG_NO}
+                          </small>
+                        )}
                       </div>
                     </Col>
                     <Col lg={4}>
@@ -291,6 +352,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="Phone No"
                         />
+                        {validationErrors.phone && (
+                          <small className="text-danger">
+                            {validationErrors.phone}
+                          </small>
+                        )}
                       </div>
                     </Col>
                   </Row>
@@ -309,6 +375,11 @@ function Charity() {
                           {/* <option>DATA_ENTRY</option>
                           <option>DATA_VERIFY</option> */}
                         </select>
+                        {validationErrors.roles && (
+                          <small className="text-danger">
+                            {validationErrors.roles}
+                          </small>
+                        )}
                       </div>
                     </Col>
                     <Col lg={4}>
@@ -324,6 +395,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="Authorizedperson"
                         />
+                        {validationErrors.authorizedperson && (
+                          <small className="text-danger">
+                            {validationErrors.authorizedperson}
+                          </small>
+                        )}
                       </div>
                     </Col>
                     <Col lg={4}>
@@ -337,6 +413,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="Date"
                         />
+                        {validationErrors.date && (
+                          <small className="text-danger">
+                            {validationErrors.date}
+                          </small>
+                        )}
                       </div>
                     </Col>
                   </Row>
@@ -351,6 +432,11 @@ function Charity() {
                           onChange={handleChange}
                           placeholder="Password"
                         />
+                        {validationErrors.password && (
+                          <small className="text-danger">
+                            {validationErrors.password}
+                          </small>
+                        )}
                         {passwordError && (
                           <small className="text-danger">{passwordError}</small>
                         )}
@@ -366,6 +452,11 @@ function Charity() {
                           accept="image/*"
                           onChange={handleImage}
                         />
+                        {validationErrors.image && (
+                          <small className="text-danger">
+                            {validationErrors.image}
+                          </small>
+                        )}
                       </div>
                     </Col>
                   </Row>
@@ -485,6 +576,11 @@ function Charity() {
                                 onChange={handleChange}
                                 placeholder="Authorizedperson"
                               />
+                              {validationErrors.authorizedperson && (
+                                <small className="text-danger">
+                                  {validationErrors.authorizedperson}
+                                </small>
+                              )}
                             </div>
                           </Col>
                           <Col lg={6}>
@@ -501,6 +597,11 @@ function Charity() {
                                 <option>DATA_ENTRY</option>
                                 <option>DATA_VERIFY</option>
                               </select>
+                              {validationErrors.roles && (
+                                <small className="text-danger">
+                                  {validationErrors.roles}
+                                </small>
+                              )}
                             </div>
                           </Col>
                         </Row>
@@ -516,6 +617,11 @@ function Charity() {
                                 onChange={handleChange}
                                 placeholder="Charity Organaization"
                               />
+                              {validationErrors.charity && (
+                                <small className="text-danger">
+                                  {validationErrors.charity}
+                                </small>
+                              )}
                             </div>
                           </Col>
                           <Col lg={6}>
@@ -529,6 +635,11 @@ function Charity() {
                                 onChange={handleChange}
                                 placeholder="اسم الجمعية الخيرية"
                               />
+                                {validationErrors.arbic && (
+                                  <small className="text-danger">
+                                    {validationErrors.arbic}
+                                  </small>
+                                )}
                             </div>
                           </Col>
                         </Row>
@@ -544,6 +655,11 @@ function Charity() {
                                 onChange={handleChange}
                                 placeholder="Enter Email"
                               />
+                              {validationErrors.email && (
+                                <small className="text-danger">
+                                  {validationErrors.email}
+                                </small>
+                              )}
                             </div>
                           </Col>
                           <Col lg={6}>
@@ -557,6 +673,11 @@ function Charity() {
                                 onChange={handleChange}
                                 placeholder="Phone No"
                               />
+                              {validationErrors.phone && (
+                                <small className="text-danger">
+                                  {validationErrors.phone}
+                                </small>
+                              )}
                             </div>
                           </Col>
                         </Row>
@@ -572,6 +693,11 @@ function Charity() {
                                 onChange={handleChange}
                                 placeholder="VAT_REG_NO"
                               />
+                              {validationErrors.VAT_REG_NO && (
+                                <small className="text-danger">
+                                  {validationErrors.VAT_REG_NO}
+                                </small>
+                              )}
                             </div>
                           </Col>
                           <Col lg={6}>
@@ -585,6 +711,11 @@ function Charity() {
                                 onChange={handleChange}
                                 placeholder="CR_NO"
                               />
+                              {validationErrors.CR_NO && (
+                                <small className="text-danger">
+                                  {validationErrors.CR_NO}
+                                </small>
+                              )}
                             </div>
                           </Col>
                         </Row>
@@ -600,6 +731,11 @@ function Charity() {
                                 onChange={handleChange}
                                 placeholder="Date"
                               />
+                              {validationErrors.date && (
+                                <small className="text-danger">
+                                  {validationErrors.date}
+                                </small>
+                              )}
                             </div>
                           </Col>
                           <Col lg={6}>
@@ -612,6 +748,11 @@ function Charity() {
                                 accept="image/*"
                                 onChange={handleImage}
                               />
+                              {validationErrors.image && (
+                                <small className="text-danger">
+                                  {validationErrors.image}
+                                </small>
+                              )}
                             </div>
                           </Col>
                         </Row>

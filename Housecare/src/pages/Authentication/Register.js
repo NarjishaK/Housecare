@@ -21,6 +21,7 @@ import { Createstaff } from "./handle-api"
 const Register = props => {
   document.title = "Register | Housecare"
   const [passwordError, setPasswordError] = useState("")
+  const [validationErrors, setValidationErrors] = useState({})
   const [values, handleChange] = useForm({
     staff: "",
     role: "",
@@ -49,16 +50,29 @@ const Register = props => {
       return true
     }
   }
-
   const handleCreate = async e => {
     e.preventDefault()
-    // if (!values.staff || !values.email || !values.password || !values.date || !image) {
-    //   setRegistrationStatus("error");
-    //   return;
-    // }
+
+    // Validate all fields
+    const errors = {}
+    if (!values.staff) errors.staff = "Staff name is required."
+    if (!values.email) errors.email = "Email is required."
+    if (!values.password) errors.password = "Password is required."
+    if (!values.role) errors.role = "Role is required."
+    if (!values.iqama) errors.iqama = "Iqama No is required."
+    if (!values.phone) errors.phone = "Phone Number is required."
+    if (!image) errors.image = "Image is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
+
     if (!validatePassword(values.password)) {
       return
     }
+
     let formData = new FormData()
     formData.append("staff", values.staff)
     formData.append("password", values.password)
@@ -67,6 +81,8 @@ const Register = props => {
     formData.append("role", values.role)
     formData.append("image", image)
     formData.append("phone", values.phone)
+
+
 
     try {
       const response = await Createstaff(formData)
@@ -122,7 +138,8 @@ const Register = props => {
                       )}
                       {registrationStatus === "error" && (
                         <Alert color="danger">
-                          Registration failed. Please try again.
+                          Registration failed 
+                          Email is already exist 
                         </Alert>
                       )}
 
@@ -136,6 +153,11 @@ const Register = props => {
                           accept="image/*"
                           onChange={handleImage}
                         />
+                        {validationErrors.image && (
+                          <small className="text-danger">
+                            {validationErrors.image}
+                          </small>
+                        )}
                       </div>
                       <div className="mb-3">
                         <Label htmlFor="useremail">Email</Label>
@@ -148,6 +170,11 @@ const Register = props => {
                           value={values.email}
                           onChange={handleChange}
                         />
+                        {validationErrors.email && (
+                          <small className="text-danger">
+                            {validationErrors.email}
+                          </small>
+                        )}
                       </div>
 
                       <div className="mb-3">
@@ -159,6 +186,11 @@ const Register = props => {
                           value={values.staff}
                           onChange={handleChange}
                         />
+                        {validationErrors.staff && (
+                          <small className="text-danger">
+                            {validationErrors.staff}
+                          </small>
+                        )}
                       </div>
 
                       <div className="mb-3">
@@ -173,6 +205,11 @@ const Register = props => {
                         {passwordError && (
                           <small className="text-danger">{passwordError}</small>
                         )}
+                        {validationErrors.password && (
+                          <small className="text-danger">
+                            {validationErrors.password}
+                          </small>
+                        )}
                       </div>
                       <div className="mb-3">
                         <Label htmlFor="role">Role</Label>
@@ -186,6 +223,11 @@ const Register = props => {
                           <option>select role</option>
                           <option value="staff">staff</option>
                         </select>
+                        {validationErrors.role && (
+                          <small className="text-danger">
+                            {validationErrors.role}
+                          </small>
+                        )}
                       </div>
                       <div className="mb-3">
                         <Label htmlFor="iqama">Iqama No</Label>
@@ -196,6 +238,11 @@ const Register = props => {
                           value={values.iqama}
                           onChange={handleChange}
                         />
+                        {validationErrors.iqama && (
+                          <small className="text-danger">
+                            {validationErrors.iqama}
+                          </small>
+                        )}
                       </div>
                       <div className="mb-3">
                         <Label htmlFor="phone">Phone</Label>
@@ -206,6 +253,11 @@ const Register = props => {
                           value={values.phone}
                           onChange={handleChange}
                         />
+                        {validationErrors.phone && (
+                          <small className="text-danger">
+                            {validationErrors.phone}
+                          </small>
+                        )}
                       </div>
 
                       <div className="mb-3 row mt-4">
