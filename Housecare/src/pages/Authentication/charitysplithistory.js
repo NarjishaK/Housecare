@@ -9,13 +9,13 @@ const SplitedHistory = () => {
   const [file, setFile] = useState(null) // Add state for the file
   const charityName = JSON.parse(localStorage.getItem("charityname"))
   const selectedDate = localStorage.getItem("selectedDate")
-
   useEffect(() => {
     const fetchSplits = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/splits`)
         const filteredSplits = response.data.filter(
           split =>
+            split.beneficiary &&
             split.beneficiary.charity_name === charityName &&
             new Date(split.date).toLocaleDateString() === selectedDate
         )

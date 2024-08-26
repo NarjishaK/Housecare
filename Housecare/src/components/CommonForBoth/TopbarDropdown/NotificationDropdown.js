@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
 import { Link } from "react-router-dom"
-import { Dropdown, DropdownToggle, DropdownMenu, Row, Col } from "reactstrap"
+import { Dropdown, DropdownToggle, DropdownMenu, Row, Col, Button } from "reactstrap"
 import SimpleBar from "simplebar-react"
 import { BASE_URL } from "pages/Authentication/handle-api"
 
@@ -46,7 +46,7 @@ const NotificationDropdown = props => {
         toggle={() => setMenu(!menu)}
         className="dropdown d-inline-block ms-1"
         tag="li"
-        onClick={handleResetNotifications}
+        
       >
         <DropdownToggle
           className="btn header-item noti-icon waves-effect"
@@ -83,6 +83,7 @@ const NotificationDropdown = props => {
                   <div className="text-muted">
                     <p className="mb-1">You have {notificationCount} unread messages</p>
                   </div>
+                  <Button>Accept</Button> <Button onClick={handleResetNotifications}>Decline</Button>
                 </div>
               </div>
             </Link>

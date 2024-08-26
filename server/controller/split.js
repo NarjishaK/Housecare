@@ -144,6 +144,22 @@ exports.getPendingApprovalsCount = async (req, res) => {
     res.status(500).json({ message: "Error fetching pending approvals", error: err });
   }
 };
+
+// Get split details by beneficiary ID
+exports.getSplitDetailsByBeneficiary = async (req, res) => {
+  try {
+    const beneficiaryId = req.params.id;
+    const splitDetails = await Splits.find({ beneficiary: beneficiaryId }).populate("beneficiary");
+
+    if (!splitDetails || splitDetails.length === 0) {
+      return res.status(404).json({ message: "No split details found for this beneficiary" });
+    }
+
+    res.status(200).json(splitDetails);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
 //////////////
 
 

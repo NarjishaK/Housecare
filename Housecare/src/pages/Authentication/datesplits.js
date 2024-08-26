@@ -8,23 +8,46 @@ const Datesplits = () => {
   const [splits, setSplits] = useState([])
   const charityName = JSON.parse(localStorage.getItem("charityname"))
 
+  // useEffect(() => {
+  //   const fetchSplits = async () => {
+  //     try {
+  //       const response = await axios.get(`${BASE_URL}/api/splits`)
+  //       const filteredSplits = response.data.filter(
+  //         split => split.beneficiary.charity_name === charityName
+  //       )
+  //       setSplits(filteredSplits)
+  //       console.log(filteredSplits, "Filtered Splits")
+  //     } catch (error) {
+  //       console.error("Error fetching splits:", error)
+  //     }
+  //   }
+
+  //   fetchSplits()
+  // }, [charityName])
+
   useEffect(() => {
     const fetchSplits = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/splits`)
-        const filteredSplits = response.data.filter(
-          split => split.beneficiary.charity_name === charityName
-        )
-        setSplits(filteredSplits)
-        console.log(filteredSplits, "Filtered Splits")
+        const response = await axios.get(`${BASE_URL}/api/splits`);
+        const filteredSplits = response.data.filter(split => {
+          // Check if split.beneficiary exists before accessing charity_name
+          if (split.beneficiary && split.beneficiary.charity_name) {
+            return split.beneficiary.charity_name === charityName;
+          } else {
+            console.log("Missing beneficiary or charity_name in split:", split);
+            return false;
+          }
+        });
+        setSplits(filteredSplits);
+        console.log(filteredSplits, "Filtered Splits");
       } catch (error) {
-        console.error("Error fetching splits:", error)
+        console.error("Error fetching splits:", error);
       }
-    }
-
-    fetchSplits()
-  }, [charityName])
-
+    };
+  
+    fetchSplits();
+  }, [charityName]);
+  
   const showSplit = date => {
     localStorage.setItem("selectedDate", date)
     window.location.href = "/histories"

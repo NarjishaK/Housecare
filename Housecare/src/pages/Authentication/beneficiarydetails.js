@@ -23,6 +23,7 @@ const BenificiaryDetails = props => {
   const { id } = useParams()
 
   useEffect(() => {
+    fetchSplitDetails();
     const fetchData = async () => {
       const token = localStorage.getItem("token")
       axios.defaults.headers.common["Authorization"] = token
@@ -35,6 +36,25 @@ const BenificiaryDetails = props => {
     }
     fetchData()
   }, [id])
+//split details 
+
+    const [splitDetails, setSplitDetails] = useState([]);
+    const fetchSplitDetails = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/splitses/${id}`);
+        setSplitDetails(response.data);  // Assuming you've added a state variable 'splitDetails' for storing the split data
+        console.log(splitDetails,"splitttt detailsss");
+        
+      } catch (error) {
+        console.error("Error fetching split details:", error);
+      }
+    };
+// Calculate total balance
+let runningTotal = 0
+const totalBalanceDetails = splitDetails.map(split => {
+  runningTotal += split.totalamount
+  return { ...split, runningTotal }
+})
 
   return (
     <React.Fragment>
@@ -149,10 +169,10 @@ const BenificiaryDetails = props => {
                                 <strong>Date&Time</strong>
                               </td>
                               <td className="text-center">
-                                <strong>Transaction Id</strong>
+                                <strong>Beneficiary Id</strong>
                               </td>
                               <td className="text-center">
-                                <strong>Amount</strong>
+                                <strong>Credit</strong>
                               </td>
                               <td className="text-end">
                                 <strong>Status</strong>
@@ -163,13 +183,26 @@ const BenificiaryDetails = props => {
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>13/04/2018</td>
-                              <td className="text-center">445665435562</td>
-                              <td className="text-center">+ 566.00</td>
-                              <td className="text-end">success</td>
-                              <td className="text-end">566.00</td>
-                            </tr>
+                               {totalBalanceDetails.map(split => {
+                              // Format the date to remove time and keep only YYYY-MM-DD
+                              const formattedDate = new Date(
+                                split.date
+                              ).toLocaleDateString("en-CA")
+
+                              return (
+                                <tr key={split._id}>
+                                  <td>{formattedDate}</td>
+                                  <td className="text-center">
+                                    {split.beneficiary.benificiary_id}
+                                  </td>
+                                  <td className="text-center">+{split.totalamount}</td>
+                                  <td className="text-end">{split.status}</td>
+                                  <td className="text-end">
+                                    {split.runningTotal}
+                                  </td>
+                                </tr>
+                              )
+                            })}
                           </tbody>
                         </table>
                       </div>

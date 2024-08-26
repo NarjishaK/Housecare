@@ -3,7 +3,7 @@ var router = express.Router();
 const { saveSplits, getSplits,sendPdf,updateSplitById } = require("../controller/split")
 const splitsController = require("../controller/split")
 const multer = require('multer');
-
+// const notificationController = require("../controller/notification")
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -31,5 +31,10 @@ router.get("/count", splitsController.getNotificationCount);
 router.post("/reset", splitsController.resetNotificationCount);
 router.put('/splits/:id/status', splitsController.updateSplitStatus);
 router.get("/pending-approvals",splitsController.getPendingApprovalsCount);
+router.get('/splitses/:id', splitsController.getSplitDetailsByBeneficiary);
+
+// router.post("/create", notificationController.createNotification);
+// router.get("/count", notificationController.getNotificationCount);
+// router.post("/reset", notificationController.resetNotificationCount);
 
 module.exports = router;
