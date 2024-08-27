@@ -79,11 +79,12 @@ const NotificationDropdown = props => {
                   </div>
                 </div>
                 <div className="flex-grow-1">
-                  <h6 className="mt-0 mb-1">New Message received CharityName</h6>
+                  <h6 className="mt-0 mb-1">New Message received </h6>
                   <div className="text-muted">
                     <p className="mb-1">You have {notificationCount} unread messages</p>
                   </div>
-                  <Button>Accept</Button> <Button onClick={handleResetNotifications}>Decline</Button>
+                  {/* <Button style={{backgroundColor: "green"}}><a href="/history-split" style={{color: "white"}}>Accept</a></Button>  */}
+                  <Button onClick={handleResetNotifications} style={{backgroundColor: "red"}}>Decline</Button>
                 </div>
               </div>
             </Link>

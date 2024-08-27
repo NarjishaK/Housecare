@@ -15,7 +15,7 @@ import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
 
 // import megamenuImg from "../../assets/images/megamenu-img.png"
 import logo from "../../assets/images/logo-sm.png"
-import logoLightPng from "../../assets/images/logo-light.png"
+import logoLightPng from "../../assets/images/logoo.png"
 import logoDark from "../../assets/images/logo-dark.png"
 
 //i18n
@@ -78,25 +78,26 @@ const Header = props => {
             <div className="navbar-brand-box">
               <Link to="/" className="logo logo-dark">
                 <span className="logo-sm">
-                  <img src={logo} alt="" height="22" />
+                  <img src={logoLightPng} alt="" height="22" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoDark} alt="" height="17" />
+                  <img src={logoLightPng} alt="" height="26" />
                 </span>
               </Link>
 
               <Link to="/" className="logo logo-light">
                 <span className="logo-sm">
-                  <img src={logo} alt="" height="22" />
+                  <img src={logoLightPng} alt="" height="50" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoLightPng} alt="" height="19" />
+                  <img src={logoLightPng} alt="" height="80" width={"80"} style={{marginTop:"15px"}} />
                 </span>
               </Link>
             </div>
 
             <button
               type="button"
+              style={{marginTop:"10px"}}
               onClick={() => {
                 tToggle()
               }}
@@ -105,7 +106,7 @@ const Header = props => {
             >
               <i className="mdi mdi-menu"></i>
             </button>
-            <div className="d-none d-sm-block">
+            {/* <div className="d-none d-sm-block">
               <Dropdown
                 isOpen={createmenu}
                 toggle={() => setCreateMenu(!createmenu)}
@@ -128,7 +129,7 @@ const Header = props => {
                   </Button>
                 </div>
               </Dropdown>
-            </div>
+            </div> */}
           </div>
           <div className="d-flex">
             <form className="app-search d-none d-lg-block">
