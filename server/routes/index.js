@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
 router.post("/api/splits", saveSplits);
 router.get("/api/splits", getSplits);
 router.delete('/:id', splitsController.deleteSplit);
-router.post('/send-pdf', upload.single('pdf'), sendPdf);
+router.post('/send-pdf', upload.single('excel'), sendPdf);
 router.put('/splits/:id', updateSplitById);
 router.post("/increment", splitsController.incrementNotification);
 router.get("/count", splitsController.getNotificationCount);
@@ -32,7 +32,7 @@ router.post("/reset", splitsController.resetNotificationCount);
 router.put('/splits/:id/status', splitsController.updateSplitStatus);
 router.get("/pending-approvals",splitsController.getPendingApprovalsCount);
 router.get('/splitses/:id', splitsController.getSplitDetailsByBeneficiary);
-
+router.post('/sendmail', upload.single('excel'), splitsController.sendEmail);
 // router.post("/create", notificationController.createNotification);
 // router.get("/count", notificationController.getNotificationCount);
 // router.post("/reset", notificationController.resetNotificationCount);

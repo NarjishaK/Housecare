@@ -4,6 +4,8 @@ import { Button, Card, Input } from "reactstrap"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 import axios from "axios"
+import * as XLSX from 'xlsx' // Add this import
+
 import Navbar from "./Navbars"
 import { BASE_URL } from "../Authentication/handle-api"
 import { fetchBenificiarys } from "pages/Authentication/handle-api"
@@ -202,46 +204,58 @@ const App = () => {
   }
   
   //share pdf through mail
-  const downloadPage = () => {
-    html2canvas(document.body).then(canvas => {
-      const imgData = canvas.toDataURL("image/png")
-      const pdf = new jsPDF("p", "mm", "a4")
-      const imgWidth = 210
-      const imgHeight = (canvas.height * imgWidth) / canvas.width
-      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight)
-      const pdfBlob = pdf.output("blob")
-      const formData = new FormData()
-      formData.append("pdf", pdfBlob, "page.pdf")
-
-      axios
-        .post(`${BASE_URL}/send-pdf`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(response => {
-          setShowAlert(false)
-          console.log(response.data.message)
-          alert("success")
-        })
-        .catch(error => {
-          console.error("Error sending PDF:", error)
-          alert("Failed")
-        })
-
-      pdf.save("page.pdf");
-    })
-  }
-
-  const handleShare = async() => {
+  const sendEmail = () => {
+    // Filter out beneficiaries with an amount of 0
+    const filteredTableData = filteredData.filter(split => split.amount !== 0);
+  
+    // Extract the relevant table data and convert it to a format suitable for XLSX
+    const tableData = filteredTableData.map((split) => ({
+      Name: split.Name,
+      Nav_Number: split.Nav_Number,
+      BEN_ID: split.benificiary_id,
+      Number: split.Number,
+      Category: split.category,
+      Age: split.age,
+      Amount: split.amount,
+    }));
+  
+    // Generate the Excel file as before
+    const worksheet = XLSX.utils.json_to_sheet(tableData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Split Details");
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const excelBlob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  
+    // Prepare form data to send to the server
+    const formData = new FormData();
+    formData.append("excel", excelBlob, "split_details.xlsx");
+  
+    // Send the Excel file to the server via POST request
+    axios
+      .post(`${BASE_URL}/sendmail`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(response => {
+        console.log(response.data.message);
+        alert("Email sent successfully!");
+      })
+      .catch(error => {
+        console.error("Error sending Excel file:", error);
+        alert("Failed to send email");
+      });
+  };
+  
+  const handleShareEmail = async() => {
     try {
-      alert("Data saved successfully!");
+      alert("Data shared successfully!");
       await axios.post(`${BASE_URL}/increment`);
       console.log("Notification count incremented successfully");
     } catch (error) {
       console.error("Error incrementing notification count:", error);
     }
-    downloadPage()
+    sendEmail()
   }
   return (
     <>
@@ -328,6 +342,7 @@ const App = () => {
               <tr>
                 <th>Name</th>
                 <th>id</th>
+                <th>BEN_ID</th>
                 <th>Nav_Number</th>
                 <th>Number</th>
                 <th>category</th>
@@ -341,6 +356,7 @@ const App = () => {
                 <tr key={row.id}>
                   <td>{row.Name}</td>
                   <td>{row.id}</td>
+                  <td>{row.benificiary_id}</td>
                   <td>{row.Nav_Number}</td>
                   <td>{row.Number}</td>
                   <td>{row.category}</td>
@@ -419,7 +435,7 @@ const App = () => {
               }}
             >
                <Button
-                onClick={handleShare}
+                onClick={handleShareEmail}
                 style={{
                   backgroundColor: "transparent",
                   border: "none",

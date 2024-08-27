@@ -4,11 +4,15 @@ import styles from "../../pages/charity/split.module.css"
 import { Button, Card } from "reactstrap"
 import * as XLSX from 'xlsx' // Add this import
 import { BASE_URL } from "./handle-api"
+import html2canvas from "html2canvas"
+import jsPDF from "jspdf"
 const SplitedHistory = () => {
   const [splits, setSplits] = useState([])
   const [file, setFile] = useState(null) // Add state for the file
   const charityName = JSON.parse(localStorage.getItem("charityname"))
   const selectedDate = localStorage.getItem("selectedDate")
+  const [customMessage, setCustomMessage] = useState("") // State for custom message
+
   useEffect(() => {
     const fetchSplits = async () => {
       try {
@@ -20,7 +24,6 @@ const SplitedHistory = () => {
             new Date(split.date).toLocaleDateString() === selectedDate
         )
         setSplits(filteredSplits)
-        console.log(filteredSplits, "Filtered Splits")
       } catch (error) {
         console.error("Error fetching splits:", error)
       }
@@ -34,7 +37,6 @@ const SplitedHistory = () => {
     setFile(event.target.files[0])
   }
 
-  // Handle file upload
  // Handle file upload
  const handleUpload = async () => {
   if (file) {
@@ -84,6 +86,55 @@ const SplitedHistory = () => {
     alert('Please select a file first!');
   }
 };
+//handle share excel file through emailssss
+const handleShareEmail = () => {
+  // Extract table data and convert it to a format suitable for XLSX
+  const tableData = splits.map((split) => ({
+    Date: new Date(split.date).toLocaleDateString(),
+    // Id: split._id,
+    Beneficiary_ID: split.beneficiary.benificiary_id,
+    Name: split.beneficiary.benificiary_name,
+    Number: split.beneficiary.number,
+    Category: split.beneficiary.category,
+    Age: split.beneficiary.age,
+    Amount: split.splitamount,
+    Status: split.status
+  }));
+
+  // Create a worksheet from the table data
+  const worksheet = XLSX.utils.json_to_sheet(tableData);
+  
+  // Create a new workbook and append the worksheet
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Split Details");
+
+  // Generate a binary Excel file
+  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+
+  // Create a Blob from the Excel file
+  const excelBlob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+  // Prepare form data to send to the server
+  const formData = new FormData();
+  formData.append("excel", excelBlob, "split_details.xlsx");
+
+  // Send the Excel file to the server via POST request
+  axios
+    .post(`${BASE_URL}/sendmail`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then(response => {
+      console.log(response.data.message);
+      alert("Email sent successfully!");
+    })
+    .catch(error => {
+      console.error("Error sending Excel file:", error);
+      alert("Failed to send email");
+    });
+};
+
 
 
   return (
@@ -104,11 +155,12 @@ const SplitedHistory = () => {
             style={{ marginLeft: 'auto', marginRight: '20px' }}
           />
           <Button
-            style={{ marginLeft: "10px" }}
+            style={{ marginRight: "10px" }}
             onClick={handleUpload}
           >
             Upload
           </Button>
+          <Button onClick = {handleShareEmail}>Share</Button>
         </div>
       </Card>
       <div className={styles.table_container}>
@@ -123,6 +175,7 @@ const SplitedHistory = () => {
               <th>Category</th>
               <th>Age</th>
               <th>Amount</th>
+              <th>Status</th>
               {/* <th>Action</th> */}
             </tr>
           </thead>
@@ -137,6 +190,7 @@ const SplitedHistory = () => {
                 <td>{split.beneficiary.category}</td>
                 <td>{split.beneficiary.age}</td>
                 <td>{split.splitamount}</td>
+                <td>{split.status}</td>
               </tr>
             ))}
           </tbody>

@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 require('dotenv').config();  // Load environment variables
 
-exports.sendPdf = async (req, res) => {
+exports.sendPdf =async (req, res) => {
   try {
     const { filename, path: filePath } = req.file;
 
@@ -18,15 +18,15 @@ exports.sendPdf = async (req, res) => {
       },
     });
 
-    // Send email with the PDF attachment
+    // Send email with the Excel file attachment
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: 'navaskuniyil6@gmail.com',
-      subject: 'PDF Document',
-      text: 'Please find the attached PDF document.',
+      subject: 'Excel Document from Housecare',
+      text: 'Please find the attached Excel document.',
       attachments: [
         {
-          filename,
+          filename: 'split_details.xlsx',
           path: filePath,
         },
       ],
@@ -35,12 +35,13 @@ exports.sendPdf = async (req, res) => {
     // Clean up the uploaded file
     fs.unlinkSync(filePath);
 
-    res.status(200).json({ message: 'PDF sent successfully!' });
+    res.status(200).json({ message: 'Excel file sent successfully!' });
   } catch (error) {
     console.error('Error sending email:', error);
-    res.status(500).json({ message: 'Failed to send PDF.' });
+    res.status(500).json({ message: 'Failed to send Excel file.' });
   }
 };
+
 
 
 exports.saveSplits = async (req, res) => {
@@ -213,3 +214,42 @@ exports.resetNotificationCount = async (req, res) => {
     res.status(500).json({ success: false, message: "Error resetting notification count", error });
   }
 };
+//send a  email to charity
+
+exports.sendEmail = async (req, res) => {
+  try {
+    const { filename, path: filePath } = req.file;
+
+    // Set up Nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Send email with the Excel file attachment
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: 'navaskuniyil6@gmail.com',
+      subject: 'Excel Document from Housecare',
+      text: 'Please find the attached Excel document.',
+      attachments: [
+        {
+          filename: 'split_details.xlsx',
+          path: filePath,
+        },
+      ],
+    });
+
+    // Clean up the uploaded file
+    fs.unlinkSync(filePath);
+
+    res.status(200).json({ message: 'Excel file sent successfully!' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({ message: 'Failed to send Excel file.' });
+  }
+};
+

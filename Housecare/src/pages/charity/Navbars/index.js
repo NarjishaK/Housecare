@@ -43,7 +43,7 @@ const Layout = props => {
     const title = pathName.pathname
     let currentage = title.charAt(1).toUpperCase() + title.slice(2)
 
-    document.title = currentage + " | Skote - React Admin & Dashboard Template"
+    document.title = currentage + " | Housecare - Charity Organaization"
   }, [pathName.pathname])
 
   useEffect(() => {

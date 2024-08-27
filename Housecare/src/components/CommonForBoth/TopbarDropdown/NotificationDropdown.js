@@ -33,11 +33,15 @@ const NotificationDropdown = props => {
       await axios.post(`${BASE_URL}/reset`)
       setNotificationCount(0)
       console.log("Notification count reset successfully")
+      setMenu(false)
     } catch (error) {
       console.error("Error resetting notification count:", error)
     }
   }
-
+const handleAccept =()=>{
+  window.location.href = "/history-split";
+  handleResetNotifications()
+}
 
   return (
     <React.Fragment>
@@ -66,7 +70,7 @@ const NotificationDropdown = props => {
             </Row>
           </div>
 
-          <SimpleBar style={{ height: "230px" }}>
+          <SimpleBar style={{ height: "130px" }}>
           
 
             <Link to="#" className="text-reset notification-item">
@@ -83,8 +87,8 @@ const NotificationDropdown = props => {
                   <div className="text-muted">
                     <p className="mb-1">You have {notificationCount} unread messages</p>
                   </div>
-                  {/* <Button style={{backgroundColor: "green"}}><a href="/history-split" style={{color: "white"}}>Accept</a></Button>  */}
-                  <Button onClick={handleResetNotifications} style={{backgroundColor: "red"}}>Decline</Button>
+                  <Button  onClick={handleAccept}>View</Button> 
+                  {/* <Button onClick={handleResetNotifications} style={{backgroundColor: "red"}}>Decline</Button> */}
                 </div>
               </div>
             </Link>
