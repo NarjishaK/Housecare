@@ -9,7 +9,7 @@ const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
   const [isInvalid, setIsInvalid] = useState(false);
 
   const handleSave = () => {
-    if (amount >= 100) {
+    if (amount >= 1) {
       saveAmount(amount);
       toggle();
     } else {
@@ -20,7 +20,7 @@ const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
   const handleChange = (e) => {
     const value = e.target.value;
     setAmount(value);
-    if (value >= 100) {
+    if (value >= 1) {
       setIsInvalid(false);
     } else {
       setIsInvalid(true);
@@ -37,12 +37,12 @@ const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
           value={amount}
           onChange={handleChange}
           placeholder="Enter amount"
-          min="100"
+          min="1"
           required
           invalid={isInvalid}  // This adds visual feedback if the value is invalid
         />
         <FormFeedback>
-          Please enter an amount of at least 100.
+          Please enter an amount of at least $1.
         </FormFeedback>
       </ModalBody>
       <ModalFooter>

@@ -6,7 +6,7 @@
   }
   
   .cards, .subcard {
-    background-color: #f0f0f0;
+    background-color: var(--bs-primary);
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -29,18 +29,18 @@
   
   .cardtitle, .subcardtitle {
     font-size: 1.2em;
-    color: #666;
+    color: white;
   }
   
   .cardvalue, .subcardvalue {
     font-size: 2em;
-    color: #333;
+    color: white;
     margin: 10px 0;
   }
   
   .cardsubtext, .subcardsubtext {
     font-size: 0.8em;
-    color: #999;
+    color: black;
   }
   
   .subcards {

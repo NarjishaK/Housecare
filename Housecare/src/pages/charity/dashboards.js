@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react"
 import styles from "./dashboard.module.css"
 import Navbar from "./Navbars"
-import { fetchBenificiarys } from "pages/Authentication/handle-api"
+import axios from "axios"
+import { fetchBenificiarys , BASE_URL} from "pages/Authentication/handle-api"
 
 const Dashboards = () => {
   //benificiarys list
   const [benificiarys, setBenificiarys] = useState([])
   useEffect(() => {
-    
+    fetchSplits()
     const fetchDatas = async () => {
       try {
         const response = await fetchBenificiarys()
         setBenificiarys(response)
+        
       } catch (error) {
         console.error("Error fetching benificiary details:", error)
       }
@@ -43,8 +45,8 @@ const Dashboards = () => {
     const storedPreviousAmount =
       JSON.parse(localStorage.getItem("previousLimitedAmount")) || 0;
   
-    console.log("Stored Current Amount:", storedCurrentAmount);
-    console.log("Stored Previous Amount:", storedPreviousAmount);
+    // console.log("Stored Current Amount:", storedCurrentAmount);
+    // console.log("Stored Previous Amount:", storedPreviousAmount);
   
     setCurrentAmount(storedCurrentAmount);
     setPreviousAmount(storedPreviousAmount);
@@ -61,7 +63,24 @@ const Dashboards = () => {
     }
   }, []);
   
-
+//fetch splits data for find out the pending approvals
+const [splits, setSplits] = useState([]);
+const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
+  const charityName = charitydetails?.charity;
+  const fetchSplits = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/splits`);  
+      const filteredSplits = response.data.filter(
+        split => split.beneficiary && split.beneficiary.charity_name === charityName
+      );
+      setSplits(filteredSplits);
+      // Calculate the count of pending approvals
+      const pendingCount = filteredSplits.filter(split => split.status === "Pending").length;
+      setPendingApprovalsCount(pendingCount);  
+    } catch (error) {
+      console.error("Error fetching splits:", error);
+    }
+  };
   return (
     <>
       <Navbar />
@@ -69,7 +88,7 @@ const Dashboards = () => {
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Fund Size</div>
           <div className={styles.cardvalue}>$ {currentAmount || "000"}</div>
-          <div
+          {/* <div
             className={styles.cardsubtext}
             style={{
               color: percentageChange >= 0 ? "green" : "red",
@@ -79,22 +98,22 @@ const Dashboards = () => {
               ? `+${percentageChange}%`
               : `${percentageChange}%`}{" "}
             From previous period
-          </div>
+          </div> */}
         </div>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Invested</div>
           <div className={styles.cardvalue}>$46,782</div>
-          <div className={styles.cardsubtext}>-29% From previous period</div>
+          {/* <div className={styles.cardsubtext}>-29% From previous period</div> */}
         </div>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Total Beneficiaries</div>
           <div className={styles.cardvalue}>{filteredBenificiarys.length}</div>
-          <div className={styles.cardsubtext}>0% From previous period</div>
+          {/* <div className={styles.cardsubtext}>0% From previous period</div> */}
         </div>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Pending Approvals</div>
-          <div className={styles.cardvalue}>10</div>
-          <div className={styles.cardsubtext}>+1% From previous period</div>
+          <div className={styles.cardvalue}>{pendingApprovalsCount}</div>
+          {/* <div className={styles.cardsubtext}>+1% From previous period</div> */}
         </div>
       </div>
     </>

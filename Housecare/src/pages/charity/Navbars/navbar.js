@@ -122,15 +122,15 @@ const Navbar = props => {
                     <span>{props.t("Beneficiary")}</span>
                   </Link>
                 </li>
-                 <li className="nav-item">
+                 {/* <li className="nav-item">
                   <Link to="/email" className="nav-link">
                   <i className="mdi mdi-email-open-multiple"></i>
                     <span>{props.t("Email")}</span>
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </Collapse>
-            <Button onClick={togglePaymentModal} style={{ marginRight: "20px" }}>
+            <Button onClick={togglePaymentModal} style={{ marginRight: "20px",backgroundColor:"var(--bs-primary)",border:"none" }}>
               DISBURSEMENT
             </Button>
           </nav>

@@ -53,7 +53,7 @@ const SplitedDetails = () => {
       <Card className="container">
         <div className="card-body" style={{ display: "flex", justifyContent: "center" }}>
           <h5 style={{ textAlign: "center", marginLeft: "20px"}}>SPLITED DETAILS</h5>
-          <Button style={{ marginLeft: "auto", marginRight: "20px" }} onClick={handleSaveData}>SaveData</Button>
+          <Button style={{ marginLeft: "auto", marginRight: "20px" ,backgroundColor:"var(--bs-primary)",border:"none"}} onClick={handleSaveData}>SaveData</Button>
         </div>
       </Card>
       <div className={styles.table_container}>

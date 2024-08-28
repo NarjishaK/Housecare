@@ -4,7 +4,7 @@ import { Button, Card, Input } from "reactstrap"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 import axios from "axios"
-import * as XLSX from 'xlsx' // Add this import
+import * as XLSX from "xlsx" // Add this import
 
 import Navbar from "./Navbars"
 import { BASE_URL } from "../Authentication/handle-api"
@@ -130,7 +130,6 @@ const App = () => {
     }
   }
 
-
   const handleSearchChange = event => {
     setSearchQuery(event.target.value)
   }
@@ -164,18 +163,17 @@ const App = () => {
       String(row.amount).toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-
   //Data History and get notification exceed amount
   const handleSaveData = async () => {
     if (totalAmount > limitedAmount) {
       alert(
         `The total amount exceeds the limited amount of ${balanceAmount}. Do you want to continue with the split?`
-      );
+      )
     }
     try {
-      const charityDetails = JSON.parse(localStorage.getItem("charitydetails"));
-      if (!charityDetails) return;
-  
+      const charityDetails = JSON.parse(localStorage.getItem("charitydetails"))
+      if (!charityDetails) return
+
       // Filter out beneficiaries with an amount of 0
       const splits = data
         .filter(item => parseFloat(item.amount) > 0)
@@ -184,30 +182,30 @@ const App = () => {
           splitamount: parseFloat(item.amount),
           beneficiary: item.id,
           date: new Date().toISOString(),
-        }));
-  
+        }))
+
       if (splits.length === 0) {
-        alert("No beneficiaries with non-zero amounts to save.");
-        return;
+        alert("No beneficiaries with non-zero amounts to save.")
+        return
       }
-  
-      await axios.post(`${BASE_URL}/api/splits`, { splits });
-  
-      alert("Data saved successfully!");
-      console.log("Splits saved successfully");
-      window.location.href = "/history";
+
+      await axios.post(`${BASE_URL}/api/splits`, { splits })
+
+      alert("Data saved successfully!")
+      console.log("Splits saved successfully")
+      window.location.href = "/history"
     } catch (error) {
-      console.error("Error saving data:", error);
-      setAlertMessage("Failed to save data. Please try again.");
-      setShowAlert(true);
+      console.error("Error saving data:", error)
+      setAlertMessage("Failed to save data. Please try again.")
+      setShowAlert(true)
     }
   }
-  
+
   //share pdf through mail
   const sendEmail = () => {
     // Filter out beneficiaries with an amount of 0
-    const filteredTableData = filteredData.filter(split => split.amount !== 0);
-    const tableData = filteredTableData.map((split) => ({
+    const filteredTableData = filteredData.filter(split => split.amount !== 0)
+    const tableData = filteredTableData.map(split => ({
       Name: split.Name,
       Nav_Number: split.Nav_Number,
       BEN_ID: split.benificiary_id,
@@ -215,19 +213,24 @@ const App = () => {
       Category: split.category,
       Age: split.age,
       Amount: split.amount,
-    }));
-  
+    }))
+
     // Generate the Excel file as before
-    const worksheet = XLSX.utils.json_to_sheet(tableData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Split Details");
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    const excelBlob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-  
+    const worksheet = XLSX.utils.json_to_sheet(tableData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Split Details")
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    })
+    const excelBlob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    })
+
     // Prepare form data to send to the server
-    const formData = new FormData();
-    formData.append("excel", excelBlob, "split_details.xlsx");
-  
+    const formData = new FormData()
+    formData.append("excel", excelBlob, "split_details.xlsx")
+
     // Send the Excel file to the server via POST request
     axios
       .post(`${BASE_URL}/sendmail`, formData, {
@@ -236,21 +239,21 @@ const App = () => {
         },
       })
       .then(response => {
-        console.log(response.data.message);
-        alert("Email sent successfully!");
+        console.log(response.data.message)
+        alert("Email sent successfully!")
       })
       .catch(error => {
-        console.error("Error sending Excel file:", error);
-        alert("Failed to send email");
-      });
-  };
-  
-  const handleShareEmail = async() => {
+        console.error("Error sending Excel file:", error)
+        alert("Failed to send email")
+      })
+  }
+
+  const handleShareEmail = async () => {
     try {
-      await axios.post(`${BASE_URL}/increment`);
-      console.log("Notification count incremented successfully");
+      await axios.post(`${BASE_URL}/increment`)
+      console.log("Notification count incremented successfully")
     } catch (error) {
-      console.error("Error incrementing notification count:", error);
+      console.error("Error incrementing notification count:", error)
     }
     handleSaveData()
     sendEmail()
@@ -280,11 +283,11 @@ const App = () => {
                   />
                   <Button
                     onClick={handleLimitedAmountSave}
-                    style={{ marginRight: "10px" }}
+                    style={{ marginRight: "10px",backgroundColor:"var(--bs-green)",border:"none" }}
                   >
-                    Save  Data
+                    Save
                   </Button>
-                  <Button onClick={handleLimitedAmountCancel}>Cancel</Button>
+                  <Button onClick={handleLimitedAmountCancel} style={{backgroundColor:"var(--bs-red)",border:"none"}}>Cancel</Button>
                 </>
               ) : (
                 <>
@@ -317,21 +320,45 @@ const App = () => {
               <div style={{ flexGrow: 1, textAlign: "center" }}>
                 <h4 style={{ margin: 0 }}>Beneficiary Distribution Panel</h4>
               </div>
-              {/* <div style={{ textAlign: "right" }}>
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  style={{ marginRight: "2px", height: "30px" }}
+              <div style={{ textAlign: "right" }}>
+                <div style={{ position: "relative", display: "inline-block" }}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    color="black"
+                    className="bi bi-search"
+                    viewBox="0 0 16 16"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "8px",
+                      transform: "translateY(-50%)",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    style={{
+                      paddingLeft: "30px",
+                      marginRight: "2px",
+                      height: "30px",
+                    }}
                   />
-                  <Button
+                </div>
+
+                {/* <Button
                     onClick={handleSaveData}
                     style={{ backgroundColor: "transparent", color: "black" }}
                   >
                     Save Data
-                  </Button>
-              </div> */}
+                  </Button> */}
+              </div>
             </div>
           </Card>
 
@@ -432,7 +459,7 @@ const App = () => {
                 flexWrap: "wrap",
               }}
             >
-               <Button
+              <Button
                 onClick={handleShareEmail}
                 style={{
                   backgroundColor: "transparent",
@@ -507,11 +534,11 @@ const App = () => {
               if (confirmAction) confirmAction()
               setShowAlert(false)
             }}
-            style={{ marginRight: "10px" }}
+            style={{ marginRight: "10px" ,backgroundColor:"green",border:"none"}}
           >
             Confirm
           </Button>
-          <Button onClick={() => setShowAlert(false)}>Cancel</Button>
+          <Button onClick={() => setShowAlert(false)} style={{backgroundColor:"red",border:"none"}}>Cancel</Button>
         </div>
       )}
     </>
