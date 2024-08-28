@@ -16,6 +16,7 @@ import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { useForm } from "helpers/useForms"
+import Swal from "sweetalert2"
 import {
   fetchBenificiarys,
   handleBenificiary,
@@ -47,10 +48,12 @@ const Beneficiary = () => {
   const [charitys, setCharitys] = useState([])
   // const [showPassword, setShowPassword] = useState(false)
   const { id } = useParams()
+  const [loginStatus, setLoginStatus] = useState(null);
   const [edits, setEdits] = useState(false)
   const [benificiarys, setBenificiarys] = useState([])
   const [modals, setmodals] = useState(false)
   const [editedId, setEditedId] = useState(null)
+  const [validationErrors, setValidationErrors] = useState({})
   // const [allcharity, setAllCharity] = useState([])
   const navigate = useNavigate()
 
@@ -75,18 +78,36 @@ const Beneficiary = () => {
     fetchData()
   }, [id])
 
-  // const loadData = async () => {
-  //   try {
-  //     const response = await fetchCharity()
-  //     setAllCharity(response)
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
+
 
   //benificiary create
+
   const benificiaryCreate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
+    if (!datas.category) errors.category = "Category is required."
+    if (!datas.age) errors.age = "Age is required."
+    if (!datas.email_id) errors.email_id = "Email is required."
+    if (!datas.number) errors.number = "Number is required."
+    if (!datas.charity_name) errors.charity_name = "Charity Name is required."
+    if (!datas.nationality) errors.nationality = "Nationality is required."
+    if (!datas.sex) errors.sex = "Sex is required."
+    if (!datas.health_status) errors.health_status = "Health Status is required."
+    if (!datas.marital) errors.marital = "Marital Status is required."
+    if (!datas.navision_linked_no) errors.navision_linked_no = "Navision Number is required."
+    if (!datas.physically_challenged) errors.physically_challenged = "Physically Challenged is required."
+    if (!datas.family_members) errors.family_members = "Family Members is required."
+    if (!datas.account_status) errors.account_status = "Account Status is required."
+    if (!datas.Balance) errors.Balance = "Balance is required."
+    
+
+   setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
+
     const formData = new FormData()
     Object.keys(datas).forEach(key => {
       formData.append(key, datas[key])
@@ -94,10 +115,20 @@ const Beneficiary = () => {
     try {
       await handleBenificiary(formData)
       fetchDatas()
-      alert("success")
+      Swal.fire({
+        title: 'Success!',
+        text: 'Create successful',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
     } catch (err) {
       console.log(err, "benificiary adding failed")
-      alert("failed")
+      Swal.fire({
+        title: 'Error!',
+        text: "Creation failed. Don't use existing email",
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
     }
   }
   //benificiarys list
@@ -153,6 +184,30 @@ const Beneficiary = () => {
   //handle benificiary update
   const handleBenificiaryUpdate = async e => {
     e.preventDefault()
+
+    const errors = {}
+    if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
+    if (!datas.category) errors.category = "Category is required."
+    if (!datas.age) errors.age = "Age is required."
+    if (!datas.email_id) errors.email_id = "Email is required."
+    if (!datas.number) errors.number = "Number is required."
+    if (!datas.charity_name) errors.charity_name = "Charity Name is required."
+    if (!datas.nationality) errors.nationality = "Nationality is required."
+    if (!datas.sex) errors.sex = "Sex is required."
+    if (!datas.health_status) errors.health_status = "Health Status is required."
+    if (!datas.marital) errors.marital = "Marital Status is required."
+    if (!datas.navision_linked_no) errors.navision_linked_no = "Navision Number is required."
+    if (!datas.physically_challenged) errors.physically_challenged = "Physically Challenged is required."
+    if (!datas.family_members) errors.family_members = "Family Members is required."
+    if (!datas.account_status) errors.account_status = "Account Status is required."
+    if (!datas.Balance) errors.Balance = "Balance is required."
+    
+
+   setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     const formData = new FormData()
     Object.keys(datas).forEach(key => {
       formData.append(key, datas[key])
@@ -160,10 +215,21 @@ const Beneficiary = () => {
     try {
       await benificiaryUpdate(editedId, formData)
       fetchDatas()
-      alert("Update successful")
+      Swal.fire({
+        title: 'Success!',
+        text: 'Update successful',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
+      setmodals(modals)
     } catch (err) {
       console.error("Error updating benificiary:", err)
-      alert("Update failed")
+      Swal.fire({
+        title: 'Error!',
+        text: "Update failed. Don't use existing email",
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
     }
   }
   //benificiary details and transactions
@@ -180,6 +246,7 @@ const Beneficiary = () => {
             <CardBody>
               <CardTitle className="p" style={{ color: "gray" }}>
                 <Card>
+              
                   <CardBody>
                     <div style={{display:"flex",alignItems:"baseline"}}>
                     
@@ -219,6 +286,7 @@ const Beneficiary = () => {
                       </ModalHeader>
                       <ModalBody>
                         <form>
+                       
                           <Row>
                             <Col lg={4}>
                               <div className="mb-3">
@@ -231,6 +299,11 @@ const Beneficiary = () => {
                                   value={datas.benificiary_name}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.benificiary_name && (
+                                  <small className="text-danger">
+                                    {validationErrors.benificiary_name}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -244,6 +317,11 @@ const Beneficiary = () => {
                                   value={datas.email_id}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.email_id && (
+                                  <small className="text-danger">
+                                    {validationErrors.email_id}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -257,6 +335,11 @@ const Beneficiary = () => {
                                   value={datas.number}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.number && (
+                                  <small className="text-danger">
+                                    {validationErrors.number}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -284,6 +367,11 @@ const Beneficiary = () => {
                                   ))} */}
                                   <option>{charitydetails.charity}</option>
                                 </select>
+                                {validationErrors.charity_name && (
+                                  <small className="text-danger">
+                                    {validationErrors.charity_name}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -297,6 +385,11 @@ const Beneficiary = () => {
                                   placeholder="Enter Nationality"
                                   type="text"
                                 />
+                                {validationErrors.nationality && (
+                                  <small className="text-danger">
+                                    {validationErrors.nationality}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -312,6 +405,11 @@ const Beneficiary = () => {
                                   <option value="male">Male</option>
                                   <option value="female">Female</option>
                                 </select>
+                                {validationErrors.sex && (
+                                  <small className="text-danger">
+                                    {validationErrors.sex}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -329,6 +427,11 @@ const Beneficiary = () => {
                                   placeholder="Health status"
                                   type="text"
                                 />
+                                {validationErrors.health_status && (
+                                  <small className="text-danger">
+                                    {validationErrors.health_status}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -344,6 +447,11 @@ const Beneficiary = () => {
                                   <option value="married">Married</option>
                                   <option value="single">Single</option>
                                 </select>
+                                {validationErrors.marital && (
+                                  <small className="text-danger">
+                                    {validationErrors.marital}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -359,6 +467,11 @@ const Beneficiary = () => {
                                   placeholder="Navision linked no"
                                   type="text"
                                 />
+                                {validationErrors.navision_linked_no && (
+                                  <small className="text-danger">
+                                    {validationErrors.navision_linked_no}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -378,6 +491,11 @@ const Beneficiary = () => {
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
                                 </select>
+                                {validationErrors.physically_challenged && (
+                                  <small className="text-danger">
+                                    {validationErrors.physically_challenged}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -393,6 +511,11 @@ const Beneficiary = () => {
                                   placeholder="Family Members"
                                   type="text"
                                 />
+                                {validationErrors.family_members && (
+                                  <small className="text-danger">
+                                    {validationErrors.family_members}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -410,6 +533,11 @@ const Beneficiary = () => {
                                   <option value="active">Active</option>
                                   <option value="inactive">Inactive</option>
                                 </select>
+                                {validationErrors.account_status && (
+                                  <small className="text-danger">
+                                    {validationErrors.account_status}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -425,6 +553,11 @@ const Beneficiary = () => {
                                   placeholder="Ctegory"
                                   type="text"
                                 />
+                                {validationErrors.category && (
+                                  <small className="text-danger">
+                                    {validationErrors.category}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -438,6 +571,11 @@ const Beneficiary = () => {
                                   placeholder="Age"
                                   type="number"
                                 />
+                                {validationErrors.age && (
+                                  <small className="text-danger">
+                                    {validationErrors.age}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -451,6 +589,11 @@ const Beneficiary = () => {
                                   placeholder="Balance"
                                   type="number"
                                 />
+                                {validationErrors.Balance && (
+                                  <small className="text-danger">
+                                    {validationErrors.Balance}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -563,6 +706,7 @@ const Beneficiary = () => {
                             >
                               Form
                             </ModalHeader>
+                           
                             <ModalBody>
                               <form>
                                 <Row>
@@ -577,6 +721,11 @@ const Beneficiary = () => {
                                         value={datas.benificiary_name}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.benificiary_name && (
+                                        <small className="text-danger">
+                                          {validationErrors.benificiary_name}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -590,6 +739,11 @@ const Beneficiary = () => {
                                         value={datas.email_id}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.email_id && (
+                                        <small className="text-danger">
+                                          {validationErrors.email_id}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -603,6 +757,11 @@ const Beneficiary = () => {
                                         value={datas.number}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.number && (
+                                        <small className="text-danger">
+                                          {validationErrors.number}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -621,6 +780,11 @@ const Beneficiary = () => {
                                           {charitydetails.charity}
                                         </option>
                                       </select>
+                                      {validationErrors.charity_name && (
+                                        <small className="text-danger">
+                                          {validationErrors.charity_name}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -636,6 +800,11 @@ const Beneficiary = () => {
                                         placeholder="Enter Nationality"
                                         type="text"
                                       />
+                                      {validationErrors.nationality && (
+                                        <small className="text-danger">
+                                          {validationErrors.nationality}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -651,6 +820,11 @@ const Beneficiary = () => {
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                       </select>
+                                      {validationErrors.sex && (
+                                        <small className="text-danger">
+                                          {validationErrors.sex}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -668,6 +842,11 @@ const Beneficiary = () => {
                                         placeholder="Health status"
                                         type="text"
                                       />
+                                      {validationErrors.health_status && (
+                                        <small className="text-danger">
+                                          {validationErrors.health_status}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -683,6 +862,11 @@ const Beneficiary = () => {
                                         <option value="married">Married</option>
                                         <option value="single">Single</option>
                                       </select>
+                                      {validationErrors.marital && (
+                                        <small className="text-danger">
+                                          {validationErrors.marital}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -698,6 +882,11 @@ const Beneficiary = () => {
                                         placeholder="Navision linked no"
                                         type="text"
                                       />
+                                      {validationErrors.navision_linked_no && (
+                                        <small className="text-danger">
+                                          {validationErrors.navision_linked_no}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -717,6 +906,11 @@ const Beneficiary = () => {
                                         <option value="yes">Yes</option>
                                         <option value="no">No</option>
                                       </select>
+                                      {validationErrors.physically_challenged && (
+                                        <small className="text-danger">
+                                          {validationErrors.physically_challenged}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -732,6 +926,11 @@ const Beneficiary = () => {
                                         placeholder="Family Members"
                                         type="text"
                                       />
+                                      {validationErrors.family_members && (
+                                        <small className="text-danger">
+                                          {validationErrors.family_members}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -751,6 +950,11 @@ const Beneficiary = () => {
                                           Inactive
                                         </option>
                                       </select>
+                                      {validationErrors.account_status && (
+                                        <small className="text-danger">
+                                          {validationErrors.account_status}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -769,6 +973,11 @@ const Beneficiary = () => {
                                         placeholder="Category"
                                         type="text"
                                       />
+                                      {validationErrors.category && (
+                                        <small className="text-danger">
+                                          {validationErrors.category}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -782,6 +991,11 @@ const Beneficiary = () => {
                                         placeholder="Age"
                                         type="number"
                                       />
+                                      {validationErrors.age && (
+                                        <small className="text-danger">
+                                          {validationErrors.age}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -795,7 +1009,13 @@ const Beneficiary = () => {
                                         placeholder="Balance"
                                         type="number"
                                       />
+                                      {validationErrors.Balance && (
+                                        <small className="text-danger">
+                                          {validationErrors.Balance}
+                                        </small>
+                                      )}
                                     </div>
+
                                   </Col>
                                 </Row>
                                 <Row>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import Swal from 'sweetalert2';
 import {
   Table,
   Card,
@@ -34,7 +35,7 @@ import Navbar from "./Navbars"
 function CharityDetails() {
   const [datas, handleChanges, setDatas] = useForm({
     benificiary_name: "",
-    category:"",
+    category: "",
     age: "",
     number: "",
     email_id: "",
@@ -71,6 +72,7 @@ function CharityDetails() {
   const [allcharity, setAllCharity] = useState([])
   const [charitystaffs, setCharitystaffs] = useState([])
   const [editId, setEditId] = useState(null)
+  const [validationErrors, setValidationErrors] = useState({})
   const navigate = useNavigate()
 
   //charity details
@@ -116,23 +118,37 @@ function CharityDetails() {
   const filteredCharityStaffs = charitystaffs.filter(
     staff => staff.charity === charitys.charity
   )
-//passwordd strong
-const [passwordError, setPasswordError] = useState("");
-const validatePassword = (password) => {
-  if (password.length < 6) {
-    setPasswordError("Password must be at least 6 characters long.");
-    return false;
-  } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-    setPasswordError("Password must contain both letters and numbers.");
-    return false;
-  } else {
-    setPasswordError(""); 
-    return true;
+  //passwordd strong
+  const [passwordError, setPasswordError] = useState("")
+  const validatePassword = password => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.")
+      return false
+    } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+      setPasswordError("Password must contain both letters and numbers.")
+      return false
+    } else {
+      setPasswordError("")
+      return true
+    }
   }
-};
   //charity staffs create
   const charitystaffCreate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!values.name) errors.name = "Name is required."
+    if (!values.email) errors.email = "Email is required."
+    if (!values.roles) errors.roles = "Role is required."
+    if (!values.phone) errors.phone = "Phone is required."
+    if (!values.password) errors.password = "Password is required."
+    if (!values.charity) errors.charity = "Charity is required."
+    if (!image) errors.image = "Image is required."
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
+
     if (!validatePassword(values.password)) {
       return
     }
@@ -143,10 +159,19 @@ const validatePassword = (password) => {
     formData.append("image", image)
     try {
       await handleCharitystaff(formData)
-      alert("success")
+      Swal.fire({
+        icon: "success",
+        title: "Charity staffs added successfully!",
+        showConfirmButton: true,
+      })
       loadData()
     } catch (err) {
-      alert("failed")
+      Swal.fire({
+        icon: "error",
+        title: "Charity staffs adding failed!Don't use existing email",
+        text: "Please try again",
+        showConfirmButton: true,
+      })
       console.log(err, "Charity staffs adding failed")
     }
   }
@@ -180,6 +205,19 @@ const validatePassword = (password) => {
   //charity staff update
   const handleUpdate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!values.name) errors.name = "Name is required."
+    if (!values.email) errors.email = "Email is required."
+    if (!values.roles) errors.roles = "Role is required."
+    if (!values.phone) errors.phone = "Phone is required."
+    if (!values.password) errors.password = "Password is required."
+    if (!values.charity) errors.charity = "Charity is required."
+    if (!image) errors.image = "Image is required."
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     if (!validatePassword(values.password)) {
       return
     }
@@ -195,99 +233,182 @@ const validatePassword = (password) => {
     try {
       await charityStaffUpdate(editId, formData)
       loadData()
-      alert("Update successful")
+      Swal.fire({
+        title: 'Success!',
+        text: "Update successful",
+        icon: 'success',
+        confirmButtonText: 'OK'
+      })
     } catch (err) {
       console.error("Error updating charitystaff:", err)
-      alert("Update failed")
+      Swal.fire({
+        title: 'Error!',
+        text: "Update failed. Don't use existing email",
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
     }
   }
   //benificiary create
   const benificiaryCreate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
+    if (!datas.category) errors.category = "Category is required."
+    if (!datas.age) errors.age = "Age is required."
+    if (!datas.email_id) errors.email_id = "Email is required."
+    if (!datas.number) errors.number = "Number is required."
+    if (!datas.charity_name) errors.charity_name = "Charity Name is required."
+    if (!datas.nationality) errors.nationality = "Nationality is required."
+    if (!datas.sex) errors.sex = "Sex is required."
+    if (!datas.health_status)
+      errors.health_status = "Health Status is required."
+    if (!datas.marital) errors.marital = "Marital Status is required."
+    if (!datas.navision_linked_no)
+      errors.navision_linked_no = "Navision Number is required."
+    if (!datas.physically_challenged)
+      errors.physically_challenged = "Physically Challenged is required."
+    if (!datas.family_members)
+      errors.family_members = "Family Members is required."
+    if (!datas.account_status)
+      errors.account_status = "Account Status is required."
+    if (!datas.Balance) errors.Balance = "Balance is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
+
     const formData = new FormData()
     Object.keys(datas).forEach(key => {
       formData.append(key, datas[key])
     })
     try {
-  
       await handleBenificiary(formData)
       fetchDatas()
-      alert("success")
-      
+      Swal.fire({
+        title: 'Success!',
+        text: 'Create successful',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
     } catch (err) {
       console.log(err, "benificiary adding failed")
-      alert("failed")
+      Swal.fire({
+        title: 'Error!',
+        text: "Update failed. Don't use existing email",
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
     }
   }
   //benificiarys list
-    const fetchDatas = async () => {
-      try {
-        const response = await fetchBenificiarys()
-        setBenificiarys(response)
-      } catch (error) {
-        console.error("Error fetching benificiary details:", error)
-      }
+  const fetchDatas = async () => {
+    try {
+      const response = await fetchBenificiarys()
+      setBenificiarys(response)
+    } catch (error) {
+      console.error("Error fetching benificiary details:", error)
     }
-    // filter benificiarys based on the selected charity
-    const filteredBenificiarys = benificiarys.filter(
-      benificiary => benificiary.charity_name === charitys.charity
-    )
-    //benificiary delete
-    const deleteBenificiary = async id => {
-      try {
-        await benificiaryDelete(id)
-        fetchDatas()
-      } catch (err) {
-        console.log(err, "delete failed")
-      }
+  }
+  // filter benificiarys based on the selected charity
+  const filteredBenificiarys = benificiarys.filter(
+    benificiary => benificiary.charity_name === charitys.charity
+  )
+  //benificiary delete
+  const deleteBenificiary = async id => {
+    try {
+      await benificiaryDelete(id)
+      fetchDatas()
+    } catch (err) {
+      console.log(err, "delete failed")
     }
-    //benificiary edit
-    const editBenificiary = async id => {
-      try {
-        const benificiaryDetails = await benificiaryEdit(id)
-        setEditedId(id)
-        setDatas({
-          charity_name: benificiaryDetails.charity_name,
-          email_id: benificiaryDetails.email_id,
-          number: benificiaryDetails.number,
-          nationality: benificiaryDetails.nationality,
-          Balance: benificiaryDetails.Balance,
-          sex: benificiaryDetails.sex,
-          health_status: benificiaryDetails.health_status,
-          marital: benificiaryDetails.marital,
-          navision_linked_no: benificiaryDetails.navision_linked_no,
-          physically_challenged: benificiaryDetails.physically_challenged,
-          family_members: benificiaryDetails.family_members,
-          account_status: benificiaryDetails.account_status,
-          benificiary_name: benificiaryDetails.benificiary_name,
-          category: benificiaryDetails.category,
-          age: benificiaryDetails.age
-        })
-      } catch (err) {
-        console.log("an error occured", err)
-      }
-    }
-    //handle benificiary update
-    const handleBenificiaryUpdate = async e => {
-      e.preventDefault()
-      const formData = new FormData()
-      Object.keys(datas).forEach(key => {
-        formData.append(key, datas[key])
+  }
+  //benificiary edit
+  const editBenificiary = async id => {
+    try {
+      const benificiaryDetails = await benificiaryEdit(id)
+      setEditedId(id)
+      setDatas({
+        charity_name: benificiaryDetails.charity_name,
+        email_id: benificiaryDetails.email_id,
+        number: benificiaryDetails.number,
+        nationality: benificiaryDetails.nationality,
+        Balance: benificiaryDetails.Balance,
+        sex: benificiaryDetails.sex,
+        health_status: benificiaryDetails.health_status,
+        marital: benificiaryDetails.marital,
+        navision_linked_no: benificiaryDetails.navision_linked_no,
+        physically_challenged: benificiaryDetails.physically_challenged,
+        family_members: benificiaryDetails.family_members,
+        account_status: benificiaryDetails.account_status,
+        benificiary_name: benificiaryDetails.benificiary_name,
+        category: benificiaryDetails.category,
+        age: benificiaryDetails.age,
       })
-      try {
-        await benificiaryUpdate(editedId, formData)
-        fetchDatas()
-        alert("Update successful")
-      } catch (err) {
-        console.error("Error updating benificiary:", err)
-        alert("Update failed")
-      }
+    } catch (err) {
+      console.log("an error occured", err)
     }
-    //benificiary details and transactions
-    const handleShow =(_id)=>{
-      navigate(`/beneficiariesdetails/${_id}`)
-    }
+  }
+  //handle benificiary update
+  const handleBenificiaryUpdate = async e => {
+    e.preventDefault()
+    const errors = {}
+    if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
+    if (!datas.category) errors.category = "Category is required."
+    if (!datas.age) errors.age = "Age is required."
+    if (!datas.email_id) errors.email_id = "Email is required."
+    if (!datas.number) errors.number = "Number is required."
+    if (!datas.charity_name) errors.charity_name = "Charity Name is required."
+    if (!datas.nationality) errors.nationality = "Nationality is required."
+    if (!datas.sex) errors.sex = "Sex is required."
+    if (!datas.health_status)
+      errors.health_status = "Health Status is required."
+    if (!datas.marital) errors.marital = "Marital Status is required."
+    if (!datas.navision_linked_no)
+      errors.navision_linked_no = "Navision Number is required."
+    if (!datas.physically_challenged)
+      errors.physically_challenged = "Physically Challenged is required."
+    if (!datas.family_members)
+      errors.family_members = "Family Members is required."
+    if (!datas.account_status)
+      errors.account_status = "Account Status is required."
+    if (!datas.Balance) errors.Balance = "Balance is required."
 
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
+    const formData = new FormData()
+    Object.keys(datas).forEach(key => {
+      formData.append(key, datas[key])
+    })
+    try {
+      await benificiaryUpdate(editedId, formData)
+      fetchDatas()
+      Swal.fire({
+        title: 'Success!',
+        text: 'Update successful',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+    } catch (err) {
+      console.error("Error updating benificiary:", err)
+      
+      Swal.fire({
+        title: 'Error!',
+        text: "Update failed. Don't use existing email",
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+    }
+  }
+  //benificiary details and transactions
+  const handleShow = _id => {
+    navigate(`/beneficiariesdetails/${_id}`)
+  }
 
   return (
     <React.Fragment>
@@ -344,25 +465,33 @@ const validatePassword = (password) => {
               <CardTitle className="p" style={{ color: "gray" }}>
                 <Card>
                   <CardBody>
-                    <div style={{display:"flex",alignItems:"baseline"}}>
-                      
+                    <div style={{ display: "flex", alignItems: "baseline" }}>
                       ADMINS
-<Button style={{marginLeft:"auto",backgroundColor:"var(--bs-primary)",border:"none"}}><Link
-                        onClick={() => {
-                          setmodal(!modal)
+                      <Button
+                        style={{
+                          marginLeft: "auto",
+                          backgroundColor: "var(--bs-primary)",
+                          border: "none",
                         }}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          color="gray"
-                          class="bi bi-plus-circle-dotted"
-                          viewBox="0 0 16 16"
+                        <Link
+                          onClick={() => {
+                            setmodal(!modal)
+                          }}
                         >
-                          <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-                        </svg>
-                      </Link>{" "} ADD NEW ADMINS</Button>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            color="gray"
+                            class="bi bi-plus-circle-dotted"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                          </svg>
+                        </Link>{" "}
+                        ADD NEW ADMINS
+                      </Button>
                     </div>
 
                     <Modal
@@ -393,6 +522,11 @@ const validatePassword = (password) => {
                                   value={values.name}
                                   onChange={handleChange}
                                 />
+                                {validationErrors.name && (
+                                  <small className="text-danger">
+                                    {validationErrors.name}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -406,6 +540,11 @@ const validatePassword = (password) => {
                                   value={values.email}
                                   onChange={handleChange}
                                 />
+                                {validationErrors.email && (
+                                  <small className="text-danger">
+                                    {validationErrors.email}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -419,6 +558,11 @@ const validatePassword = (password) => {
                                   value={values.phone}
                                   onChange={handleChange}
                                 />
+                                {validationErrors.phone && (
+                                  <small className="text-danger">
+                                    {validationErrors.phone}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -445,6 +589,11 @@ const validatePassword = (password) => {
                                     </option>
                                   ))}
                                 </select>
+                                {validationErrors.charity && (
+                                  <small className="text-danger">
+                                    {validationErrors.charity}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -460,6 +609,11 @@ const validatePassword = (password) => {
                                   <option>DATA_ENTRY</option>
                                   <option>DATA_VERIFY</option>
                                 </select>
+                                {validationErrors.roles && (
+                                  <small className="text-danger">
+                                    {validationErrors.roles}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -473,9 +627,16 @@ const validatePassword = (password) => {
                                   value={values.password}
                                   onChange={handleChange}
                                 />
-                                 {passwordError && (
-                                    <small className="text-danger">{passwordError}</small>
-                                  )}
+                                {passwordError && (
+                                  <small className="text-danger">
+                                    {passwordError}
+                                  </small>
+                                )}
+                                {validationErrors.password && (
+                                  <small className="text-danger">
+                                    {validationErrors.password}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -491,6 +652,11 @@ const validatePassword = (password) => {
                                   onChange={handleImage}
                                   rows="3"
                                 />
+                                {validationErrors.image && (
+                                  <small className="text-danger">
+                                    {validationErrors.image}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -617,6 +783,11 @@ const validatePassword = (password) => {
                                         value={values.name}
                                         onChange={handleChange}
                                       />
+                                      {validationErrors.name && (
+                                        <small className="text-danger">
+                                          {validationErrors.name}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -630,6 +801,11 @@ const validatePassword = (password) => {
                                         value={values.email}
                                         onChange={handleChange}
                                       />
+                                      {validationErrors.email && (
+                                        <small className="text-danger">
+                                          {validationErrors.email}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -643,6 +819,11 @@ const validatePassword = (password) => {
                                         value={values.phone}
                                         onChange={handleChange}
                                       />
+                                      {validationErrors.phone && (
+                                        <small className="text-danger">
+                                          {validationErrors.phone}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -670,6 +851,11 @@ const validatePassword = (password) => {
                                           </option>
                                         ))}
                                       </select>
+                                      {validationErrors.charity && (
+                                        <small className="text-danger">
+                                          {validationErrors.charity}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -685,6 +871,11 @@ const validatePassword = (password) => {
                                         <option>DATA_ENTRY</option>
                                         <option>DATA_VERIFY</option>
                                       </select>
+                                      {validationErrors.roles && (
+                                        <small className="text-danger">
+                                          {validationErrors.roles}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -699,9 +890,16 @@ const validatePassword = (password) => {
                                         onChange={handleChange}
                                         min={6}
                                       />
-                                       {passwordError && (
-                                    <small className="text-danger">{passwordError}</small>
-                                  )}
+                                      {validationErrors.password && (
+                                        <small className="text-danger">
+                                          {validationErrors.password}
+                                        </small>
+                                      )}
+                                      {passwordError && (
+                                        <small className="text-danger">
+                                          {passwordError}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -717,6 +915,11 @@ const validatePassword = (password) => {
                                         onChange={handleImage}
                                         rows="3"
                                       />
+                                      {validationErrors.image && (
+                                        <small className="text-danger">
+                                          {validationErrors.image}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -766,7 +969,6 @@ const validatePassword = (password) => {
         </Col>
       </Row>
 
-
       {/* Beneficiary management */}
       <Row>
         <Col>
@@ -775,25 +977,33 @@ const validatePassword = (password) => {
               <CardTitle className="p" style={{ color: "gray" }}>
                 <Card>
                   <CardBody>
-                    <div style={{display:"flex",alignItems:"baseline"}}>
+                    <div style={{ display: "flex", alignItems: "baseline" }}>
                       BENIFICIARIES
-                      <Button style={{marginLeft:"auto",backgroundColor:"var(--bs-primary)",border:"none"}}>
-                      <Link
-                        onClick={() => {
-                          setmodals(!modals)
+                      <Button
+                        style={{
+                          marginLeft: "auto",
+                          backgroundColor: "var(--bs-primary)",
+                          border: "none",
                         }}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          color="gray"
-                          class="bi bi-plus-circle-dotted"
-                          viewBox="0 0 16 16"
+                        <Link
+                          onClick={() => {
+                            setmodals(!modals)
+                          }}
                         >
-                          <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-                        </svg>
-                      </Link> ADD NEW BENEFICIARY{" "}</Button>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            color="gray"
+                            class="bi bi-plus-circle-dotted"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                          </svg>
+                        </Link>{" "}
+                        ADD NEW BENEFICIARY{" "}
+                      </Button>
                     </div>
 
                     <Modal
@@ -824,6 +1034,11 @@ const validatePassword = (password) => {
                                   value={datas.benificiary_name}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.benificiary_name && (
+                                  <small className="text-danger">
+                                    {validationErrors.benificiary_name}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -837,6 +1052,11 @@ const validatePassword = (password) => {
                                   value={datas.email_id}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.email_id && (
+                                  <small className="text-danger">
+                                    {validationErrors.email_id}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -850,6 +1070,11 @@ const validatePassword = (password) => {
                                   value={datas.number}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.number && (
+                                  <small className="text-danger">
+                                    {validationErrors.number}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -876,6 +1101,11 @@ const validatePassword = (password) => {
                                     </option>
                                   ))}
                                 </select>
+                                {validationErrors.charity_name && (
+                                  <small className="text-danger">
+                                    {validationErrors.charity_name}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -889,6 +1119,11 @@ const validatePassword = (password) => {
                                   placeholder="Enter Nationality"
                                   type="text"
                                 />
+                                {validationErrors.nationality && (
+                                  <small className="text-danger">
+                                    {validationErrors.nationality}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -904,6 +1139,11 @@ const validatePassword = (password) => {
                                   <option value="male">Male</option>
                                   <option value="female">Female</option>
                                 </select>
+                                {validationErrors.sex && (
+                                  <small className="text-danger">
+                                    {validationErrors.sex}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -921,6 +1161,11 @@ const validatePassword = (password) => {
                                   placeholder="Health status"
                                   type="text"
                                 />
+                                {validationErrors.health_status && (
+                                  <small className="text-danger">
+                                    {validationErrors.health_status}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -936,6 +1181,11 @@ const validatePassword = (password) => {
                                   <option value="married">Married</option>
                                   <option value="single">Single</option>
                                 </select>
+                                {validationErrors.marital && (
+                                  <small className="text-danger">
+                                    {validationErrors.marital}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -951,6 +1201,11 @@ const validatePassword = (password) => {
                                   placeholder="Navision linked no"
                                   type="text"
                                 />
+                                {validationErrors.navision_linked_no && (
+                                  <small className="text-danger">
+                                    {validationErrors.navision_linked_no}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -970,6 +1225,11 @@ const validatePassword = (password) => {
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
                                 </select>
+                                {validationErrors.physically_challenged && (
+                                  <small className="text-danger">
+                                    {validationErrors.physically_challenged}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -985,6 +1245,11 @@ const validatePassword = (password) => {
                                   placeholder="Family Members"
                                   type="text"
                                 />
+                                {validationErrors.family_members && (
+                                  <small className="text-danger">
+                                    {validationErrors.family_members}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -1002,15 +1267,31 @@ const validatePassword = (password) => {
                                   <option value="active">Active</option>
                                   <option value="inactive">Inactive</option>
                                 </select>
+                                {validationErrors.account_status && (
+                                  <small className="text-danger">
+                                    {validationErrors.account_status}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
                           <Row>
                             <Col lg={4}>
-
-                              <div className="mb-3" >
+                              <div className="mb-3">
                                 <label htmlFor="category"> Category </label>
-                                  <input  className="form-control" name="category" value={datas.category} onChange={handleChanges} placeholder="Ctegory" type="text"/>
+                                <input
+                                  className="form-control"
+                                  name="category"
+                                  value={datas.category}
+                                  onChange={handleChanges}
+                                  placeholder="Ctegory"
+                                  type="text"
+                                />
+                                {validationErrors.category && (
+                                  <small className="text-danger">
+                                    {validationErrors.category}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -1024,6 +1305,11 @@ const validatePassword = (password) => {
                                   placeholder="Age"
                                   type="number"
                                 />
+                                {validationErrors.age && (
+                                  <small className="text-danger">
+                                    {validationErrors.age}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -1037,6 +1323,11 @@ const validatePassword = (password) => {
                                   placeholder="Balance"
                                   type="number"
                                 />
+                                {validationErrors.Balance && (
+                                  <small className="text-danger">
+                                    {validationErrors.Balance}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -1163,6 +1454,11 @@ const validatePassword = (password) => {
                                         value={datas.benificiary_name}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.benificiary_name && (
+                                        <small className="text-danger">
+                                          {validationErrors.benificiary_name}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1176,6 +1472,11 @@ const validatePassword = (password) => {
                                         value={datas.email_id}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.email_id && (
+                                        <small className="text-danger">
+                                          {validationErrors.email_id}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1189,6 +1490,11 @@ const validatePassword = (password) => {
                                         value={datas.number}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.number && (
+                                        <small className="text-danger">
+                                          {validationErrors.number}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -1216,6 +1522,11 @@ const validatePassword = (password) => {
                                           </option>
                                         ))}
                                       </select>
+                                      {validationErrors.charity_name && (
+                                        <small className="text-danger">
+                                          {validationErrors.charity_name}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1231,6 +1542,11 @@ const validatePassword = (password) => {
                                         placeholder="Enter Nationality"
                                         type="text"
                                       />
+                                      {validationErrors.nationality && (
+                                        <small className="text-danger">
+                                          {validationErrors.nationality}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1246,6 +1562,11 @@ const validatePassword = (password) => {
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                       </select>
+                                      {validationErrors.sex && (
+                                        <small className="text-danger">
+                                          {validationErrors.sex}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -1263,6 +1584,11 @@ const validatePassword = (password) => {
                                         placeholder="Health status"
                                         type="text"
                                       />
+                                      {validationErrors.health_status && (
+                                        <small className="text-danger">
+                                          {validationErrors.health_status}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1278,6 +1604,11 @@ const validatePassword = (password) => {
                                         <option value="married">Married</option>
                                         <option value="single">Single</option>
                                       </select>
+                                      {validationErrors.marital && (
+                                        <small className="text-danger">
+                                          {validationErrors.marital}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1293,6 +1624,11 @@ const validatePassword = (password) => {
                                         placeholder="Navision linked no"
                                         type="text"
                                       />
+                                      {validationErrors.navision_linked_no && (
+                                        <small className="text-danger">
+                                          {validationErrors.navision_linked_no}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -1312,6 +1648,13 @@ const validatePassword = (password) => {
                                         <option value="yes">Yes</option>
                                         <option value="no">No</option>
                                       </select>
+                                      {validationErrors.physically_challenged && (
+                                        <small className="text-danger">
+                                          {
+                                            validationErrors.physically_challenged
+                                          }
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1327,6 +1670,11 @@ const validatePassword = (password) => {
                                         placeholder="Family Members"
                                         type="text"
                                       />
+                                      {validationErrors.family_members && (
+                                        <small className="text-danger">
+                                          {validationErrors.family_members}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1346,30 +1694,54 @@ const validatePassword = (password) => {
                                           Inactive
                                         </option>
                                       </select>
+                                      {validationErrors.account_status && (
+                                        <small className="text-danger">
+                                          {validationErrors.account_status}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
                                 <Row>
-                                <Col lg={4}>
-        <div className="mb-3" >
-          <label htmlFor="category"> Category</label>
-          <input className="form-control" name="category" value={datas.category} onChange={handleChanges} placeholder="Category" type="text"/>
-          
-        </div>
-      </Col>
-                            <Col lg={4}>
-                              <div className="mb-3">
-                                <label htmlFor="age">Age</label>
-                                <input
-                                  className="form-control"
-                                  name="age"
-                                  value={datas.age}
-                                  onChange={handleChanges}
-                                  placeholder="Age"
-                                  type="number"
-                                />
-                              </div>
-                            </Col>
+                                  <Col lg={4}>
+                                    <div className="mb-3">
+                                      <label htmlFor="category">
+                                        {" "}
+                                        Category
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        name="category"
+                                        value={datas.category}
+                                        onChange={handleChanges}
+                                        placeholder="Category"
+                                        type="text"
+                                      />
+                                      {validationErrors.category && (
+                                        <small className="text-danger">
+                                          {validationErrors.category}
+                                        </small>
+                                      )}
+                                    </div>
+                                  </Col>
+                                  <Col lg={4}>
+                                    <div className="mb-3">
+                                      <label htmlFor="age">Age</label>
+                                      <input
+                                        className="form-control"
+                                        name="age"
+                                        value={datas.age}
+                                        onChange={handleChanges}
+                                        placeholder="Age"
+                                        type="number"
+                                      />
+                                      {validationErrors.age && (
+                                        <small className="text-danger">
+                                          {validationErrors.age}
+                                        </small>
+                                      )}
+                                    </div>
+                                  </Col>
                                   <Col lg={4}>
                                     <div className="mb-3">
                                       <label htmlFor="Balance">Balance</label>
@@ -1381,6 +1753,11 @@ const validatePassword = (password) => {
                                         placeholder="Balance"
                                         type="number"
                                       />
+                                      {validationErrors.Balance && (
+                                        <small className="text-danger">
+                                          {validationErrors.Balance}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>

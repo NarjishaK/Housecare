@@ -82,8 +82,6 @@ const Register = props => {
     formData.append("image", image)
     formData.append("phone", values.phone)
 
-
-
     try {
       const response = await Createstaff(formData)
       setRegistrationStatus("success")
@@ -138,8 +136,7 @@ const Register = props => {
                       )}
                       {registrationStatus === "error" && (
                         <Alert color="danger">
-                          Registration failed 
-                          Email is already exist 
+                          Registration failed Email is already exist
                         </Alert>
                       )}
 

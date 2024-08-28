@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import styles from "./dashboard.module.css"
 import { Button, Card, Input } from "reactstrap"
 import html2canvas from "html2canvas"
+import Swal from "sweetalert2"
 import jsPDF from "jspdf"
 import axios from "axios"
 import * as XLSX from "xlsx" // Add this import
@@ -166,9 +167,20 @@ const App = () => {
   //Data History and get notification exceed amount
   const handleSaveData = async () => {
     if (totalAmount > limitedAmount) {
-      alert(
-        `The total amount exceeds the limited amount of ${balanceAmount}. Do you want to continue with the split?`
-      )
+      const { isConfirmed } = await Swal.fire({
+        title: 'Amount Exceeds Limit',
+        text: `The total amount exceeds the limited amount of ${balanceAmount}. Do you want to continue with the split?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, continue',
+        cancelButtonText: 'Cancel'
+      });
+  
+      if (!isConfirmed) {
+        return;
+      }
     }
     try {
       const charityDetails = JSON.parse(localStorage.getItem("charitydetails"))
@@ -184,19 +196,36 @@ const App = () => {
           date: new Date().toISOString(),
         }))
 
-      if (splits.length === 0) {
-        alert("No beneficiaries with non-zero amounts to save.")
-        return
-      }
-
+        if (splits.length === 0) {
+          await Swal.fire({
+            title: 'No Beneficiaries',
+            text: 'No beneficiaries with non-zero amounts to save.',
+            icon: 'info',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+          });
+          return;
+        }
       await axios.post(`${BASE_URL}/api/splits`, { splits })
 
-      alert("Data saved successfully!")
+      await Swal.fire({
+        title: 'Success',
+        text: 'Data saved successfully!',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       console.log("Splits saved successfully")
       window.location.href = "/history"
     } catch (error) {
       console.error("Error saving data:", error)
-      setAlertMessage("Failed to save data. Please try again.")
+      await Swal.fire({
+        title: 'Error',
+        text: 'Failed to save data. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       setShowAlert(true)
     }
   }
@@ -240,11 +269,23 @@ const App = () => {
       })
       .then(response => {
         console.log(response.data.message)
-        alert("Email sent successfully!")
+        Swal.fire({
+          title: 'Success',
+          text: response.data.message || 'Email sent successfully!',
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
       })
       .catch(error => {
         console.error("Error sending Excel file:", error)
-        alert("Failed to send email")
+         Swal.fire({
+          title: 'Error',
+          text: 'Failed to send email. Please try again.',
+          icon: 'error',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
       })
   }
 

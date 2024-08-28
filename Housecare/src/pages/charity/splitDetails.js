@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./split.module.css";
 import { Button, Card } from "reactstrap";
+import Swal from "sweetalert2";
 import { BASE_URL } from "../Authentication/handle-api";
 const SplitedDetails = () => {
   const [splits, setSplits] = useState([]);
@@ -40,7 +41,13 @@ const SplitedDetails = () => {
   };
   const handleSaveData = async () => {
     try {
-      alert("Data saved successfully!");
+      await Swal.fire({
+        title: 'Success',
+        text: 'Data saved successfully!',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       await axios.post(`${BASE_URL}/increment`);
       console.log("Notification count incremented successfully");
     } catch (error) {

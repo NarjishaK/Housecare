@@ -40,6 +40,7 @@ const HousecareLoginPanel = () => {
               type="email"
               value={values.email}
               onChange={handleChange}
+              required
             />
           </div>
           <div className="mb-3">
@@ -50,6 +51,7 @@ const HousecareLoginPanel = () => {
               placeholder="Enter Password"
               value={values.password}
               onChange={handleChange}
+              required
             />
           </div>
           <Row className="mb-3 mt-4">

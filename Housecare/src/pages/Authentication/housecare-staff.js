@@ -10,6 +10,7 @@ import {
   Modal,
   ModalHeader,
 } from "reactstrap"
+import Swal from "sweetalert2"
 import {
   fetchStaff,
   deleteStaff,
@@ -61,21 +62,42 @@ function Staff() {
     }
   }
   //staff delete
-  const handleDelete = async id => {
-    const confirmation = window.confirm(
-      "Are you sure you want delete this product?"
-    )
-    if (confirmation) {
+  const handleDelete = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to delete this product?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    });
+  
+    if (isConfirmed) {
       try {
-        await deleteStaff(id)
-        loadData()
-        alert("Success")
+        await deleteStaff(id);
+        loadData();
+        await Swal.fire({
+          title: 'Deleted!',
+          text: 'The product has been deleted.',
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
       } catch (err) {
-        console.error("Error deleting staff:", err)
-        alert("Failed")
+        console.error('Error deleting staff:', err);
+        await Swal.fire({
+          title: 'Error!',
+          text: 'Failed to delete the product. Please try again.',
+          icon: 'error',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
       }
     }
   }
+  
   //password validation
   const [passwordError, setPasswordError] = useState("");
   const validatePassword = (password) => {
@@ -148,10 +170,22 @@ function Staff() {
       await staffUpdate(editId, formData)
       toggleModal()
       loadData()
-      alert("Update successful")
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Update successful',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     } catch (err) {
       console.error("Error updating staff:", err)
-      alert("Update failed")
+      await Swal.fire({
+        title: 'Error!',
+        text: 'Update failed. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     }
   }
   //handlecreatestaff
@@ -161,30 +195,49 @@ function Staff() {
   //revok staff
 
   const handleBlock = async (id, currentStatus) => {
-    const confirmation = window.confirm(
-      `Are you sure you want to ${
-        currentStatus ? "unblock" : "block"
-      } this staff?`
-    )
-    if (confirmation) {
+    const { isConfirmed } = await Swal.fire({
+      title: 'Are you sure?',
+      text: `Do you want to ${currentStatus ? 'unblock' : 'block'} this staff?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: `Yes, ${currentStatus ? 'unblock' : 'block'} it!`,
+      cancelButtonText: 'Cancel'
+    });
+  
+    if (isConfirmed) {
       try {
-        const updatedStaff = await toggleBlockStaff(id)
-        console.log(updatedStaff)
+        const updatedStaff = await toggleBlockStaff(id);
+        console.log(updatedStaff);
+  
         setStaff(prevStaff =>
           prevStaff.map(s =>
             s._id === id ? { ...s, isBlocked: !currentStatus } : s
           )
-        )
-        alert(`Staff ${currentStatus ? "unblocked" : "blocked"} successfully`)
+        );
+  
+        await Swal.fire({
+          title: 'Success!',
+          text: `Staff ${currentStatus ? 'unblocked' : 'blocked'} successfully`,
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
       } catch (err) {
-        console.error(
-          `Error ${currentStatus ? "unblocking" : "blocking"} staff:`,
-          err
-        )
-        alert(`Failed to ${currentStatus ? "unblock" : "block"} staff`)
+        console.error(`Error ${currentStatus ? 'unblocking' : 'blocking'} staff:`, err);
+  
+        await Swal.fire({
+          title: 'Error!',
+          text: `Failed to ${currentStatus ? 'unblock' : 'block'} staff. Please try again.`,
+          icon: 'error',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
       }
     }
   }
+  
 
   return (
     <React.Fragment>

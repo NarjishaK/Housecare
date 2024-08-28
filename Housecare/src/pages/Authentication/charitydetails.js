@@ -11,6 +11,7 @@ import {
   ModalHeader,
   ModalBody,
 } from "reactstrap"
+import Swal from "sweetalert2"
 
 import axios from "axios"
 import { useParams } from "react-router-dom"
@@ -148,11 +149,23 @@ function CharityDetails() {
     formData.append("image", image)
     try {
       await handleCharitystaff(formData)
-      alert("success")
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Charity staff added successfully.',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       loadData()
       setmodal(false)
     } catch (err) {
-      alert("Email is already exist")
+      await Swal.fire({
+        title: 'Error!',
+        text: 'Email already exists.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       console.log(err, "Charity staffs adding failed")
     }
   }
@@ -215,17 +228,51 @@ function CharityDetails() {
     try {
       await charityStaffUpdate(editId, formData)
       loadData()
-      alert("Update successful")
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Update successful',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       setEdit(false)
       
     } catch (err) {
       console.error("Error updating charitystaff:", err)
-      alert("Update failed")
+      await Swal.fire({
+        title: 'Error!',
+        text: 'Update failed. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     }
   }
   //create benificiary
   const benificiaryCreate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
+    if (!datas.category) errors.category = "Category is required."
+    if (!datas.age) errors.age = "Age is required."
+    if (!datas.email_id) errors.email_id = "Email is required."
+    if (!datas.number) errors.number = "Number is required."
+    if (!datas.charity_name) errors.charity_name = "Charity Name is required."
+    if (!datas.nationality) errors.nationality = "Nationality is required."
+    if (!datas.sex) errors.sex = "Sex is required."
+    if (!datas.health_status) errors.health_status = "Health Status is required."
+    if (!datas.marital) errors.marital = "Marital Status is required."
+    if (!datas.navision_linked_no) errors.navision_linked_no = "Navision Number is required."
+    if (!datas.physically_challenged) errors.physically_challenged = "Physically Challenged is required."
+    if (!datas.family_members) errors.family_members = "Family Members is required."
+    if (!datas.account_status) errors.account_status = "Account Status is required."
+    if (!datas.Balance) errors.Balance = "Balance is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     const formData = new FormData()
     Object.keys(datas).forEach(key => {
       formData.append(key, datas[key])
@@ -233,11 +280,22 @@ function CharityDetails() {
     try {
       await handleBenificiary(formData)
       fetchData()
-      alert("success")
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Beneficiary added successfully.',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     } catch (err) {
       console.log(err, "benificiary adding failed")
-      alert("Failed to add benificiary Please try again. Do not Use existing Email Id")
-    }
+      await Swal.fire({
+        title: 'Error!',
+        text: 'Failed to add beneficiary. Please try again. Do not use an existing Email ID.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });    }
   }
   const fetchData = async () => {
     try {
@@ -289,6 +347,28 @@ function CharityDetails() {
   //handle benificiary update
   const handleBenificiaryUpdate = async e => {
     e.preventDefault()
+    const errors = {}
+    if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
+    if (!datas.category) errors.category = "Category is required."
+    if (!datas.age) errors.age = "Age is required."
+    if (!datas.email_id) errors.email_id = "Email is required."
+    if (!datas.number) errors.number = "Number is required."
+    if (!datas.charity_name) errors.charity_name = "Charity Name is required."
+    if (!datas.nationality) errors.nationality = "Nationality is required."
+    if (!datas.sex) errors.sex = "Sex is required."
+    if (!datas.health_status) errors.health_status = "Health Status is required."
+    if (!datas.marital) errors.marital = "Marital Status is required."
+    if (!datas.navision_linked_no) errors.navision_linked_no = "Navision Number is required."
+    if (!datas.physically_challenged) errors.physically_challenged = "Physically Challenged is required."
+    if (!datas.family_members) errors.family_members = "Family Members is required."
+    if (!datas.account_status) errors.account_status = "Account Status is required."
+    if (!datas.Balance) errors.Balance = "Balance is required."
+
+    setValidationErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return
+    }
     const formData = new FormData()
     Object.keys(datas).forEach(key => {
       formData.append(key, datas[key])
@@ -296,11 +376,22 @@ function CharityDetails() {
     try {
       await benificiaryUpdate(editedId, formData)
       fetchData()
-      alert("Update successful")
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Update successful',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     } catch (err) {
       console.error("Error updating benificiary:", err)
-      alert("Update failed")
-    }
+      await Swal.fire({
+        title: 'Error!',
+        text: 'Update failed. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });    }
   }
   //benificiary details and transactions
   const handleShow = _id => {
@@ -916,6 +1007,11 @@ function CharityDetails() {
                                   value={datas.benificiary_name}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.benificiary_name && (
+                                  <small className="text-danger">
+                                    {validationErrors.benificiary_name}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -929,6 +1025,11 @@ function CharityDetails() {
                                   value={datas.email_id}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.email_id && (
+                                  <small className="text-danger">
+                                    {validationErrors.email_id}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -942,6 +1043,11 @@ function CharityDetails() {
                                   value={datas.number}
                                   onChange={handleChanges}
                                 />
+                                {validationErrors.number && (
+                                  <small className="text-danger">
+                                    {validationErrors.number}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -968,6 +1074,11 @@ function CharityDetails() {
                                     </option>
                                   ))}
                                 </select>
+                                {validationErrors.charity_name && (
+                                  <small className="text-danger">
+                                    {validationErrors.charity_name}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -981,6 +1092,11 @@ function CharityDetails() {
                                   placeholder="Enter Nationality"
                                   type="text"
                                 />
+                                {validationErrors.nationality && (
+                                  <small className="text-danger">
+                                    {validationErrors.nationality}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -996,6 +1112,11 @@ function CharityDetails() {
                                   <option value="male">Male</option>
                                   <option value="female">Female</option>
                                 </select>
+                                {validationErrors.sex && (
+                                  <small className="text-danger">
+                                    {validationErrors.sex}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -1013,6 +1134,11 @@ function CharityDetails() {
                                   placeholder="Health status"
                                   type="text"
                                 />
+                                {validationErrors.health_status && (
+                                  <small className="text-danger">
+                                    {validationErrors.health_status}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -1028,6 +1154,11 @@ function CharityDetails() {
                                   <option value="married">Married</option>
                                   <option value="single">Single</option>
                                 </select>
+                                {validationErrors.marital && (
+                                  <small className="text-danger">
+                                    {validationErrors.marital}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -1043,6 +1174,11 @@ function CharityDetails() {
                                   placeholder="Navision linked no"
                                   type="text"
                                 />
+                                {validationErrors.navision_linked_no && (
+                                  <small className="text-danger">
+                                    {validationErrors.navision_linked_no}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -1062,6 +1198,11 @@ function CharityDetails() {
                                   <option value="yes">Yes</option>
                                   <option value="no">No</option>
                                 </select>
+                                {validationErrors.physically_challenged && (
+                                  <small className="text-danger">
+                                    {validationErrors.physically_challenged}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -1077,6 +1218,11 @@ function CharityDetails() {
                                   placeholder="Family Members"
                                   type="text"
                                 />
+                                {validationErrors.family_members && (
+                                  <small className="text-danger">
+                                    {validationErrors.family_members}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                             <Col lg={4}>
@@ -1094,6 +1240,11 @@ function CharityDetails() {
                                   <option value="active">Active</option>
                                   <option value="inactive">Inactive</option>
                                 </select>
+                                {validationErrors.account_status && (
+                                  <small className="text-danger">
+                                    {validationErrors.account_status}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -1109,6 +1260,11 @@ function CharityDetails() {
                                   placeholder="Age"
                                   type="number"
                                 />
+                                {validationErrors.age && (
+                                  <small className="text-danger">
+                                    {validationErrors.age}
+                                  </small>
+                                )}
                                 </div>
                             </Col>
                             <Col lg={4}>
@@ -1122,6 +1278,11 @@ function CharityDetails() {
                                   placeholder="Category"
                                   type="text"
                                 />
+                                {validationErrors.category && (
+                                  <small className="text-danger">
+                                    {validationErrors.category}
+                                  </small>
+                                )}
                                 </div>
                             </Col>
                             <Col lg={4}>
@@ -1135,6 +1296,11 @@ function CharityDetails() {
                                   placeholder="Balance"
                                   type="number"
                                 />
+                                {validationErrors.Balance && (
+                                  <small className="text-danger">
+                                    {validationErrors.Balance}
+                                  </small>
+                                )}
                               </div>
                             </Col>
                           </Row>
@@ -1261,6 +1427,11 @@ function CharityDetails() {
                                         value={datas.benificiary_name}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.benificiary_name && (
+                                        <small className="text-danger">
+                                          {validationErrors.benificiary_name}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1274,6 +1445,11 @@ function CharityDetails() {
                                         value={datas.email_id}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.email_id && (
+                                        <small className="text-danger">
+                                          {validationErrors.email_id}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1287,6 +1463,11 @@ function CharityDetails() {
                                         value={datas.number}
                                         onChange={handleChanges}
                                       />
+                                      {validationErrors.number && (
+                                        <small className="text-danger">
+                                          {validationErrors.number}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -1314,6 +1495,11 @@ function CharityDetails() {
                                           </option>
                                         ))}
                                       </select>
+                                      {validationErrors.charity_name && (
+                                        <small className="text-danger">
+                                          {validationErrors.charity_name}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1329,6 +1515,11 @@ function CharityDetails() {
                                         placeholder="Enter Nationality"
                                         type="text"
                                       />
+                                      {validationErrors.nationality && (
+                                        <small className="text-danger">
+                                          {validationErrors.nationality}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1344,6 +1535,11 @@ function CharityDetails() {
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                       </select>
+                                      {validationErrors.sex && (
+                                        <small className="text-danger">
+                                          {validationErrors.sex}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -1361,6 +1557,11 @@ function CharityDetails() {
                                         placeholder="Health status"
                                         type="text"
                                       />
+                                      {validationErrors.health_status && (
+                                        <small className="text-danger">
+                                          {validationErrors.health_status}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1376,6 +1577,11 @@ function CharityDetails() {
                                         <option value="married">Married</option>
                                         <option value="single">Single</option>
                                       </select>
+                                      {validationErrors.marital && (
+                                        <small className="text-danger">
+                                          {validationErrors.marital}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1391,6 +1597,11 @@ function CharityDetails() {
                                         placeholder="Navision linked no"
                                         type="text"
                                       />
+                                      {validationErrors.navision_linked_no && (
+                                        <small className="text-danger">
+                                          {validationErrors.navision_linked_no}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -1410,6 +1621,12 @@ function CharityDetails() {
                                         <option value="yes">Yes</option>
                                         <option value="no">No</option>
                                       </select>
+                                      {validationErrors.physically_challenged && (
+                                        <small className="text-danger">
+                                          {validationErrors.physically_challenged}
+                                        </small>
+                                      )}
+
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1425,6 +1642,11 @@ function CharityDetails() {
                                         placeholder="Family Members"
                                         type="text"
                                       />
+                                      {validationErrors.family_members && (
+                                        <small className="text-danger">
+                                          {validationErrors.family_members}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1444,6 +1666,11 @@ function CharityDetails() {
                                           Inactive
                                         </option>
                                       </select>
+                                      {validationErrors.account_status && (
+                                        <small className="text-danger">
+                                          {validationErrors.account_status}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>
@@ -1459,6 +1686,11 @@ function CharityDetails() {
                                   placeholder="Age"
                                   type="number"
                                 />
+                                {validationErrors.age && (
+                                  <small className="text-danger">
+                                    {validationErrors.age}
+                                  </small>
+                                )}
                                 </div>
                             </Col>
                             <Col lg={4}>
@@ -1472,6 +1704,11 @@ function CharityDetails() {
                                   placeholder="Category"
                                   type="text"
                                 />
+                                {validationErrors.category && (
+                                  <small className="text-danger">
+                                    {validationErrors.category}
+                                  </small>
+                                )}
                                 </div>
                             </Col>
                                   <Col lg={4}>
@@ -1485,6 +1722,11 @@ function CharityDetails() {
                                         placeholder="Balance"
                                         type="number"
                                       />
+                                      {validationErrors.Balance && (
+                                        <small className="text-danger">
+                                          {validationErrors.Balance}
+                                        </small>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>

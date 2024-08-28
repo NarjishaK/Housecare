@@ -1,5 +1,5 @@
 import axios from "axios"
-
+import Swal from "sweetalert2";
 const HOUSECARE_BASE_URL = `${process.env.REACT_APP_BASE_URL}/housecare`;
 const CHARITY_URL= `${process.env.REACT_APP_BASE_URL}/charity`;
 const ADMIN_URL = `${process.env.REACT_APP_BASE_URL}/admin`;
@@ -160,21 +160,41 @@ export const handleCharity = async formData => {
 
 //charity organaization Delete
 
-export const charityDelete = async id => {
-  const confirmation = window.confirm(
-    "Are you sure you want delete this product?"
-  )
-  if (confirmation) {
+export const charityDelete = async (id) => {
+  const { isConfirmed } = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you want to delete this product?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+  });
+
+  if (isConfirmed) {
     try {
-      await axios.delete(`${CHARITY_URL}/${id}`)
+      await axios.delete(`${CHARITY_URL}/${id}`);
+      await Swal.fire({
+        title: 'Deleted!',
+        text: 'The product has been deleted.',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     } catch (err) {
-      console.log(
-        err.response ? err.response.data : err.message,
-        "something went wrong in staff delete"
-      )
+      console.error('Error deleting charity:', err);
+      await Swal.fire({
+        title: 'Error!',
+        text: 'Failed to delete the product. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     }
   }
 }
+
 //superadmin signin
 
 export const handleadminLogin = async (e, values, setLoginStatus) => {
@@ -284,19 +304,32 @@ export const fetchCharitystaffs = async () => {
 
 //delete charitystaffs
 
-export const charitystaffDelete = async id => {
-  const confirmation = window.confirm(
-    "Are you sure do you want to delete this staff"
-  )
-  if (confirmation) {
+export const charitystaffDelete = async (id) => {
+  const { value: confirmed } = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you want to delete this staff?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  });
+
+  if (confirmed) {
     try {
-      await axios.delete(`${CHARITYSTAFF_URL}/${id}`)
+      await axios.delete(`${CHARITYSTAFF_URL}/${id}`);
+      Swal.fire(
+        'Deleted!',
+        'The staff has been deleted.',
+        'success'
+      );
     } catch (err) {
-      console.log(
+      Swal.fire(
+        'Error!',
         err.response ? err.response.data : err.message,
-        "something went wrong in staff delete"
-      )
-      alert("deleting failed")
+        'error'
+      );
     }
   }
 }
@@ -370,19 +403,32 @@ export const fetchBenificiarys = async () => {
 }
 //delete benificiary
 
-export const benificiaryDelete = async id => {
-  const confirmation = window.confirm(
-    "Are you sure do you want to delete this staff"
-  )
-  if (confirmation) {
+export const benificiaryDelete = async (id) => {
+  const { value: confirmed } = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you want to delete this beneficiary?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  });
+
+  if (confirmed) {
     try {
-      await axios.delete(`${BENIFICIARY_URL}/${id}`)
+      await axios.delete(`${BENIFICIARY_URL}/${id}`);
+      Swal.fire(
+        'Deleted!',
+        'The beneficiary has been deleted.',
+        'success'
+      );
     } catch (err) {
-      console.log(
+      Swal.fire(
+        'Error!',
         err.response ? err.response.data : err.message,
-        "something went wrong in staff delete"
-      )
-      alert("deleting failed")
+        'error'
+      );
     }
   }
 }

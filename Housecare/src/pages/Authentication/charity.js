@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import Swal from "sweetalert2"
 import {
   Row,
   Col,
@@ -117,11 +118,23 @@ function Charity() {
     formData.append("image", image)
     try {
       await handleCharity(formData)
-      alert("success")
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Charity organization created successfully.',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       setmodal(!modal)
       loadData()
     } catch (err) {
-      alert("Failed creation, Email already exists")
+      await Swal.fire({
+        title: 'Error!',
+        text: 'Failed to create charity. Email already exists.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       console.log(err, "Charity organaization adding failed")
     }
   }
@@ -198,12 +211,24 @@ function Charity() {
 
     try {
       await charityUpdate(editId, formData)
-      alert("Update successful")
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Update successful',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
       loadData()
       setmodal_center(false)
     } catch (err) {
       console.error("Error updating charity:", err)
-      alert("Update failed ")
+      await Swal.fire({
+        title: 'Error!',
+        text: 'Update failed. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     }
   }
   //image handle

@@ -4,6 +4,7 @@ import styles from "../../pages/charity/split.module.css"
 import { Button, Card } from "reactstrap"
 import * as XLSX from 'xlsx' // Add this import
 import { BASE_URL } from "./handle-api"
+import Swal from "sweetalert2"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 const SplitedHistory = () => {
@@ -83,8 +84,13 @@ const SplitedHistory = () => {
     };
     reader.readAsBinaryString(file);
   } else {
-    alert('Please select a file first!');
-  }
+    await Swal.fire({
+      title: 'Warning!',
+      text: 'Please select a file first!',
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'OK'
+    });  }
 };
 //handle share excel file through emailssss
 const handleShareEmail = () => {
@@ -127,11 +133,23 @@ const handleShareEmail = () => {
     })
     .then(response => {
       console.log(response.data.message);
-      alert("Email sent successfully!");
+      Swal.fire({
+        title: 'Success!',
+        text: 'Email sent successfully!',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     })
     .catch(error => {
       console.error("Error sending Excel file:", error);
-      alert("Failed to send email");
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to send email. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
     });
 };
 
