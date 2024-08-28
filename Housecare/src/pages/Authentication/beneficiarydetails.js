@@ -43,7 +43,6 @@ const BenificiaryDetails = props => {
       try {
         const response = await axios.get(`${BASE_URL}/splitses/${id}`);
         setSplitDetails(response.data);  // Assuming you've added a state variable 'splitDetails' for storing the split data
-        console.log(splitDetails,"splitttt detailsss");
         
       } catch (error) {
         console.error("Error fetching split details:", error);
