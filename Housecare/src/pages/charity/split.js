@@ -207,8 +207,6 @@ const App = () => {
   const sendEmail = () => {
     // Filter out beneficiaries with an amount of 0
     const filteredTableData = filteredData.filter(split => split.amount !== 0);
-  
-    // Extract the relevant table data and convert it to a format suitable for XLSX
     const tableData = filteredTableData.map((split) => ({
       Name: split.Name,
       Nav_Number: split.Nav_Number,
@@ -249,12 +247,12 @@ const App = () => {
   
   const handleShareEmail = async() => {
     try {
-      alert("Data shared successfully!");
       await axios.post(`${BASE_URL}/increment`);
       console.log("Notification count incremented successfully");
     } catch (error) {
       console.error("Error incrementing notification count:", error);
     }
+    handleSaveData()
     sendEmail()
   }
   return (
@@ -319,7 +317,7 @@ const App = () => {
               <div style={{ flexGrow: 1, textAlign: "center" }}>
                 <h4 style={{ margin: 0 }}>Beneficiary Distribution Panel</h4>
               </div>
-              <div style={{ textAlign: "right" }}>
+              {/* <div style={{ textAlign: "right" }}>
                 <input
                   type="text"
                   placeholder="Search"
@@ -333,7 +331,7 @@ const App = () => {
                   >
                     Save Data
                   </Button>
-              </div>
+              </div> */}
             </div>
           </Card>
 

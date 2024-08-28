@@ -83,6 +83,7 @@ import Datesplits from "pages/Authentication/datesplits"
 import History from "pages/Authentication/History"
 import Email from "pages/charity/email"
 import Resetpassword from "pages/Authentication/resetpassword"
+import LatestNotifications from "pages/Authentication/latestnotifications"
 const userRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   { path: "/staffs", component: <Staff /> },
@@ -95,6 +96,8 @@ const userRoutes = [
   { path: "/histories", component: <Charitysplithistory /> },
   { path: "/datesplits/:id", component: <Datesplits /> },
   {path: "/history-split" , component: <History/>},
+  {path: "/latest-notifications" , component: <LatestNotifications/>},
+
 
   // //calendar
   { path: "/calendar", component: <Calendar /> },
