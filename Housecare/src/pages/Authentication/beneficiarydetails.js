@@ -30,7 +30,7 @@ const BenificiaryDetails = (props) => {
       try {
         const response = await axios.get(`${BASE_URL}/benificiary/${id}/transactions`);
         const { creditedDetails, debitedDetails } = response.data;
-
+    
         // Combine credited and debited details
         const allTransactions = [
           ...creditedDetails.map((split) => ({
@@ -48,22 +48,23 @@ const BenificiaryDetails = (props) => {
             beneficiaryId: debit.beneficiary,
           })),
         ];
-
-        // Sort transactions by date
-        allTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-
+    
+        // Sort transactions by date in descending order
+        allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
         // Calculate running total balance
         let runningTotal = 0;
         const totalBalanceDetails = allTransactions.map((transaction) => {
           runningTotal += transaction.type === "credit" ? transaction.amount : -transaction.amount;
           return { ...transaction, runningTotal };
         });
-
+    
         setTransactions(totalBalanceDetails);
       } catch (error) {
         console.error("Error fetching transaction details:", error);
       }
     };
+    
 
     fetchData();
     fetchTransactions();

@@ -16,9 +16,11 @@ const SplitedDetails = () => {
         const response = await axios.get(`${BASE_URL}/api/splits`);
         console.log(response.data, "All Splits Data");
   
-        const filteredSplits = response.data.filter(
-          split => split.beneficiary && split.beneficiary.charity_name === charityName
-        );
+        const filteredSplits = response.data
+          .filter(
+            split => split.beneficiary && split.beneficiary.charity_name === charityName
+          )
+          .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date in descending order
   
         setSplits(filteredSplits);
         console.log(filteredSplits, "Filtered Splits");

@@ -7,63 +7,86 @@ import Navbar from "./Navbars"
 import imgdark from "../../assets/images/1.JPG"
 import { BASE_URL } from "../Authentication/handle-api"
 import axios from "axios"
+import { connect } from "react-redux";
+import { setBreadcrumbItems } from "../../store/actions";
 
-const BenificiariesDetails = props => {
-  document.title = "Benificiary Details | Housecare"
+const BenificiaryDetails = (props) => {
+  document.title = "Benificiary Details | Housecare";
 
-  //Print the Invoice
-  const printInvoice = () => {
-    window.print()
-  }
-  const [beneficiarys, setBeneficiarys] = useState([])
-  const { id } = useParams()
+  const [beneficiarys, setBeneficiarys] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const { id } = useParams();
 
   useEffect(() => {
-    fetchSplitDetails()
     const fetchData = async () => {
-      const token = localStorage.getItem("token")
-      axios.defaults.headers.common["Authorization"] = token
+      const token = localStorage.getItem("token");
+      axios.defaults.headers.common["Authorization"] = token;
       try {
-        const response = await axios.get(`${BASE_URL}/benificiary/${id}`)
-        setBeneficiarys(response.data)
+        const response = await axios.get(`${BASE_URL}/benificiary/${id}`);
+        setBeneficiarys(response.data);
       } catch (error) {
-        console.error("Error fetching beneficiary details:", error)
+        console.error("Error fetching beneficiary details:", error);
       }
-    }
-    fetchData()
-  }, [id])
+    };
 
-  //split details
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/benificiary/${id}/transactions`);
+        const { creditedDetails, debitedDetails } = response.data;
+    
+        // Combine credited and debited details
+        const allTransactions = [
+          ...creditedDetails.map((split) => ({
+            date: split.date,
+            amount: split.splitamount,
+            type: "credit",
+            status: split.status,
+            beneficiaryId: split.beneficiary,
+          })),
+          ...debitedDetails.map((debit) => ({
+            date: debit.debitedDate,
+            amount: debit.debitedAmount,
+            type: "debit",
+            status: "Debited",
+            beneficiaryId: debit.beneficiary,
+          })),
+        ];
+    
+        // Sort transactions by date in descending order
+        allTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+        // Calculate running total balance
+        let runningTotal = 0;
+        const totalBalanceDetails = allTransactions.map((transaction) => {
+          runningTotal += transaction.type === "credit" ? transaction.amount : -transaction.amount;
+          return { ...transaction, runningTotal };
+        });
+    
+        setTransactions(totalBalanceDetails);
+      } catch (error) {
+        console.error("Error fetching transaction details:", error);
+      }
+    };
+    
 
-  const [splitDetails, setSplitDetails] = useState([])
-  const fetchSplitDetails = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/splitses/${id}`)
-      setSplitDetails(response.data) // Assuming you've added a state variable 'splitDetails' for storing the split data
-    } catch (error) {
-      console.error("Error fetching split details:", error)
-    }
-  }
-  // Calculate total balance
-  let runningTotal = 0
-  const totalBalanceDetails = splitDetails.map(split => {
-    runningTotal += split.totalamount
-    return { ...split, runningTotal }
-  })
+    fetchData();
+    fetchTransactions();
+  }, [id]);
+
+  const printInvoice = () => {
+    window.print();
+  };
+
   return (
     <React.Fragment>
-      <Navbar />
-
-      <Row>
+      <Navbar/>
+        <Row >
         <Col xs="12" className="container">
           <Card>
             <CardBody>
               <Row>
                 <Col xs="12">
                   <div className="invoice-title">
-                    {/* <h4 className="float-end font-size-16">
-                      <strong>Id: {beneficiarys._id}</strong>
-                    </h4> */}
                     <h3>
                       <img src={imgdark} alt="logo" height="34" />
                     </h3>
@@ -100,14 +123,13 @@ const BenificiariesDetails = props => {
                         <br />
                         {beneficiarys.category}
                         <br />
-                        Physically challenged:{" "}
-                        {beneficiarys.physically_challenged}
+                        Physically challenged: {beneficiarys.physically_challenged}
                         <br />
                         Health status: {beneficiarys.health_status}
                         <br />
-                        Merital status : {beneficiarys.marital}
+                        Marital status: {beneficiarys.marital}
                         <br />
-                        Family members : {beneficiarys.family_members}
+                        Family members: {beneficiarys.family_members}
                       </address>
                     </Col>
                     <Col xs="6" className="mt-4 text-end">
@@ -135,16 +157,13 @@ const BenificiariesDetails = props => {
                       <h3 className="font-size-16">
                         <strong>Transactions</strong>
                         <div className="float-end">
-                          <Link
-                            to="#"
-                            className="btn btn-dark waves-effect waves-light"
-                          >
+                          <Link to="#" className="btn btn-dark waves-effect waves-light">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="16"
                               height="16"
                               fill="currentColor"
-                              class="bi bi-funnel-fill"
+                              className="bi bi-funnel-fill"
                               viewBox="0 0 16 16"
                             >
                               <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z" />
@@ -163,13 +182,13 @@ const BenificiariesDetails = props => {
                           <thead>
                             <tr>
                               <td>
-                                <strong>Date&Time</strong>
+                                <strong>Date & Time</strong>
                               </td>
                               <td className="text-center">
                                 <strong>Beneficiary Id</strong>
                               </td>
                               <td className="text-center">
-                                <strong>Credit</strong>
+                                <strong>Transaction</strong>
                               </td>
                               <td className="text-end">
                                 <strong>Status</strong>
@@ -179,28 +198,26 @@ const BenificiariesDetails = props => {
                               </td>
                             </tr>
                           </thead>
-                          {totalBalanceDetails.map(split => {
-                            // Format the date to remove time and keep only YYYY-MM-DD
-                            const formattedDate = new Date(
-                              split.date
-                            ).toLocaleDateString("en-CA")
+                          <tbody>
+                            {transactions.map((transaction) => {
+                              const formattedDate = new Date(transaction.date).toLocaleDateString("en-CA");
 
-                            return (
-                              <tr key={split._id}>
-                                <td>{formattedDate}</td>
-                                <td className="text-center">
-                                  {split.beneficiary.benificiary_id}
-                                </td>
-                                <td className="text-center">
-                                  +{split.totalamount}
-                                </td>
-                                <td className="text-end">{split.status}</td>
-                                <td className="text-end">
-                                  {split.runningTotal}
-                                </td>
-                              </tr>
-                            )
-                          })}
+                              return (
+                                <tr key={transaction._id}>
+                                  <td>{formattedDate}</td>
+                                  {/* <td className="text-center">{transaction.beneficiaryId}</td> */}
+                                  <td className="text-center">{beneficiarys.benificiary_id}</td>
+                                  <td className="text-center">
+                                    {transaction.type === "credit"
+                                      ? `+${transaction.amount}`
+                                      : `-${transaction.amount}`}
+                                  </td>
+                                  <td className="text-end">{transaction.status}</td>
+                                  <td className="text-end">{transaction.runningTotal}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
                         </table>
                       </div>
 
@@ -213,10 +230,7 @@ const BenificiariesDetails = props => {
                           >
                             <i className="fa fa-print"></i>
                           </Link>{" "}
-                          <Link
-                            to="#"
-                            className="btn btn-primary waves-effect waves-light"
-                          >
+                          <Link to="#" className="btn btn-primary waves-effect waves-light">
                             Send
                           </Link>
                         </div>
@@ -229,9 +243,8 @@ const BenificiariesDetails = props => {
           </Card>
         </Col>
       </Row>
-      {/* ))} */}
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default BenificiariesDetails
+export default connect(null, { setBreadcrumbItems })(BenificiaryDetails);

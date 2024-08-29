@@ -85,13 +85,16 @@ const UiTabsAccordions = () => {
     return dateB - dateA;
   });
 
+  const handleClick = () => {
+    window.location.href = "/allsplit";
+  };
   return (
     <React.Fragment>
       <Row>
         <Col xl={12}>
           <Card>
             <CardBody>
-              <CardTitle className="h4" style={{textAlign: "center"}}>SPLIT DETAILS</CardTitle>
+              <CardTitle className="h4" style={{display:"flex"}} ><h4>SPLIT DETAILS</h4><Button style={{marginLeft:"auto",backgroundColor:"var(--bs-primary)",border:"none"}} onClick={handleClick}>Manage</Button></CardTitle>
 
               <div className="accordion" id="accordion">
                 {sortedDates.map((splitDate) => (
