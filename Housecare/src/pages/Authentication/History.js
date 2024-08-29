@@ -158,7 +158,10 @@ const UiTabsAccordions = () => {
                           </thead>
                           <tbody>
                             {groupedSplits[splitDate].map((split, index) => (
-                              <tr key={index}>
+                              <tr 
+                                key={index}
+                                style={split.status === 'Pending' ? { backgroundColor: '#f8d7da' } : {}}
+                              >
                                 <td>
                                   <input
                                     type="checkbox"

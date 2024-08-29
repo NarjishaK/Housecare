@@ -1,5 +1,6 @@
 import PropTypes from "prop-types"
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useRef,useState } from "react"
+import { BASE_URL } from "../../pages/Authentication/handle-api"
 
 // //Import Scrollbar
 import SimpleBar from "simplebar-react"
@@ -11,6 +12,7 @@ import { Link } from "react-router-dom"
 
 //i18n
 import { withTranslation } from "react-i18next"
+import axios from "axios"
 
 const SidebarContent = props => {
   const ref = useRef();
@@ -136,16 +138,40 @@ const SidebarContent = props => {
     }
   }
 
+  const [notificationCount, setNotificationCount] = useState(0)
+
+  useEffect(() => {
+    const fetchNotificationCount = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/count`)
+        setNotificationCount(response.data.count)
+      } catch (error) {
+        console.error("Error fetching notification count:", error)
+      }
+    }
+
+    fetchNotificationCount()
+  }, [])
+
+  const handleResetNotifications = async () => {
+    try {
+      await axios.post(`${BASE_URL}/reset`)
+      setNotificationCount(0)
+      console.log("Notification count reset successfully")
+    } catch (error) {
+      console.error("Error resetting notification count:", error)
+    }
+  }
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            <li className="menu-title">{props.t("Main")} </li>
+            {/* <li className="menu-title">{props.t("Main")} </li> */}
             <li>
               <Link to="/dashboard" className="waves-effect">
                 <i className="mdi mdi-view-dashboard"></i>
-                <span className="badge rounded-pill bg-primary float-end">2</span>
+                {/* <span className="badge rounded-pill bg-primary float-end">2</span> */}
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
@@ -160,6 +186,26 @@ const SidebarContent = props => {
                 <i className="mdi mdi-account-group"></i>
                 <span>{props.t("Charity Organaization")}</span>
               </Link>
+            </li>
+            <li>
+            <Link to="/beneficiary" className="nav-link">
+                    <i className="mdi mdi-account-group"></i>
+                    <span>{props.t("Beneficiary")}</span>
+                  </Link>
+            </li>
+            <li>
+            <Link
+                    to="/history-split"
+                    className="nav-link"
+                    onClick={handleResetNotifications}
+                  >
+                    <i className="mdi mdi-format-line-weight"></i>
+                    <span className="badge rounded-pill bg-primary float-end">
+                      {" "}
+                      {notificationCount}
+                    </span>
+                    <span>{props.t("History")}</span>
+                  </Link>
             </li>
 
             {/* <li>
@@ -305,7 +351,7 @@ const SidebarContent = props => {
             
             
 
-            <li className="menu-title">Authentication</li>
+            {/* <li className="menu-title">Authentication</li>
 
             <li>
               <Link to="/#" className="has-arrow waves-effect">
@@ -322,7 +368,7 @@ const SidebarContent = props => {
                   <Link to="/auth-lock-screen">{props.t("Lock Screen")}</Link>
                 </li>
               </ul>
-            </li>
+            </li> */}
 
             {/* <li>
               <Link to="/#" className="has-arrow waves-effect">
