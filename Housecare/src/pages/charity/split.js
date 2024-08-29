@@ -185,7 +185,7 @@ const App = () => {
     try {
       const charityDetails = JSON.parse(localStorage.getItem("charitydetails"))
       if (!charityDetails) return
-
+  
       // Filter out beneficiaries with an amount of 0
       const splits = data
         .filter(item => parseFloat(item.amount) > 0)
@@ -195,19 +195,29 @@ const App = () => {
           beneficiary: item.id,
           date: new Date().toISOString(),
         }))
-
-        if (splits.length === 0) {
-          await Swal.fire({
-            title: 'No Beneficiaries',
-            text: 'No beneficiaries with non-zero amounts to save.',
-            icon: 'info',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-          });
-          return;
-        }
+  
+      if (splits.length === 0) {
+        await Swal.fire({
+          title: 'No Beneficiaries',
+          text: 'No beneficiaries with non-zero amounts to save.',
+          icon: 'info',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
+  
+      // Save splits to the backend
       await axios.post(`${BASE_URL}/api/splits`, { splits })
-
+  
+      // Update beneficiaries' balances
+      const balanceUpdates = splits.map(split => ({
+        beneficiaryId: split.beneficiary,
+        newBalance: parseFloat(split.splitamount)
+      }))
+      
+      await axios.post(`${BASE_URL}/benificiary/update-balances`, { balanceUpdates })
+  
       await Swal.fire({
         title: 'Success',
         text: 'Data saved successfully!',
@@ -215,7 +225,7 @@ const App = () => {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'OK'
       });
-      console.log("Splits saved successfully")
+      console.log("Splits and balances saved successfully")
       window.location.href = "/history"
     } catch (error) {
       console.error("Error saving data:", error)
@@ -229,6 +239,7 @@ const App = () => {
       setShowAlert(true)
     }
   }
+  
 
   //share pdf through mail
   const sendEmail = () => {
@@ -504,11 +515,13 @@ const App = () => {
                 onClick={handleShareEmail}
                 style={{
                   backgroundColor: "transparent",
-                  border: "none",
+                  borderColor: "#7A6FBE",
                   color: "black",
+                   marginRight:"10px",
+
                 }}
               >
-                {" "}
+                SHARE{" "}  
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -523,8 +536,8 @@ const App = () => {
               </Button>
               <Button
                 onClick={handleSend}
-                style={{ backgroundColor: "transparent", border: "none" }}
-              >
+                style={{ backgroundColor: "transparent", borderColor: "green",color:"black", marginRight:"10px" }}
+              >DOWNLOAD {" "}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -545,8 +558,8 @@ const App = () => {
               </Button>
               <Button
                 onClick={handleClear}
-                style={{ backgroundColor: "transparent", border: "none" }}
-              >
+                style={{ backgroundColor: "transparent", borderColor: "red",color:"black" }}
+              >RESET {" "}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"

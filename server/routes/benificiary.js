@@ -19,6 +19,11 @@ router.get("/",Authentication,Controller.list);
 router.get("/:id",Authentication, Controller.edit);
 router.put("/:id",Authentication, Controller.update);
 router.delete("/:id",Authentication, Controller.delete);
+router.put("/benificiary/:id",Controller. updateBeneficiaryBalance);
 
+router.post('/debited', Controller.createDebitedRecord);
+
+router.put('/beneficiaries/:id', Controller.updateBeneficiary);
+router.post('/update-balances',Controller.updateBalances);
 
 module.exports = router;

@@ -547,7 +547,7 @@ function Staff() {
                       </Button>
                       <Button
                         // color="danger"
-                        style={{ paddingInline: "10px", width: "75px" }}
+                        style={{ paddingInline: "10px", width: "75px",backgroundColor:"transparent",color:"black" }}
                         className="waves-effect waves-light"
                         disabled={isRoleStaff()}
                         onClick={() =>

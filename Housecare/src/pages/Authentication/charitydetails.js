@@ -959,11 +959,11 @@ function CharityDetails() {
                         </svg>
                       </Link>{" "} */}
                       BENIFICIARIES
-                      <Button style={{marginLeft:"auto",backgroundColor: "var(--bs-primary)",border:"none"}}>
-                      <Link
-                        onClick={() => {
+                      <Button style={{marginLeft:"auto",backgroundColor: "var(--bs-primary)",border:"none"}} onClick={() => {
                           setmodals(!modals)
-                        }}
+                        }}>
+                      <Link
+                        
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -991,7 +991,7 @@ function CharityDetails() {
                           setmodals(!modals)
                         }}
                       >
-                        Admin Form
+                        CREATE NEW BENEFICIARY
                       </ModalHeader>
                       <ModalBody>
                         <form>
@@ -1291,7 +1291,8 @@ function CharityDetails() {
                                 <input
                                   className="form-control"
                                   name="Balance"
-                                  value={datas.Balance}
+                                  value={"0" ||datas.Balance}
+                                  
                                   onChange={handleChanges}
                                   placeholder="Balance"
                                   type="number"

@@ -147,6 +147,12 @@ const Navbar = props => {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link to="/beneficiary" className="nav-link">
+                    <i className="mdi mdi-account-group"></i>
+                    <span>{props.t("Beneficiary")}</span>
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link
                     to="/history-split"
                     className="nav-link"

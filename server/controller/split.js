@@ -1,4 +1,5 @@
 const Splits = require("../model/split");
+const Debited = require("../model/debited");
 const Benificiary = require("../model/benificiary");
 const Notifications = require("../model/notification");
 const nodemailer = require('nodemailer');
@@ -253,3 +254,22 @@ exports.sendEmail = async (req, res) => {
   }
 };
 
+////transactions
+exports.getTransactions = async (req, res) => {
+  try {
+      const beneficiaryId = req.params.id;
+
+      // Fetch credited details
+      const creditedDetails = await Splits.find({ beneficiary: beneficiaryId });
+
+      // Fetch debited details
+      const debitedDetails = await Debited.find({ beneficiary: beneficiaryId });
+
+      res.json({
+          creditedDetails,
+          debitedDetails
+      });
+  } catch (error) {
+      res.status(500).json({ message: "Error fetching transaction details", error });
+  }
+};

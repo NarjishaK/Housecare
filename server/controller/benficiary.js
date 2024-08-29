@@ -1,5 +1,8 @@
 const Benificiaries = require("../model/benificiary");
 const asyncHandler = require("express-async-handler");
+const Debited = require('../model/debited');
+
+
 
 exports.create = asyncHandler(async (req, res) => {
   const {
@@ -155,3 +158,87 @@ exports.delete = asyncHandler(async (req, res) => {
 		return res.status(500).json({ message: 'an error occured in Benificiary delete' });
 	}
 });
+
+//update balance
+exports.updateBeneficiaryBalance = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { Balance } = req.body;
+
+    const beneficiary = await Benificiaries.findById(id);
+    if (!beneficiary) {
+      return res.status(404).send("Beneficiary not found");
+    }
+
+    beneficiary.Balance = Balance;
+    await beneficiary.save();
+
+    res.send(beneficiary);
+  } catch (error) {
+    res.status(500).send("Error updating beneficiary balance");
+  }
+};
+
+
+///
+
+// Create a new debited record
+exports. createDebitedRecord = async (req, res) => {
+  try {
+      const { debitedAmount, debitedDate, transactionId, beneficiary } = req.body;
+
+      const newDebited = new Debited({
+          debitedAmount,
+          debitedDate,
+          transactionId,
+          beneficiary
+      });
+
+      await newDebited.save();
+      res.status(201).json(newDebited);
+  } catch (error) {
+      console.error('Error creating debited record:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+};
+// Example of a controller update function
+exports.updateBeneficiary = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { debitedAmount, debitedDate, Balance } = req.body;
+    
+    const updatedBeneficiary = await Benificiaries.findByIdAndUpdate(
+      id,
+      { debitedAmount, debitedDate, Balance }, // Ensure all necessary fields are updated
+      { new: true }
+    );
+
+    if (!updatedBeneficiary) {
+      return res.status(404).send('Beneficiary not found');
+    }
+
+    res.json(updatedBeneficiary);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+};
+
+//balanceupdate splited tobalance
+exports.updateBalances = async (req, res) => {
+  try {
+    const { balanceUpdates } = req.body;
+
+    await Promise.all(balanceUpdates.map(async (update) => {
+      const beneficiary = await Benificiaries.findById(update.beneficiaryId);
+      if (beneficiary) {
+        beneficiary.Balance += update.newBalance;
+        await beneficiary.save();
+      }
+    }));
+
+    res.status(200).json({ message: 'Balances updated successfully' });
+  } catch (error) {
+    console.error('Error updating balances:', error);
+    res.status(500).json({ message: 'Error updating balances' });
+  }
+};

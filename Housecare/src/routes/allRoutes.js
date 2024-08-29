@@ -75,6 +75,7 @@ import BenificiariesDetails from "pages/charity/beneficiariesdetails"
 import Split from "pages/charity/split"
 import Profile from "pages/charity/profile"
 import Beneficiary from "pages/charity/beneficiary"
+import Allbeneficiaries from "pages/Authentication/allbeneficiary"
 // import New from "pages/charity/new"
 import New from "pages/charity/splitDetails"
 import SplitHistory from "pages/Authentication/splithistory"
@@ -97,6 +98,7 @@ const userRoutes = [
   { path: "/datesplits/:id", component: <Datesplits /> },
   {path: "/history-split" , component: <History/>},
   {path: "/latest-notifications" , component: <LatestNotifications/>},
+  {path: "/beneficiary" , component: <Allbeneficiaries/>},
 
 
   // //calendar

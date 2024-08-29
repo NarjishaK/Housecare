@@ -17,6 +17,10 @@ const benificiarySchema = mongoose.Schema({
   Balance: { type: Number, required: true },
   category: { type: String, required: true },
   age: { type: Number, required: true },
+  // debitedDate: { type: Date }, 
+  // debitedAmount: { type: Number, default: 0 },
+  // totalamount: { type: Number, default: 0 },
+  // transactionId: { type: String },
 }, { timestamps: true });
 
 // Pre-save middleware to generate unique beneficiary_id

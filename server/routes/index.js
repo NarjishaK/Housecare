@@ -36,5 +36,7 @@ router.post('/sendmail', upload.single('excel'), splitsController.sendEmail);
 // router.post("/create", notificationController.createNotification);
 // router.get("/count", notificationController.getNotificationCount);
 // router.post("/reset", notificationController.resetNotificationCount);
+router.get("/benificiary/:id/transactions", splitsController.getTransactions);
+
 
 module.exports = router;
