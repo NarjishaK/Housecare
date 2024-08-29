@@ -84,6 +84,7 @@ const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
   return (
     <>
       <Navbar />
+      <div className="container">
       <div className={styles.dashboards}>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Fund Size</div>
@@ -115,6 +116,7 @@ const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
           <div className={styles.cardvalue}>{pendingApprovalsCount}</div>
           {/* <div className={styles.cardsubtext}>+1% From previous period</div> */}
         </div>
+      </div>
       </div>
     </>
   )

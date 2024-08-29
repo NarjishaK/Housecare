@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardBody, Label, Form, Input, Alert, Row, Col } from "reactstrap";
+import { Card, CardBody, Label, Form, Input, Row, Col } from "reactstrap";
+import Swal from "sweetalert2";
 import logoDark from "../../assets/images/logo-dark.png";
 import logoLight from "../../assets/images/logo-dark.png";
 import { useForm } from "helpers/useForms";
@@ -9,6 +10,27 @@ import { handleCharitySignin } from "../Authentication/handle-api";
 const CharityLoginPanel = () => {
   const [values, handleChange] = useForm({ email: "", password: "" });
   const [loginStatus, setLoginStatus] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleCharitySignin(e, values, (status) => {
+      setLoginStatus(status);
+      if (status === "success") {
+        Swal.fire({
+          icon: "success",
+          title: "Login successful",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else if (status === "error") {
+        Swal.fire({
+          icon: "error",
+          title: "Login failed",
+          text: "Please try again.",
+        });
+      }
+    });
+  };
 
   return (
     <CardBody className="pt-0">
@@ -23,16 +45,7 @@ const CharityLoginPanel = () => {
         <h4 className="text-muted font-size-18 mb-1 text-center">
           Charity Organization
         </h4>
-        <Form
-          className="form-horizontal mt-4"
-          onSubmit={e => handleCharitySignin(e, values, setLoginStatus)}
-        >
-          {loginStatus === "success" && (
-            <Alert color="success">Login successful</Alert>
-          )}
-          {loginStatus === "error" && (
-            <Alert color="danger">Login failed. Please try again.</Alert>
-          )}
+        <Form className="form-horizontal mt-4" onSubmit={handleSubmit}>
           <div className="mb-3">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -64,7 +77,10 @@ const CharityLoginPanel = () => {
                   className="form-check-input"
                   id="customControlInline"
                 />
-                <label className="form-check-label" htmlFor="customControlInline">
+                <label
+                  className="form-check-label"
+                  htmlFor="customControlInline"
+                >
                   Remember me
                 </label>
               </div>
@@ -78,7 +94,6 @@ const CharityLoginPanel = () => {
               </button>
             </div>
           </Row>
-          {/* Remove or modify the Forgot Password link as needed */}
           <Row className="form-group mb-0">
             <Link to="/forgot-password" className="text-muted">
               <i className="mdi mdi-lock"></i> Forgot your password?

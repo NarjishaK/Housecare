@@ -112,6 +112,9 @@ function Beneficiary() {
       throw err;
     }
   };
+  const handleView = (beneficiaryId) => {
+    window.location.href=`/beneficiarydetails/${beneficiaryId}`
+  }
 
   return (
     <React.Fragment>
@@ -163,12 +166,14 @@ function Beneficiary() {
                           width: "75px",
                           backgroundColor: "transparent",
                           color: "black",
+                          marginRight: "10px",
                         }}
                         className="waves-effect waves-light"
                         onClick={() => handlePayNowClick(benificiary)}
                       >
                         PAY NOW
                       </Button>
+                      <Button style={{backgroundColor: "transparent",color: "black",}} onClick={()=>handleView(benificiary._id)}>VIEW</Button>
                     </td>
                   </tr>
                 ))}

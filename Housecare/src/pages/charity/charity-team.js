@@ -473,11 +473,12 @@ function CharityDetails() {
                           backgroundColor: "var(--bs-primary)",
                           border: "none",
                         }}
+                        onClick={() => {
+                          setmodal(!modal)
+                        }}
                       >
                         <Link
-                          onClick={() => {
-                            setmodal(!modal)
-                          }}
+                         
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -985,11 +986,12 @@ function CharityDetails() {
                           backgroundColor: "var(--bs-primary)",
                           border: "none",
                         }}
+                        onClick={() => {
+                          setmodals(!modals)
+                        }}
                       >
                         <Link
-                          onClick={() => {
-                            setmodals(!modals)
-                          }}
+                          
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

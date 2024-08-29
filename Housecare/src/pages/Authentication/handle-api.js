@@ -474,7 +474,6 @@ export const handleCharitySignin = async (e, values, setLoginStatus) => {
     setLoginStatus(true);
     console.log("Login successful");
     window.location.href = "/dashboards";
-    alert("success")
     }
   } catch (err) {
     setLoginStatus("error")
