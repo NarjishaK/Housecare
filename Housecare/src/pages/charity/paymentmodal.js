@@ -18,14 +18,25 @@ const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
   };
 
   const handleChange = (e) => {
-    const value = e.target.value;
-    setAmount(value);
-    if (value >= 1) {
-      setIsInvalid(false);
+    let value = e.target.value;
+  
+    // Convert to a number, and if the value is not a valid number, set it to an empty string
+    const numericValue = parseInt(value, 10);
+    
+    if (!isNaN(numericValue)) {
+      setAmount(numericValue);
+      if (numericValue >= 1) {
+        setIsInvalid(false);
+      } else {
+        setIsInvalid(true);
+      }
     } else {
+      setAmount('');  // Reset amount if input is not a valid number
       setIsInvalid(true);
     }
   };
+  
+  
 
   return (
     <Modal isOpen={isOpen} toggle={toggle}>

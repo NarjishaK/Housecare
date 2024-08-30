@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, Card, CardBody } from "reactstrap";
+import { Col, Row, Card, CardBody, Button } from "reactstrap";
 import { Link, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { setBreadcrumbItems } from "../../store/actions";
@@ -219,6 +219,8 @@ const BenificiaryDetails = (props) => {
 
                       <div className="d-print-none">
                         <div className="float-end">
+                          
+                          <Button style={{backgroundColor:"transparent",marginRight:"10px",color:"black"}}>Total Amount : {beneficiarys.Balance}</Button>
                           <Link
                             to="#"
                             onClick={printInvoice}
