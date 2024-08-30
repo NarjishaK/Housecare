@@ -262,15 +262,15 @@ function CharityDetails() {
     if (!datas.health_status)
       errors.health_status = "Health Status is required."
     if (!datas.marital) errors.marital = "Marital Status is required."
-    if (!datas.navision_linked_no)
-      errors.navision_linked_no = "Navision Number is required."
+    // if (!datas.navision_linked_no)
+      // errors.navision_linked_no = "Navision Number is required."
     if (!datas.physically_challenged)
       errors.physically_challenged = "Physically Challenged is required."
     if (!datas.family_members)
       errors.family_members = "Family Members is required."
     if (!datas.account_status)
       errors.account_status = "Account Status is required."
-    if (!datas.Balance) errors.Balance = "Balance is required."
+    // if (!datas.Balance) errors.Balance = "Balance is required."
 
     setValidationErrors(errors)
 
@@ -334,7 +334,7 @@ function CharityDetails() {
         email_id: benificiaryDetails.email_id,
         number: benificiaryDetails.number,
         nationality: benificiaryDetails.nationality,
-        Balance: benificiaryDetails.Balance,
+        // Balance: benificiaryDetails.Balance,
         sex: benificiaryDetails.sex,
         health_status: benificiaryDetails.health_status,
         marital: benificiaryDetails.marital,
@@ -365,15 +365,15 @@ function CharityDetails() {
     if (!datas.health_status)
       errors.health_status = "Health Status is required."
     if (!datas.marital) errors.marital = "Marital Status is required."
-    if (!datas.navision_linked_no)
-      errors.navision_linked_no = "Navision Number is required."
+    // if (!datas.navision_linked_no)
+    //   errors.navision_linked_no = "Navision Number is required."
     if (!datas.physically_challenged)
       errors.physically_challenged = "Physically Challenged is required."
     if (!datas.family_members)
       errors.family_members = "Family Members is required."
     if (!datas.account_status)
       errors.account_status = "Account Status is required."
-    if (!datas.Balance) errors.Balance = "Balance is required."
+    // if (!datas.Balance) errors.Balance = "Balance is required."
 
     setValidationErrors(errors)
 
@@ -1211,11 +1211,11 @@ function CharityDetails() {
                                   placeholder="Navision linked no"
                                   type="text"
                                 />
-                                {validationErrors.navision_linked_no && (
+                                {/* {validationErrors.navision_linked_no && (
                                   <small className="text-danger">
                                     {validationErrors.navision_linked_no}
                                   </small>
-                                )}
+                                )} */}
                               </div>
                             </Col>
                           </Row>
@@ -1322,7 +1322,7 @@ function CharityDetails() {
                                 )}
                               </div>
                             </Col>
-                            <Col lg={4}>
+                            {/* <Col lg={4}>
                               <div className="mb-3">
                                 <label htmlFor="Balance">Balance</label>
                                 <input
@@ -1339,7 +1339,7 @@ function CharityDetails() {
                                   </small>
                                 )}
                               </div>
-                            </Col>
+                            </Col> */}
                           </Row>
                           <Row>
                             <Col lg={12}>
@@ -1384,7 +1384,7 @@ function CharityDetails() {
                         <td>{benificiary.email_id}</td>
                         <td>{benificiary.nationality}</td>
                         <td>{benificiary.sex}</td>
-                        <td>{benificiary.Balance}</td>
+                        <td>{benificiary.Balance || 0}</td>
                         <td
                           style={{
                             textAlign: "center",
@@ -1636,11 +1636,11 @@ function CharityDetails() {
                                         placeholder="Navision linked no"
                                         type="text"
                                       />
-                                      {validationErrors.navision_linked_no && (
+                                      {/* {validationErrors.navision_linked_no && (
                                         <small className="text-danger">
                                           {validationErrors.navision_linked_no}
                                         </small>
-                                      )}
+                                      )} */}
                                     </div>
                                   </Col>
                                 </Row>
@@ -1751,7 +1751,7 @@ function CharityDetails() {
                                       )}
                                     </div>
                                   </Col>
-                                  <Col lg={4}>
+                                  {/* <Col lg={4}>
                                     <div className="mb-3">
                                       <label htmlFor="Balance">Balance</label>
                                       <input
@@ -1768,7 +1768,7 @@ function CharityDetails() {
                                         </small>
                                       )}
                                     </div>
-                                  </Col>
+                                  </Col> */}
                                 </Row>
                                 <Row>
                                   <Col lg={12}>

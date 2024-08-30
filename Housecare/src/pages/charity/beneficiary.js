@@ -94,15 +94,15 @@ const Beneficiary = () => {
     if (!datas.health_status)
       errors.health_status = "Health Status is required."
     if (!datas.marital) errors.marital = "Marital Status is required."
-    if (!datas.navision_linked_no)
-      errors.navision_linked_no = "Navision Number is required."
+    // if (!datas.navision_linked_no)
+    //   errors.navision_linked_no = "Navision Number is required."
     if (!datas.physically_challenged)
       errors.physically_challenged = "Physically Challenged is required."
     if (!datas.family_members)
       errors.family_members = "Family Members is required."
     if (!datas.account_status)
       errors.account_status = "Account Status is required."
-    if (!datas.Balance) errors.Balance = "Balance is required."
+    // if (!datas.Balance) errors.Balance = "Balance is required."
 
     setValidationErrors(errors)
 
@@ -168,11 +168,11 @@ const Beneficiary = () => {
         email_id: benificiaryDetails.email_id,
         number: benificiaryDetails.number,
         nationality: benificiaryDetails.nationality,
-        Balance: benificiaryDetails.Balance,
+        // Balance: benificiaryDetails.Balance,
         sex: benificiaryDetails.sex,
         health_status: benificiaryDetails.health_status,
         marital: benificiaryDetails.marital,
-        navision_linked_no: benificiaryDetails.navision_linked_no,
+        // navision_linked_no: benificiaryDetails.navision_linked_no,
         physically_challenged: benificiaryDetails.physically_challenged,
         family_members: benificiaryDetails.family_members,
         account_status: benificiaryDetails.account_status,
@@ -200,15 +200,15 @@ const Beneficiary = () => {
     if (!datas.health_status)
       errors.health_status = "Health Status is required."
     if (!datas.marital) errors.marital = "Marital Status is required."
-    if (!datas.navision_linked_no)
-      errors.navision_linked_no = "Navision Number is required."
+    // if (!datas.navision_linked_no)
+    //   errors.navision_linked_no = "Navision Number is required."
     if (!datas.physically_challenged)
       errors.physically_challenged = "Physically Challenged is required."
     if (!datas.family_members)
       errors.family_members = "Family Members is required."
     if (!datas.account_status)
       errors.account_status = "Account Status is required."
-    if (!datas.Balance) errors.Balance = "Balance is required."
+    // if (!datas.Balance) errors.Balance = "Balance is required."
 
     setValidationErrors(errors)
 
@@ -413,68 +413,7 @@ const Beneficiary = () => {
                               </div>
                             </Col>
                           </Row>
-                          <Row>
-                            <Col lg={4}>
-                              <div className="mb-3">
-                                <label htmlFor="health status">
-                                  Health status
-                                </label>
-                                <input
-                                  className="form-control"
-                                  name="health_status"
-                                  value={datas.health_status}
-                                  onChange={handleChanges}
-                                  placeholder="Health status"
-                                  type="text"
-                                />
-                                {validationErrors.health_status && (
-                                  <small className="text-danger">
-                                    {validationErrors.health_status}
-                                  </small>
-                                )}
-                              </div>
-                            </Col>
-                            <Col lg={4}>
-                              <div className="mb-3">
-                                <label htmlFor="marital">Marital</label>
-                                <select
-                                  className="form-control"
-                                  name="marital"
-                                  value={datas.marital}
-                                  onChange={handleChanges}
-                                >
-                                  <option>select marital</option>
-                                  <option value="married">Married</option>
-                                  <option value="single">Single</option>
-                                </select>
-                                {validationErrors.marital && (
-                                  <small className="text-danger">
-                                    {validationErrors.marital}
-                                  </small>
-                                )}
-                              </div>
-                            </Col>
-                            <Col lg={4}>
-                              <div className="mb-3">
-                                <label htmlFor="navision_linked_no">
-                                  Navision linked No
-                                </label>
-                                <input
-                                  className="form-control"
-                                  name="navision_linked_no"
-                                  value={datas.navision_linked_no}
-                                  onChange={handleChanges}
-                                  placeholder="Navision linked no"
-                                  type="text"
-                                />
-                                {validationErrors.navision_linked_no && (
-                                  <small className="text-danger">
-                                    {validationErrors.navision_linked_no}
-                                  </small>
-                                )}
-                              </div>
-                            </Col>
-                          </Row>
+
                           <Row>
                             <Col lg={4}>
                               <div className="mb-3">
@@ -578,7 +517,7 @@ const Beneficiary = () => {
                                 )}
                               </div>
                             </Col>
-                            <Col lg={4}>
+                            {/* <Col lg={4}>
                               <div className="mb-3">
                                 <label htmlFor="Balance">Balance</label>
                                 <input
@@ -595,8 +534,72 @@ const Beneficiary = () => {
                                   </small>
                                 )}
                               </div>
+                            </Col> */}
+                            <Col lg={4}>
+                              <div className="mb-3">
+                                <label htmlFor="marital">Marital</label>
+                                <select
+                                  className="form-control"
+                                  name="marital"
+                                  value={datas.marital}
+                                  onChange={handleChanges}
+                                >
+                                  <option>select marital</option>
+                                  <option value="married">Married</option>
+                                  <option value="single">Single</option>
+                                </select>
+                                {validationErrors.marital && (
+                                  <small className="text-danger">
+                                    {validationErrors.marital}
+                                  </small>
+                                )}
+                              </div>
                             </Col>
                           </Row>
+                          <Row>
+                            <Col lg={6}>
+                              <div className="mb-3">
+                                <label htmlFor="health status">
+                                  Health status
+                                </label>
+                                <input
+                                  className="form-control"
+                                  name="health_status"
+                                  value={datas.health_status}
+                                  onChange={handleChanges}
+                                  placeholder="Health status"
+                                  type="text"
+                                />
+                                {validationErrors.health_status && (
+                                  <small className="text-danger">
+                                    {validationErrors.health_status}
+                                  </small>
+                                )}
+                              </div>
+                            </Col>
+
+                            {/* <Col lg={4}>
+                              <div className="mb-3">
+                                <label htmlFor="navision_linked_no">
+                                  Navision linked No
+                                </label>
+                                <input
+                                  className="form-control"
+                                  name="navision_linked_no"
+                                  value={datas.navision_linked_no}
+                                  onChange={handleChanges}
+                                  placeholder="Navision linked no"
+                                  type="text"
+                                />
+                                {validationErrors.navision_linked_no && (
+                                  <small className="text-danger">
+                                    {validationErrors.navision_linked_no}
+                                  </small>
+                                )}
+                              </div>
+                            </Col> */}
+                          </Row>
+
                           <Row>
                             <Col lg={12}>
                               <div className="text-right">
@@ -640,7 +643,7 @@ const Beneficiary = () => {
                         <td>{benificiary.email_id}</td>
                         <td>{benificiary.nationality}</td>
                         <td>{benificiary.sex}</td>
-                        <td>{benificiary.Balance}</td>
+                        <td>{benificiary.Balance || 0}</td>
                         <td
                           style={{
                             textAlign: "center",
@@ -831,68 +834,6 @@ const Beneficiary = () => {
                                 <Row>
                                   <Col lg={4}>
                                     <div className="mb-3">
-                                      <label htmlFor="health status">
-                                        Health status
-                                      </label>
-                                      <input
-                                        className="form-control"
-                                        name="health_status"
-                                        value={datas.health_status}
-                                        onChange={handleChanges}
-                                        placeholder="Health status"
-                                        type="text"
-                                      />
-                                      {validationErrors.health_status && (
-                                        <small className="text-danger">
-                                          {validationErrors.health_status}
-                                        </small>
-                                      )}
-                                    </div>
-                                  </Col>
-                                  <Col lg={4}>
-                                    <div className="mb-3">
-                                      <label htmlFor="marital">Marital</label>
-                                      <select
-                                        className="form-control"
-                                        name="marital"
-                                        value={datas.marital}
-                                        onChange={handleChanges}
-                                      >
-                                        <option>select marital</option>
-                                        <option value="married">Married</option>
-                                        <option value="single">Single</option>
-                                      </select>
-                                      {validationErrors.marital && (
-                                        <small className="text-danger">
-                                          {validationErrors.marital}
-                                        </small>
-                                      )}
-                                    </div>
-                                  </Col>
-                                  <Col lg={4}>
-                                    <div className="mb-3">
-                                      <label htmlFor="navision_linked_no">
-                                        Navision linked No
-                                      </label>
-                                      <input
-                                        className="form-control"
-                                        name="navision_linked_no"
-                                        value={datas.navision_linked_no}
-                                        onChange={handleChanges}
-                                        placeholder="Navision linked no"
-                                        type="text"
-                                      />
-                                      {validationErrors.navision_linked_no && (
-                                        <small className="text-danger">
-                                          {validationErrors.navision_linked_no}
-                                        </small>
-                                      )}
-                                    </div>
-                                  </Col>
-                                </Row>
-                                <Row>
-                                  <Col lg={4}>
-                                    <div className="mb-3">
                                       <label htmlFor="physically_challenged">
                                         Physically Challenged
                                       </label>
@@ -1002,23 +943,69 @@ const Beneficiary = () => {
                                   </Col>
                                   <Col lg={4}>
                                     <div className="mb-3">
-                                      <label htmlFor="Balance">Balance</label>
-                                      <input
+                                      <label htmlFor="marital">Marital</label>
+                                      <select
                                         className="form-control"
-                                        name="Balance"
-                                        value={datas.Balance}
+                                        name="marital"
+                                        value={datas.marital}
                                         onChange={handleChanges}
-                                        placeholder="Balance"
-                                        type="number"
-                                      />
-                                      {validationErrors.Balance && (
+                                      >
+                                        <option>select marital</option>
+                                        <option value="married">Married</option>
+                                        <option value="single">Single</option>
+                                      </select>
+                                      {validationErrors.marital && (
                                         <small className="text-danger">
-                                          {validationErrors.Balance}
+                                          {validationErrors.marital}
                                         </small>
                                       )}
                                     </div>
                                   </Col>
                                 </Row>
+                                <Row>
+                                  <Col lg={6}>
+                                    <div className="mb-3">
+                                      <label htmlFor="health status">
+                                        Health status
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        name="health_status"
+                                        value={datas.health_status}
+                                        onChange={handleChanges}
+                                        placeholder="Health status"
+                                        type="text"
+                                      />
+                                      {validationErrors.health_status && (
+                                        <small className="text-danger">
+                                          {validationErrors.health_status}
+                                        </small>
+                                      )}
+                                    </div>
+                                  </Col>
+
+                                  {/* <Col lg={4}>
+                                    <div className="mb-3">
+                                      <label htmlFor="navision_linked_no">
+                                        Navision linked No
+                                      </label>
+                                      <input
+                                        className="form-control"
+                                        name="navision_linked_no"
+                                        value={datas.navision_linked_no}
+                                        onChange={handleChanges}
+                                        placeholder="Navision linked no"
+                                        type="text"
+                                      />
+                                      {validationErrors.navision_linked_no && (
+                                        <small className="text-danger">
+                                          {validationErrors.navision_linked_no}
+                                        </small>
+                                      )}
+                                    </div>
+                                  </Col> */}
+                                </Row>
+
                                 <Row>
                                   <Col lg={12}>
                                     <div className="text-right">

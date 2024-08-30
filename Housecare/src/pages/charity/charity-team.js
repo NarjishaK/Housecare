@@ -267,15 +267,15 @@ function CharityDetails() {
     if (!datas.health_status)
       errors.health_status = "Health Status is required."
     if (!datas.marital) errors.marital = "Marital Status is required."
-    if (!datas.navision_linked_no)
-      errors.navision_linked_no = "Navision Number is required."
+    // if (!datas.navision_linked_no)
+    //   errors.navision_linked_no = "Navision Number is required."
     if (!datas.physically_challenged)
       errors.physically_challenged = "Physically Challenged is required."
     if (!datas.family_members)
       errors.family_members = "Family Members is required."
     if (!datas.account_status)
       errors.account_status = "Account Status is required."
-    if (!datas.Balance) errors.Balance = "Balance is required."
+    // if (!datas.Balance) errors.Balance = "Balance is required."
 
     setValidationErrors(errors)
 
@@ -339,11 +339,11 @@ function CharityDetails() {
         email_id: benificiaryDetails.email_id,
         number: benificiaryDetails.number,
         nationality: benificiaryDetails.nationality,
-        Balance: benificiaryDetails.Balance,
+        // Balance: benificiaryDetails.Balance,
         sex: benificiaryDetails.sex,
         health_status: benificiaryDetails.health_status,
         marital: benificiaryDetails.marital,
-        navision_linked_no: benificiaryDetails.navision_linked_no,
+        // navision_linked_no: benificiaryDetails.navision_linked_no,
         physically_challenged: benificiaryDetails.physically_challenged,
         family_members: benificiaryDetails.family_members,
         account_status: benificiaryDetails.account_status,
@@ -370,15 +370,15 @@ function CharityDetails() {
     if (!datas.health_status)
       errors.health_status = "Health Status is required."
     if (!datas.marital) errors.marital = "Marital Status is required."
-    if (!datas.navision_linked_no)
-      errors.navision_linked_no = "Navision Number is required."
+    // if (!datas.navision_linked_no)
+    //   errors.navision_linked_no = "Navision Number is required."
     if (!datas.physically_challenged)
       errors.physically_challenged = "Physically Challenged is required."
     if (!datas.family_members)
       errors.family_members = "Family Members is required."
     if (!datas.account_status)
       errors.account_status = "Account Status is required."
-    if (!datas.Balance) errors.Balance = "Balance is required."
+    // if (!datas.Balance) errors.Balance = "Balance is required."
 
     setValidationErrors(errors)
 
@@ -1202,20 +1202,18 @@ function CharityDetails() {
                             </Col>
                             <Col lg={4}>
                               <div className="mb-3">
-                                <label htmlFor="navision_linked_no">
-                                  Navision linked No
-                                </label>
+                                <label htmlFor="age">Age</label>
                                 <input
                                   className="form-control"
-                                  name="navision_linked_no"
-                                  value={datas.navision_linked_no}
+                                  name="age"
+                                  value={datas.age}
                                   onChange={handleChanges}
-                                  placeholder="Navision linked no"
-                                  type="text"
+                                  placeholder="Age"
+                                  type="number"
                                 />
-                                {validationErrors.navision_linked_no && (
+                                {validationErrors.age && (
                                   <small className="text-danger">
-                                    {validationErrors.navision_linked_no}
+                                    {validationErrors.age}
                                   </small>
                                 )}
                               </div>
@@ -1306,7 +1304,7 @@ function CharityDetails() {
                                 )}
                               </div>
                             </Col>
-                            <Col lg={4}>
+                            {/* <Col lg={4}>
                               <div className="mb-3">
                                 <label htmlFor="age">Age</label>
                                 <input
@@ -1323,25 +1321,8 @@ function CharityDetails() {
                                   </small>
                                 )}
                               </div>
-                            </Col>
-                            <Col lg={4}>
-                              <div className="mb-3">
-                                <label htmlFor="Balance">Balance</label>
-                                <input
-                                  className="form-control"
-                                  name="Balance"
-                                  value={datas.Balance}
-                                  onChange={handleChanges}
-                                  placeholder="Balance"
-                                  type="number"
-                                />
-                                {validationErrors.Balance && (
-                                  <small className="text-danger">
-                                    {validationErrors.Balance}
-                                  </small>
-                                )}
-                              </div>
-                            </Col>
+                            </Col> */}
+                           
                           </Row>
                           <Row>
                             <Col lg={12}>
@@ -1386,7 +1367,7 @@ function CharityDetails() {
                         <td>{benificiary.email_id}</td>
                         <td>{benificiary.nationality}</td>
                         <td>{benificiary.sex}</td>
-                        <td>{benificiary.Balance}</td>
+                        <td>{benificiary.Balance || 0}</td>
                         <td
                           style={{
                             textAlign: "center",
@@ -1628,20 +1609,18 @@ function CharityDetails() {
                                   </Col>
                                   <Col lg={4}>
                                     <div className="mb-3">
-                                      <label htmlFor="navision_linked_no">
-                                        Navision linked No
-                                      </label>
+                                      <label htmlFor="age">Age</label>
                                       <input
                                         className="form-control"
-                                        name="navision_linked_no"
-                                        value={datas.navision_linked_no}
+                                        name="age"
+                                        value={datas.age}
                                         onChange={handleChanges}
-                                        placeholder="Navision linked no"
-                                        type="text"
+                                        placeholder="Age"
+                                        type="number"
                                       />
-                                      {validationErrors.navision_linked_no && (
+                                      {validationErrors.age && (
                                         <small className="text-danger">
-                                          {validationErrors.navision_linked_no}
+                                          {validationErrors.age}
                                         </small>
                                       )}
                                     </div>
@@ -1739,25 +1718,8 @@ function CharityDetails() {
                                       )}
                                     </div>
                                   </Col>
-                                  <Col lg={4}>
-                                    <div className="mb-3">
-                                      <label htmlFor="age">Age</label>
-                                      <input
-                                        className="form-control"
-                                        name="age"
-                                        value={datas.age}
-                                        onChange={handleChanges}
-                                        placeholder="Age"
-                                        type="number"
-                                      />
-                                      {validationErrors.age && (
-                                        <small className="text-danger">
-                                          {validationErrors.age}
-                                        </small>
-                                      )}
-                                    </div>
-                                  </Col>
-                                  <Col lg={4}>
+                                 
+                                  {/* <Col lg={4}>
                                     <div className="mb-3">
                                       <label htmlFor="Balance">Balance</label>
                                       <input
@@ -1774,7 +1736,7 @@ function CharityDetails() {
                                         </small>
                                       )}
                                     </div>
-                                  </Col>
+                                  </Col> */}
                                 </Row>
                                 <Row>
                                   <Col lg={12}>
