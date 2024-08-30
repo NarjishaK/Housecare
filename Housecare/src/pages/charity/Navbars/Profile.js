@@ -16,10 +16,12 @@ import withRouter from "components/Common/withRouter"
 
 // users
 import user1 from "../../../assets/images/users/user-1.jpg"
+import { BASE_URL } from "pages/Authentication/handle-api"
 // const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
+  const charitydetails =JSON.parse(localStorage.getItem("charitydetails"))
   return (
     <React.Fragment>
       <Dropdown
@@ -28,16 +30,31 @@ const ProfileMenu = props => {
         className="d-inline-block"
       >
         <DropdownToggle
-          className="btn header-item waves-effect"
-          id="page-header-user-dropdown"
-          tag="button"
-        >
-          <img
-            className="rounded-circle header-profile-user"
-            src={user1}
-            alt="Header Avatar"
-          />
-        </DropdownToggle>
+      className="btn header-item waves-effect"
+      id="page-header-user-dropdown"
+      tag="button"
+      style={{
+        display: 'flex',
+        alignItems: 'stretch',
+        backgroundColor: 'transparent',
+        borderRadius: '10px',
+        padding: '10px',
+        alignContent:"space-between"
+      }}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+        <strong style={{ fontSize: '16px', marginRight: '10px'}}>{charitydetails.arbic}{" "} </strong>
+      <small style={{ fontSize: '12px',marginRight: '10px' }}>{charitydetails.authorizedperson}</small>
+
+      </div>
+      <img
+        className="rounded-circle header-profile-user"
+        src={`${BASE_URL}/upload/${charitydetails.image}`}
+        alt="Header Avatar"
+        style={{ width: '40px', height: '40px', marginRight: '10px' }}
+      />
+      
+    </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem
             tag="a"

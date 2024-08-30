@@ -9,6 +9,10 @@ exports.create = asyncHandler(async (req, res) => {
 		if (staffs) {
 			return res.status(400).json({ invalid: true, message: 'email is already exist' });
 		}
+		const staffsphone = await Charitystaffs.findOne({ phone });
+		if (staffsphone) {
+			return res.status(400).json({ invalid: true, message: 'phone number is already exist' });
+		}
 		const staff = await Charitystaffs.create({
 			name: name,
 			password: password,
@@ -64,6 +68,17 @@ exports.update = asyncHandler(async (req, res) => {
 		if (!staff) {
 			return res.status(400).json({ message: 'Staff not found' });
 		}
+		  // Check if the email already exists for another staff member
+		  const existingEmail = await Charitystaffs.findOne({ email, _id: { $ne: id } });
+		  if (existingEmail) {
+			return res.status(400).json({ message: 'Email already exists' });
+		  }
+	  
+		  // Check if the phone number already exists for another staff member
+		  const existingPhone = await Charitystaffs.findOne({ phone, _id: { $ne: id } });
+		  if (existingPhone) {
+			return res.status(400).json({ message: 'Phone number already exists' });
+		  }
 		staff.name = name;
 		staff.email = email;
 		staff.phone = phone;

@@ -181,7 +181,7 @@ function Staff() {
       console.error("Error updating staff:", err)
       await Swal.fire({
         title: 'Error!',
-        text: 'Update failed. Please try again.',
+        text: 'Update failed. Email or Phone number already exists.',
         icon: 'error',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'OK'

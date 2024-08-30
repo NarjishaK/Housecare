@@ -88,7 +88,7 @@ const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
       <div className={styles.dashboards}>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Fund Size</div>
-          <div className={styles.cardvalue}>$ {currentAmount || "000"}</div>
+          <div className={styles.cardvalue}>SAR {currentAmount || "000"}</div>
           {/* <div
             className={styles.cardsubtext}
             style={{
@@ -103,7 +103,7 @@ const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
         </div>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Invested</div>
-          <div className={styles.cardvalue}>$46,782</div>
+          <div className={styles.cardvalue}>SAR 46,782</div>
           {/* <div className={styles.cardsubtext}>-29% From previous period</div> */}
         </div>
         <div className={styles.cards}>

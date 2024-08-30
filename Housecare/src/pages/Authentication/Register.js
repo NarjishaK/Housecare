@@ -136,7 +136,7 @@ const Register = props => {
                       )}
                       {registrationStatus === "error" && (
                         <Alert color="danger">
-                          Registration failed Email is already exist
+                          Registration failed Email or Phone number is already exist
                         </Alert>
                       )}
 

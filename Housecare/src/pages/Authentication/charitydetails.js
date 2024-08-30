@@ -109,19 +109,19 @@ function CharityDetails() {
     staff => staff.charity === charitys.charity
   )
   //password validation
-  const [passwordError, setPasswordError] = useState("");
-  const validatePassword = (password) => {
+  const [passwordError, setPasswordError] = useState("")
+  const validatePassword = password => {
     if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters long.");
-      return false;
+      setPasswordError("Password must be at least 6 characters long.")
+      return false
     } else if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-      setPasswordError("Password must contain both letters and numbers.");
-      return false;
+      setPasswordError("Password must contain both letters and numbers.")
+      return false
     } else {
-      setPasswordError(""); 
-      return true;
+      setPasswordError("")
+      return true
     }
-  };
+  }
   //charity staff create
   const charitystaffCreate = async e => {
     e.preventDefault()
@@ -140,7 +140,7 @@ function CharityDetails() {
       return
     }
     if (!validatePassword(values.password)) {
-      return; 
+      return
     }
     const formData = new FormData()
     Object.keys(values).forEach(key => {
@@ -150,22 +150,22 @@ function CharityDetails() {
     try {
       await handleCharitystaff(formData)
       await Swal.fire({
-        title: 'Success!',
-        text: 'Charity staff added successfully.',
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });
+        title: "Success!",
+        text: "Charity staff added successfully.",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      })
       loadData()
       setmodal(false)
     } catch (err) {
       await Swal.fire({
-        title: 'Error!',
-        text: 'Email already exists.',
-        icon: 'error',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });
+        title: "Error!",
+        text: "Email or Phone number already exists.",
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      })
       console.log(err, "Charity staffs adding failed")
     }
   }
@@ -214,7 +214,7 @@ function CharityDetails() {
       return
     }
     if (!validatePassword(values.password)) {
-      return; 
+      return
     }
     const formData = new FormData()
     Object.keys(values).forEach(key => {
@@ -229,23 +229,22 @@ function CharityDetails() {
       await charityStaffUpdate(editId, formData)
       loadData()
       await Swal.fire({
-        title: 'Success!',
-        text: 'Update successful',
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });
+        title: "Success!",
+        text: "Update successful",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      })
       setEdit(false)
-      
     } catch (err) {
       console.error("Error updating charitystaff:", err)
       await Swal.fire({
-        title: 'Error!',
-        text: 'Update failed. Please try again.',
-        icon: 'error',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });
+        title: "Error!",
+        text: "Update failed.Email or Phone number already exists.",
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      })
     }
   }
   //create benificiary
@@ -260,12 +259,17 @@ function CharityDetails() {
     if (!datas.charity_name) errors.charity_name = "Charity Name is required."
     if (!datas.nationality) errors.nationality = "Nationality is required."
     if (!datas.sex) errors.sex = "Sex is required."
-    if (!datas.health_status) errors.health_status = "Health Status is required."
+    if (!datas.health_status)
+      errors.health_status = "Health Status is required."
     if (!datas.marital) errors.marital = "Marital Status is required."
-    if (!datas.navision_linked_no) errors.navision_linked_no = "Navision Number is required."
-    if (!datas.physically_challenged) errors.physically_challenged = "Physically Challenged is required."
-    if (!datas.family_members) errors.family_members = "Family Members is required."
-    if (!datas.account_status) errors.account_status = "Account Status is required."
+    if (!datas.navision_linked_no)
+      errors.navision_linked_no = "Navision Number is required."
+    if (!datas.physically_challenged)
+      errors.physically_challenged = "Physically Challenged is required."
+    if (!datas.family_members)
+      errors.family_members = "Family Members is required."
+    if (!datas.account_status)
+      errors.account_status = "Account Status is required."
     if (!datas.Balance) errors.Balance = "Balance is required."
 
     setValidationErrors(errors)
@@ -281,21 +285,23 @@ function CharityDetails() {
       await handleBenificiary(formData)
       fetchData()
       await Swal.fire({
-        title: 'Success!',
-        text: 'Beneficiary added successfully.',
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });
+        title: "Success!",
+        text: "Beneficiary added successfully.",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      })
+      setmodals(false)
     } catch (err) {
       console.log(err, "benificiary adding failed")
       await Swal.fire({
-        title: 'Error!',
-        text: 'Failed to add beneficiary. Please try again. Do not use an existing Email ID.',
-        icon: 'error',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });    }
+        title: "Error!",
+        text: "Failed to add beneficiary. Do not use an existing Email ID & Mobile Number.",
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      })
+    }
   }
   const fetchData = async () => {
     try {
@@ -356,12 +362,17 @@ function CharityDetails() {
     if (!datas.charity_name) errors.charity_name = "Charity Name is required."
     if (!datas.nationality) errors.nationality = "Nationality is required."
     if (!datas.sex) errors.sex = "Sex is required."
-    if (!datas.health_status) errors.health_status = "Health Status is required."
+    if (!datas.health_status)
+      errors.health_status = "Health Status is required."
     if (!datas.marital) errors.marital = "Marital Status is required."
-    if (!datas.navision_linked_no) errors.navision_linked_no = "Navision Number is required."
-    if (!datas.physically_challenged) errors.physically_challenged = "Physically Challenged is required."
-    if (!datas.family_members) errors.family_members = "Family Members is required."
-    if (!datas.account_status) errors.account_status = "Account Status is required."
+    if (!datas.navision_linked_no)
+      errors.navision_linked_no = "Navision Number is required."
+    if (!datas.physically_challenged)
+      errors.physically_challenged = "Physically Challenged is required."
+    if (!datas.family_members)
+      errors.family_members = "Family Members is required."
+    if (!datas.account_status)
+      errors.account_status = "Account Status is required."
     if (!datas.Balance) errors.Balance = "Balance is required."
 
     setValidationErrors(errors)
@@ -377,21 +388,23 @@ function CharityDetails() {
       await benificiaryUpdate(editedId, formData)
       fetchData()
       await Swal.fire({
-        title: 'Success!',
-        text: 'Update successful',
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });
+        title: "Success!",
+        text: "Update successful",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      })
+      setEdits(false)
     } catch (err) {
       console.error("Error updating benificiary:", err)
       await Swal.fire({
-        title: 'Error!',
-        text: 'Update failed. Please try again.',
-        icon: 'error',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
-      });    }
+        title: "Error!",
+        text: "Update failed. Email or phone number already exists.",
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      })
+    }
   }
   //benificiary details and transactions
   const handleShow = _id => {
@@ -441,26 +454,32 @@ function CharityDetails() {
               <CardTitle className="p" style={{ color: "gray" }}>
                 <Card>
                   <CardBody>
-                    <div style={{display:"flex",alignItems: "baseline"}}>
-
+                    <div style={{ display: "flex", alignItems: "baseline" }}>
                       ADMINS
-                      <Button style={{marginLeft:"auto",backgroundColor: "var(--bs-primary)",border:"none"}}>
-                        <Link
+                      <Button
+                        style={{
+                          marginLeft: "auto",
+                          backgroundColor: "var(--bs-primary)",
+                          border: "none",
+                        }}
                         onClick={() => {
                           setmodal(!modal)
                         }}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          color="gray"
-                          class="bi bi-plus-circle-dotted"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-                        </svg>
-                      </Link>{" "} ADD NEW ADMIN</Button>
+                        <Link>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            color="gray"
+                            class="bi bi-plus-circle-dotted"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                          </svg>
+                        </Link>{" "}
+                        ADD NEW ADMIN
+                      </Button>
                     </div>
 
                     <Modal
@@ -475,7 +494,7 @@ function CharityDetails() {
                           setmodal(!modal)
                         }}
                       >
-                        Admin Form
+                        CREATE NEW ADMIN
                       </ModalHeader>
                       <ModalBody>
                         <form>
@@ -545,19 +564,22 @@ function CharityDetails() {
                                   name="charity"
                                   className="form-control"
                                 >
-                                  <option>select charity</option>
-                                  {allcharity.map(charities => (
-                                    <option
-                                      key={charities._id}
-                                      value={charities.charity}
-                                      disabled={
-                                        charities.charity !== charitys.charity
-                                      }
-                                    >
-                                      {charities.charity}
-                                    </option>
-                                  ))}
+                                  <option value="">Select charity</option>
+                                  {allcharity
+                                    .filter(
+                                      charities =>
+                                        charities.charity === charitys.charity
+                                    ) // Filter out the charities that should be disabled
+                                    .map(charities => (
+                                      <option
+                                        key={charities._id}
+                                        value={charities.charity}
+                                      >
+                                        {charities.charity}
+                                      </option>
+                                    ))}
                                 </select>
+
                                 {validationErrors.charity && (
                                   <small className="text-danger">
                                     {validationErrors.charity}
@@ -597,8 +619,10 @@ function CharityDetails() {
                                   onChange={handleChange}
                                 />
                                 {passwordError && (
-                                    <small className="text-danger">{passwordError}</small>
-                                  )}
+                                  <small className="text-danger">
+                                    {passwordError}
+                                  </small>
+                                )}
                                 {validationErrors.password && (
                                   <small className="text-danger">
                                     {validationErrors.password}
@@ -734,7 +758,7 @@ function CharityDetails() {
                                 setEdit(!edit)
                               }}
                             >
-                              Form
+                              EDIT ADMIN
                             </ModalHeader>
                             <ModalBody>
                               <form>
@@ -804,19 +828,21 @@ function CharityDetails() {
                                         name="charity"
                                         className="form-control"
                                       >
-                                        <option>select charity</option>
-                                        {allcharity.map(charities => (
-                                          <option
-                                            key={charities._id}
-                                            value={charities.charity}
-                                            disabled={
-                                              charities.charity !==
+                                        <option value="">Select charity</option>
+                                        {allcharity
+                                          .filter(
+                                            charities =>
+                                              charities.charity ===
                                               charitys.charity
-                                            }
-                                          >
-                                            {charities.charity}
-                                          </option>
-                                        ))}
+                                          ) // Filter out the charities that should be disabled
+                                          .map(charities => (
+                                            <option
+                                              key={charities._id}
+                                              value={charities.charity}
+                                            >
+                                              {charities.charity}
+                                            </option>
+                                          ))}
                                       </select>
                                       {validationErrors.charity && (
                                         <small className="text-danger">
@@ -857,8 +883,10 @@ function CharityDetails() {
                                         onChange={handleChange}
                                       />
                                       {passwordError && (
-                                    <small className="text-danger">{passwordError}</small>
-                                  )}
+                                        <small className="text-danger">
+                                          {passwordError}
+                                        </small>
+                                      )}
                                       {validationErrors.password && (
                                         <small className="text-danger">
                                           {validationErrors.password}
@@ -941,7 +969,7 @@ function CharityDetails() {
               <CardTitle className="p" style={{ color: "gray" }}>
                 <Card>
                   <CardBody>
-                    <div style={{display:"flex",alignItems: "baseline"}}>
+                    <div style={{ display: "flex", alignItems: "baseline" }}>
                       {/* <Link
                         onClick={() => {
                           setmodals(!modals)
@@ -959,24 +987,30 @@ function CharityDetails() {
                         </svg>
                       </Link>{" "} */}
                       BENIFICIARIES
-                      <Button style={{marginLeft:"auto",backgroundColor: "var(--bs-primary)",border:"none"}} onClick={() => {
+                      <Button
+                        style={{
+                          marginLeft: "auto",
+                          backgroundColor: "var(--bs-primary)",
+                          border: "none",
+                        }}
+                        onClick={() => {
                           setmodals(!modals)
-                        }}>
-                      <Link
-                        
+                        }}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          color="gray"
-                          class="bi bi-plus-circle-dotted"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-                        </svg>
-                      </Link>{" "}ADD NEW BENEFICIARY
-</Button>
+                        <Link>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            color="gray"
+                            class="bi bi-plus-circle-dotted"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M8 0q-.264 0-.523.017l.064.998a7 7 0 0 1 .918 0l.064-.998A8 8 0 0 0 8 0M6.44.152q-.52.104-1.012.27l.321.948q.43-.147.884-.237L6.44.153zm4.132.271a8 8 0 0 0-1.011-.27l-.194.98q.453.09.884.237zm1.873.925a8 8 0 0 0-.906-.524l-.443.896q.413.205.793.459zM4.46.824q-.471.233-.905.524l.556.83a7 7 0 0 1 .793-.458zM2.725 1.985q-.394.346-.74.74l.752.66q.303-.345.648-.648zm11.29.74a8 8 0 0 0-.74-.74l-.66.752q.346.303.648.648zm1.161 1.735a8 8 0 0 0-.524-.905l-.83.556q.254.38.458.793l.896-.443zM1.348 3.555q-.292.433-.524.906l.896.443q.205-.413.459-.793zM.423 5.428a8 8 0 0 0-.27 1.011l.98.194q.09-.453.237-.884zM15.848 6.44a8 8 0 0 0-.27-1.012l-.948.321q.147.43.237.884zM.017 7.477a8 8 0 0 0 0 1.046l.998-.064a7 7 0 0 1 0-.918zM16 8a8 8 0 0 0-.017-.523l-.998.064a7 7 0 0 1 0 .918l.998.064A8 8 0 0 0 16 8M.152 9.56q.104.52.27 1.012l.948-.321a7 7 0 0 1-.237-.884l-.98.194zm15.425 1.012q.168-.493.27-1.011l-.98-.194q-.09.453-.237.884zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a7 7 0 0 1-.458-.793zm13.828.905q.292-.434.524-.906l-.896-.443q-.205.413-.459.793zm-12.667.83q.346.394.74.74l.66-.752a7 7 0 0 1-.648-.648zm11.29.74q.394-.346.74-.74l-.752-.66q-.302.346-.648.648zm-1.735 1.161q.471-.233.905-.524l-.556-.83a7 7 0 0 1-.793.458zm-7.985-.524q.434.292.906.524l.443-.896a7 7 0 0 1-.793-.459zm1.873.925q.493.168 1.011.27l.194-.98a7 7 0 0 1-.884-.237zm4.132.271a8 8 0 0 0 1.012-.27l-.321-.948a7 7 0 0 1-.884.237l.194.98zm-2.083.135a8 8 0 0 0 1.046 0l-.064-.998a7 7 0 0 1-.918 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                          </svg>
+                        </Link>{" "}
+                        ADD NEW BENEFICIARY
+                      </Button>
                     </div>
 
                     <Modal
@@ -1061,19 +1095,22 @@ function CharityDetails() {
                                   name="charity_name"
                                   className="form-control"
                                 >
-                                  <option>select charity</option>
-                                  {allcharity.map(charities => (
-                                    <option
-                                      key={charities._id}
-                                      value={charities.charity}
-                                      disabled={
-                                        charities.charity !== charitys.charity
-                                      }
-                                    >
-                                      {charities.charity}
-                                    </option>
-                                  ))}
+                                  <option value="">Select charity</option>
+                                  {allcharity
+                                    .filter(
+                                      charities =>
+                                        charities.charity === charitys.charity
+                                    ) // Only include charities that match
+                                    .map(charities => (
+                                      <option
+                                        key={charities._id}
+                                        value={charities.charity}
+                                      >
+                                        {charities.charity}
+                                      </option>
+                                    ))}
                                 </select>
+
                                 {validationErrors.charity_name && (
                                   <small className="text-danger">
                                     {validationErrors.charity_name}
@@ -1265,7 +1302,7 @@ function CharityDetails() {
                                     {validationErrors.age}
                                   </small>
                                 )}
-                                </div>
+                              </div>
                             </Col>
                             <Col lg={4}>
                               <div className="mb-3">
@@ -1283,7 +1320,7 @@ function CharityDetails() {
                                     {validationErrors.category}
                                   </small>
                                 )}
-                                </div>
+                              </div>
                             </Col>
                             <Col lg={4}>
                               <div className="mb-3">
@@ -1291,8 +1328,7 @@ function CharityDetails() {
                                 <input
                                   className="form-control"
                                   name="Balance"
-                                  value={"0" ||datas.Balance}
-                                  
+                                  value={"0" || datas.Balance}
                                   onChange={handleChanges}
                                   placeholder="Balance"
                                   type="number"
@@ -1412,7 +1448,7 @@ function CharityDetails() {
                                 setEdits(!edits)
                               }}
                             >
-                              Form
+                              EDIT BENIFICIARY
                             </ModalHeader>
                             <ModalBody>
                               <form>
@@ -1482,19 +1518,21 @@ function CharityDetails() {
                                         name="charity_name"
                                         className="form-control"
                                       >
-                                        <option>select charity</option>
-                                        {allcharity.map(charities => (
-                                          <option
-                                            key={charities._id}
-                                            value={charities.charity}
-                                            disabled={
-                                              charities.charity !==
+                                        <option value="">Select charity</option>
+                                        {allcharity
+                                          .filter(
+                                            charities =>
+                                              charities.charity ===
                                               charitys.charity
-                                            }
-                                          >
-                                            {charities.charity}
-                                          </option>
-                                        ))}
+                                          ) // Only include charities that match
+                                          .map(charities => (
+                                            <option
+                                              key={charities._id}
+                                              value={charities.charity}
+                                            >
+                                              {charities.charity}
+                                            </option>
+                                          ))}
                                       </select>
                                       {validationErrors.charity_name && (
                                         <small className="text-danger">
@@ -1624,10 +1662,11 @@ function CharityDetails() {
                                       </select>
                                       {validationErrors.physically_challenged && (
                                         <small className="text-danger">
-                                          {validationErrors.physically_challenged}
+                                          {
+                                            validationErrors.physically_challenged
+                                          }
                                         </small>
                                       )}
-
                                     </div>
                                   </Col>
                                   <Col lg={4}>
@@ -1676,42 +1715,42 @@ function CharityDetails() {
                                   </Col>
                                 </Row>
                                 <Row>
-                                <Col lg={4}>
-                              <div className="mb-3">
-                                <label htmlFor="Age">Age</label>
-                                <input
-                                  className="form-control"
-                                  name="age"
-                                  value={datas.age}
-                                  onChange={handleChanges}
-                                  placeholder="Age"
-                                  type="number"
-                                />
-                                {validationErrors.age && (
-                                  <small className="text-danger">
-                                    {validationErrors.age}
-                                  </small>
-                                )}
-                                </div>
-                            </Col>
-                            <Col lg={4}>
-                              <div className="mb-3">
-                                <label htmlFor="Category">Category</label>
-                                <input
-                                  className="form-control"
-                                  name="category"
-                                  value={datas.category}
-                                  onChange={handleChanges}
-                                  placeholder="Category"
-                                  type="text"
-                                />
-                                {validationErrors.category && (
-                                  <small className="text-danger">
-                                    {validationErrors.category}
-                                  </small>
-                                )}
-                                </div>
-                            </Col>
+                                  <Col lg={4}>
+                                    <div className="mb-3">
+                                      <label htmlFor="Age">Age</label>
+                                      <input
+                                        className="form-control"
+                                        name="age"
+                                        value={datas.age}
+                                        onChange={handleChanges}
+                                        placeholder="Age"
+                                        type="number"
+                                      />
+                                      {validationErrors.age && (
+                                        <small className="text-danger">
+                                          {validationErrors.age}
+                                        </small>
+                                      )}
+                                    </div>
+                                  </Col>
+                                  <Col lg={4}>
+                                    <div className="mb-3">
+                                      <label htmlFor="Category">Category</label>
+                                      <input
+                                        className="form-control"
+                                        name="category"
+                                        value={datas.category}
+                                        onChange={handleChanges}
+                                        placeholder="Category"
+                                        type="text"
+                                      />
+                                      {validationErrors.category && (
+                                        <small className="text-danger">
+                                          {validationErrors.category}
+                                        </small>
+                                      )}
+                                    </div>
+                                  </Col>
                                   <Col lg={4}>
                                     <div className="mb-3">
                                       <label htmlFor="Balance">Balance</label>

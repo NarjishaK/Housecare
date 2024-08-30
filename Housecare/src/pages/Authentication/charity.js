@@ -130,7 +130,7 @@ function Charity() {
     } catch (err) {
       await Swal.fire({
         title: 'Error!',
-        text: 'Failed to create charity. Email already exists.',
+        text: 'Failed to create charity. Email or Phone number already exists.',
         icon: 'error',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'OK'
@@ -224,7 +224,7 @@ function Charity() {
       console.error("Error updating charity:", err)
       await Swal.fire({
         title: 'Error!',
-        text: 'Update failed. Please try again.',
+        text: 'Update failed.Email or Phone number already exists.',
         icon: 'error',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'OK'

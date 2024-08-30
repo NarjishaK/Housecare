@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2"
 import {
   Table,
   Card,
@@ -165,10 +165,12 @@ function CharityDetails() {
         showConfirmButton: true,
       })
       loadData()
+      setmodal(false)
     } catch (err) {
       Swal.fire({
         icon: "error",
-        title: "Charity staffs adding failed!Don't use existing email",
+        title:
+          "Charity staffs adding failed!Don't use existing email or phone number",
         text: "Please try again",
         showConfirmButton: true,
       })
@@ -234,19 +236,20 @@ function CharityDetails() {
       await charityStaffUpdate(editId, formData)
       loadData()
       Swal.fire({
-        title: 'Success!',
+        title: "Success!",
         text: "Update successful",
-        icon: 'success',
-        confirmButtonText: 'OK'
+        icon: "success",
+        confirmButtonText: "OK",
       })
+      setEdit(false)
     } catch (err) {
       console.error("Error updating charitystaff:", err)
       Swal.fire({
-        title: 'Error!',
-        text: "Update failed. Don't use existing email",
-        icon: 'error',
-        confirmButtonText: 'OK'
-    });
+        title: "Error!",
+        text: "Update failed. Don't use existing email or phone number",
+        icon: "error",
+        confirmButtonText: "OK",
+      })
     }
   }
   //benificiary create
@@ -288,19 +291,20 @@ function CharityDetails() {
       await handleBenificiary(formData)
       fetchDatas()
       Swal.fire({
-        title: 'Success!',
-        text: 'Create successful',
-        icon: 'success',
-        confirmButtonText: 'OK'
-    });
+        title: "Success!",
+        text: "Create successful",
+        icon: "success",
+        confirmButtonText: "OK",
+      })
+      setmodals(false)
     } catch (err) {
       console.log(err, "benificiary adding failed")
       Swal.fire({
-        title: 'Error!',
-        text: "Update failed. Don't use existing email",
-        icon: 'error',
-        confirmButtonText: 'OK'
-    });
+        title: "Error!",
+        text: "Update failed. Don't use existing email or phone number",
+        icon: "error",
+        confirmButtonText: "OK",
+      })
     }
   }
   //benificiarys list
@@ -389,20 +393,21 @@ function CharityDetails() {
       await benificiaryUpdate(editedId, formData)
       fetchDatas()
       Swal.fire({
-        title: 'Success!',
-        text: 'Update successful',
-        icon: 'success',
-        confirmButtonText: 'OK'
-    });
+        title: "Success!",
+        text: "Update successful",
+        icon: "success",
+        confirmButtonText: "OK",
+      })
+      setEdits(false)
     } catch (err) {
       console.error("Error updating benificiary:", err)
-      
+
       Swal.fire({
-        title: 'Error!',
-        text: "Update failed. Don't use existing email",
-        icon: 'error',
-        confirmButtonText: 'OK'
-    });
+        title: "Error!",
+        text: "Update failed. Don't use existing email or phone number.",
+        icon: "error",
+        confirmButtonText: "OK",
+      })
     }
   }
   //benificiary details and transactions
@@ -477,9 +482,7 @@ function CharityDetails() {
                           setmodal(!modal)
                         }}
                       >
-                        <Link
-                         
-                        >
+                        <Link>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -577,19 +580,22 @@ function CharityDetails() {
                                   name="charity"
                                   className="form-control"
                                 >
-                                  <option>select charity</option>
-                                  {allcharity.map(charities => (
-                                    <option
-                                      key={charities._id}
-                                      value={charities.charity}
-                                      disabled={
-                                        charities.charity !== charitys.charity
-                                      }
-                                    >
-                                      {charities.charity}
-                                    </option>
-                                  ))}
+                                  <option value="">Select charity</option>
+                                  {allcharity
+                                    .filter(
+                                      charities =>
+                                        charities.charity === charitys.charity
+                                    ) // Filter out charities that would be disabled
+                                    .map(charities => (
+                                      <option
+                                        key={charities._id}
+                                        value={charities.charity}
+                                      >
+                                        {charities.charity}
+                                      </option>
+                                    ))}
                                 </select>
+
                                 {validationErrors.charity && (
                                   <small className="text-danger">
                                     {validationErrors.charity}
@@ -838,20 +844,23 @@ function CharityDetails() {
                                         name="charity"
                                         className="form-control"
                                       >
-                                        <option>select charity</option>
-                                        {allcharity.map(charities => (
-                                          <option
-                                            key={charities._id}
-                                            value={charities.charity}
-                                            disabled={
-                                              charities.charity !==
+                                        <option value="">Select charity</option>
+                                        {allcharity
+                                          .filter(
+                                            charities =>
+                                              charities.charity ===
                                               charitys.charity
-                                            }
-                                          >
-                                            {charities.charity}
-                                          </option>
-                                        ))}
+                                          ) // Filter out charities that would be disabled
+                                          .map(charities => (
+                                            <option
+                                              key={charities._id}
+                                              value={charities.charity}
+                                            >
+                                              {charities.charity}
+                                            </option>
+                                          ))}
                                       </select>
+
                                       {validationErrors.charity && (
                                         <small className="text-danger">
                                           {validationErrors.charity}
@@ -990,9 +999,7 @@ function CharityDetails() {
                           setmodals(!modals)
                         }}
                       >
-                        <Link
-                          
-                        >
+                        <Link>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -1020,7 +1027,7 @@ function CharityDetails() {
                           setmodals(!modals)
                         }}
                       >
-                        Admin Form
+                        CREATE NEW BENEFICIARY
                       </ModalHeader>
                       <ModalBody>
                         <form>
@@ -1090,19 +1097,22 @@ function CharityDetails() {
                                   name="charity_name"
                                   className="form-control"
                                 >
-                                  <option>select charity</option>
-                                  {allcharity.map(charities => (
-                                    <option
-                                      key={charities._id}
-                                      value={charities.charity}
-                                      disabled={
-                                        charities.charity !== charitys.charity
-                                      }
-                                    >
-                                      {charities.charity}
-                                    </option>
-                                  ))}
+                                  <option value="">Select charity</option>
+                                  {allcharity
+                                    .filter(
+                                      charities =>
+                                        charities.charity === charitys.charity
+                                    ) // Filter to exclude disabled charities
+                                    .map(charities => (
+                                      <option
+                                        key={charities._id}
+                                        value={charities.charity}
+                                      >
+                                        {charities.charity}
+                                      </option>
+                                    ))}
                                 </select>
+
                                 {validationErrors.charity_name && (
                                   <small className="text-danger">
                                     {validationErrors.charity_name}
@@ -1440,7 +1450,7 @@ function CharityDetails() {
                                 setEdits(!edits)
                               }}
                             >
-                              Form
+                              EDIT BENEFICIARY
                             </ModalHeader>
                             <ModalBody>
                               <form>
@@ -1510,20 +1520,23 @@ function CharityDetails() {
                                         name="charity_name"
                                         className="form-control"
                                       >
-                                        <option>select charity</option>
-                                        {allcharity.map(charities => (
-                                          <option
-                                            key={charities._id}
-                                            value={charities.charity}
-                                            disabled={
-                                              charities.charity !==
+                                        <option value="">Select charity</option>
+                                        {allcharity
+                                          .filter(
+                                            charities =>
+                                              charities.charity ===
                                               charitys.charity
-                                            }
-                                          >
-                                            {charities.charity}
-                                          </option>
-                                        ))}
+                                          ) // Filter to exclude disabled charities
+                                          .map(charities => (
+                                            <option
+                                              key={charities._id}
+                                              value={charities.charity}
+                                            >
+                                              {charities.charity}
+                                            </option>
+                                          ))}
                                       </select>
+
                                       {validationErrors.charity_name && (
                                         <small className="text-danger">
                                           {validationErrors.charity_name}

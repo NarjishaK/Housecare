@@ -123,11 +123,12 @@ const Beneficiary = () => {
         icon: "success",
         confirmButtonText: "OK",
       })
+      setmodals(false)
     } catch (err) {
       console.log(err, "benificiary adding failed")
       Swal.fire({
         title: "Error!",
-        text: "Creation failed. Don't use existing email",
+        text: "Creation failed. Don't use existing email or number",
         icon: "error",
         confirmButtonText: "OK",
       })
@@ -227,12 +228,12 @@ const Beneficiary = () => {
         icon: "success",
         confirmButtonText: "OK",
       })
-      setmodals(modals)
+      setEdits(false)
     } catch (err) {
       console.error("Error updating benificiary:", err)
       Swal.fire({
         title: "Error!",
-        text: "Update failed. Don't use existing email",
+        text: "Update failed. Don't use existing email or phone number",
         icon: "error",
         confirmButtonText: "OK",
       })
@@ -261,12 +262,11 @@ const Beneficiary = () => {
                           backgroundColor: "var(--bs-primary)",
                           border: "none",
                         }}
+                        onClick={() => {
+                          setmodals(!modals)
+                        }}
                       >
-                        <Link
-                          onClick={() => {
-                            setmodals(!modals)
-                          }}
-                        >
+                        <Link>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="16"
@@ -293,7 +293,7 @@ const Beneficiary = () => {
                           setmodals(!modals)
                         }}
                       >
-                        Admin Form
+                        Create New Benificiary
                       </ModalHeader>
                       <ModalBody>
                         <form>
@@ -364,17 +364,7 @@ const Beneficiary = () => {
                                   className="form-control"
                                 >
                                   <option>select charity</option>
-                                  {/* {allcharity.map(charities => (
-                                    <option
-                                      key={charities._id}
-                                      value={charities.charity}
-                                      disabled={
-                                        charities.charity !== filteredBenificiarys.charity
-                                      }
-                                    >
-                                      {charities.charity}
-                                    </option>
-                                  ))} */}
+
                                   <option>{charitydetails.charity}</option>
                                 </select>
                                 {validationErrors.charity_name && (
@@ -714,7 +704,7 @@ const Beneficiary = () => {
                                 setEdits(!edits)
                               }}
                             >
-                              Form
+                              Edit Beneficiary
                             </ModalHeader>
 
                             <ModalBody>

@@ -42,7 +42,7 @@ const PaymentModal = ({ isOpen, toggle, saveAmount }) => {
           invalid={isInvalid}  // This adds visual feedback if the value is invalid
         />
         <FormFeedback>
-          Please enter an amount of at least $1.
+          Please enter an amount of at least SAR 1.
         </FormFeedback>
       </ModalBody>
       <ModalFooter>
