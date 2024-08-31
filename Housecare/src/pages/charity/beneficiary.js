@@ -448,7 +448,7 @@ const Beneficiary = () => {
                                   value={datas.family_members}
                                   onChange={handleChanges}
                                   placeholder="Family Members"
-                                  type="text"
+                                  type="number"
                                 />
                                 {validationErrors.family_members && (
                                   <small className="text-danger">
@@ -867,7 +867,7 @@ const Beneficiary = () => {
                                         value={datas.family_members}
                                         onChange={handleChanges}
                                         placeholder="Family Members"
-                                        type="text"
+                                        type="number"
                                       />
                                       {validationErrors.family_members && (
                                         <small className="text-danger">

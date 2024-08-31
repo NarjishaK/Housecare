@@ -1253,7 +1253,7 @@ function CharityDetails() {
                                   value={datas.family_members}
                                   onChange={handleChanges}
                                   placeholder="Family Members"
-                                  type="text"
+                                  type="number"
                                 />
                                 {validationErrors.family_members && (
                                   <small className="text-danger">
@@ -1680,7 +1680,7 @@ function CharityDetails() {
                                         value={datas.family_members}
                                         onChange={handleChanges}
                                         placeholder="Family Members"
-                                        type="text"
+                                        type="number"
                                       />
                                       {validationErrors.family_members && (
                                         <small className="text-danger">
