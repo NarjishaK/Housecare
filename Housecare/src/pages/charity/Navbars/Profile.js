@@ -39,12 +39,13 @@ const ProfileMenu = props => {
         backgroundColor: 'transparent',
         borderRadius: '10px',
         padding: '10px',
-        alignContent:"space-between"
+        alignContent:"space-between",
+        alignItems:"center"
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
         <strong style={{ fontSize: '16px', marginRight: '10px'}}>{charitydetails.arbic}{" "} </strong>
-      <small style={{ fontSize: '12px',marginRight: '10px' }}>{charitydetails.authorizedperson}</small>
+      {/* <small style={{ fontSize: '12px',marginRight: '10px' }}>{charitydetails.authorizedperson}</small> */}
 
       </div>
       <img

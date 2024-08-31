@@ -131,6 +131,7 @@ exports.updateSplitStatus = async (req, res) => {
 
       res.json({ message: 'Status updated successfully', split });
   } catch (error) {
+    console.error("Error updating split status:", error); 
       res.status(500).json({ message: 'Server error', error });
   }
 };

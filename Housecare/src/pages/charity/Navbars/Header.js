@@ -126,6 +126,7 @@ const Header = props => {
                 </form>
               </div>
             </div>
+            {/* <NotificationDropdown/> */}
             {/* <Button onClick={togglePaymentModal}>PAY NOW</Button> */}
             <ProfileMenu />
           </div>

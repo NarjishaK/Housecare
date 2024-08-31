@@ -59,7 +59,7 @@ function Allsplit() {
       <br />
       <Card className="container">
         <div className="card-body" style={{ display: "flex", justifyContent: "center" }}>
-          <h5 style={{ textAlign: "center", marginLeft: "20px" }}>SPLITED DETAILS MANAGE</h5>
+          <h5 style={{ textAlign: "center", marginLeft: "20px" }}>VIEW COMPLETE SPLIT HISTORY</h5>
         </div>
       </Card>
       <div className={styles.table_container}>

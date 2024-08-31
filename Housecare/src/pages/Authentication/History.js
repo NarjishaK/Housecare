@@ -3,6 +3,7 @@ import styles from "../../pages/charity/split.module.css";
 import { Button, Card, CardBody, CardTitle, Col, Collapse, Row } from "reactstrap";
 import axios from "axios";
 import { BASE_URL } from "./handle-api"
+
 const UiTabsAccordions = () => {
   const [activeDate, setActiveDate] = useState(null);
   const [splits, setSplits] = useState([]);
@@ -88,13 +89,19 @@ const UiTabsAccordions = () => {
   const handleClick = () => {
     window.location.href = "/allsplit";
   };
+
   return (
     <React.Fragment>
       <Row>
         <Col xl={12}>
           <Card>
             <CardBody>
-              <CardTitle className="h4" style={{display:"flex"}} ><h4>SPLIT DETAILS</h4><Button style={{marginLeft:"auto",backgroundColor:"var(--bs-primary)",border:"none"}} onClick={handleClick}>Manage</Button></CardTitle>
+              <CardTitle className="h4" style={{display:"flex"}} >
+                <h4>SPLIT DETAILS</h4>
+                <Button style={{marginLeft:"auto",backgroundColor:"var(--bs-primary)",border:"none"}} onClick={handleClick}>
+                  View All History
+                </Button>
+              </CardTitle>
 
               <div className="accordion" id="accordion">
                 {sortedDates.map((splitDate) => (
@@ -118,7 +125,7 @@ const UiTabsAccordions = () => {
                             onClick={() => handleStatusChange(selectedSplits[splitDate] || [], 'Accepted')}
                             disabled={!selectedSplits[splitDate]?.length}
                           >
-                            Accept
+                            Approve
                           </Button>
                           <Button
                             style={{ marginRight: "5px", backgroundColor: "#dc3545", borderColor: "#dc3545" }}
@@ -127,13 +134,6 @@ const UiTabsAccordions = () => {
                           >
                             Reject
                           </Button>
-                          {/* <Button
-                            style={{ backgroundColor: "#ffc107", borderColor: "#ffc107", color: "#000" }}
-                            onClick={() => handleStatusChange(selectedSplits[splitDate] || [], 'Pending')}
-                            disabled={!selectedSplits[splitDate]?.length}
-                          >
-                            Pending
-                          </Button> */}
                         </div>
                         <br/>
                         <table className={styles.tables}>
@@ -176,7 +176,7 @@ const UiTabsAccordions = () => {
                                 <td>{split.beneficiary?.charity_name || "N/A"}</td>
                                 <td>{split.beneficiary?.age || "N/A"}</td>
                                 <td>{split.splitamount}</td>
-                                <td>{split.status}</td>
+                                <td>{split.status === 'Accepted' ? 'Approved' : split.status}</td>
                               </tr>
                             ))}
                           </tbody>
