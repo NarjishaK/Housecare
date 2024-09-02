@@ -56,6 +56,7 @@ function CharityDetails() {
   })
   const [datas, handleChanges, setDatas] = useForm({
     benificiary_name: "",
+    date: "",
     number: "",
     email_id: "",
     charity_name: "",
@@ -254,6 +255,7 @@ function CharityDetails() {
     if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
     if (!datas.category) errors.category = "Category is required."
     if (!datas.age) errors.age = "Age is required."
+    if(!datas.date) errors.date = "Date is required."
     if (!datas.email_id) errors.email_id = "Email is required."
     if (!datas.number) errors.number = "Number is required."
     if (!datas.charity_name) errors.charity_name = "Charity Name is required."
@@ -354,6 +356,7 @@ function CharityDetails() {
   const handleBenificiaryUpdate = async e => {
     e.preventDefault()
     const errors = {}
+    if(!datas.date) errors.date = "Date is required."
     if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
     if (!datas.category) errors.category = "Category is required."
     if (!datas.age) errors.age = "Age is required."
@@ -1322,24 +1325,24 @@ function CharityDetails() {
                                 )}
                               </div>
                             </Col>
-                            {/* <Col lg={4}>
+                            <Col lg={4}>
                               <div className="mb-3">
-                                <label htmlFor="Balance">Balance</label>
+                                <label htmlFor="Date">Date</label>
                                 <input
                                   className="form-control"
-                                  name="Balance"
-                                  value={"0" || datas.Balance}
+                                  name="date"
+                                  value={values.date}
                                   onChange={handleChanges}
-                                  placeholder="Balance"
-                                  type="number"
+                                  placeholder="Date"
+                                  type="date"
                                 />
-                                {validationErrors.Balance && (
+                                {validationErrors.date && (
                                   <small className="text-danger">
-                                    {validationErrors.Balance}
+                                    {validationErrors.date}
                                   </small>
                                 )}
                               </div>
-                            </Col> */}
+                            </Col>
                           </Row>
                           <Row>
                             <Col lg={12}>
@@ -1751,24 +1754,24 @@ function CharityDetails() {
                                       )}
                                     </div>
                                   </Col>
-                                  {/* <Col lg={4}>
-                                    <div className="mb-3">
-                                      <label htmlFor="Balance">Balance</label>
-                                      <input
-                                        className="form-control"
-                                        name="Balance"
-                                        value={datas.Balance}
-                                        onChange={handleChanges}
-                                        placeholder="Balance"
-                                        type="number"
-                                      />
-                                      {validationErrors.Balance && (
-                                        <small className="text-danger">
-                                          {validationErrors.Balance}
-                                        </small>
-                                      )}
-                                    </div>
-                                  </Col> */}
+                                  <Col lg={4}>
+                              <div className="mb-3">
+                                <label htmlFor="Date">Date</label>
+                                <input
+                                  className="form-control"
+                                  name="date"
+                                  value={values.date}
+                                  onChange={handleChanges}
+                                  placeholder="Date"
+                                  type="date"
+                                />
+                                {validationErrors.date && (
+                                  <small className="text-danger">
+                                    {validationErrors.date}
+                                  </small>
+                                )}
+                              </div>
+                            </Col>
                                 </Row>
                                 <Row>
                                   <Col lg={12}>

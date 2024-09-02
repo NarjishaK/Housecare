@@ -7,6 +7,7 @@ const Debited = require('../model/debited');
 exports.create = asyncHandler(async (req, res) => {
   const {
     benificiary_name,
+    date,
     category,
     age,
     charity_name,
@@ -41,6 +42,7 @@ exports.create = asyncHandler(async (req, res) => {
       email_id: email_id,
       benificiary_name: benificiary_name,
       category: category,
+      date: date,
       age: age,
       number: number,
       nationality: nationality,
@@ -104,6 +106,7 @@ exports.update = asyncHandler(async (req, res) => {
     const {
         benificiary_name,
         category,
+        date,
         age,
         charity_name,
         email_id,
@@ -141,6 +144,7 @@ exports.update = asyncHandler(async (req, res) => {
 		charity.email_id = email_id;
 		charity.number = number;
 		charity.marital = marital;
+    charity.date = date;
 		charity.charity_name = charity_name;
 		charity.sex = sex;
 		charity.nationality = nationality;

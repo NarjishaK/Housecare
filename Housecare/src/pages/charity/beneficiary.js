@@ -43,6 +43,7 @@ const Beneficiary = () => {
     family_members: "",
     account_status: "",
     Balance: "",
+    date: "",
   })
 
   const [charitys, setCharitys] = useState([])
@@ -83,6 +84,7 @@ const Beneficiary = () => {
   const benificiaryCreate = async e => {
     e.preventDefault()
     const errors = {}
+    if(!datas.date) errors.date = "Date is required."
     if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
     if (!datas.category) errors.category = "Category is required."
     if (!datas.age) errors.age = "Age is required."
@@ -189,6 +191,7 @@ const Beneficiary = () => {
     e.preventDefault()
 
     const errors = {}
+    if(!datas.date) errors.date = "Date is required."
     if (!datas.benificiary_name) errors.benificiary_name = "Name is required."
     if (!datas.category) errors.category = "Category is required."
     if (!datas.age) errors.age = "Age is required."
@@ -517,24 +520,7 @@ const Beneficiary = () => {
                                 )}
                               </div>
                             </Col>
-                            {/* <Col lg={4}>
-                              <div className="mb-3">
-                                <label htmlFor="Balance">Balance</label>
-                                <input
-                                  className="form-control"
-                                  name="Balance"
-                                  value={datas.Balance}
-                                  onChange={handleChanges}
-                                  placeholder="Balance"
-                                  type="number"
-                                />
-                                {validationErrors.Balance && (
-                                  <small className="text-danger">
-                                    {validationErrors.Balance}
-                                  </small>
-                                )}
-                              </div>
-                            </Col> */}
+                            
                             <Col lg={4}>
                               <div className="mb-3">
                                 <label htmlFor="marital">Marital</label>
@@ -557,7 +543,7 @@ const Beneficiary = () => {
                             </Col>
                           </Row>
                           <Row>
-                            <Col lg={6}>
+                            <Col lg={4}>
                               <div className="mb-3">
                                 <label htmlFor="health status">
                                   Health status
@@ -578,28 +564,25 @@ const Beneficiary = () => {
                               </div>
                             </Col>
 
-                            {/* <Col lg={4}>
+                            <Col lg={4}>
                               <div className="mb-3">
-                                <label htmlFor="navision_linked_no">
-                                  Navision linked No
-                                </label>
+                                <label htmlFor="Date">Date</label>
                                 <input
                                   className="form-control"
-                                  name="navision_linked_no"
-                                  value={datas.navision_linked_no}
+                                  name="date"
+                                  value={datas.date}
                                   onChange={handleChanges}
-                                  placeholder="Navision linked no"
-                                  type="text"
+                                  placeholder="Date"
+                                  type="date"
                                 />
-                                {validationErrors.navision_linked_no && (
+                                {validationErrors.date && (
                                   <small className="text-danger">
-                                    {validationErrors.navision_linked_no}
+                                    {validationErrors.date}
                                   </small>
                                 )}
                               </div>
-                            </Col> */}
-                          </Row>
-
+                            </Col>
+                           </Row>
                           <Row>
                             <Col lg={12}>
                               <div className="text-right">
@@ -963,7 +946,7 @@ const Beneficiary = () => {
                                   </Col>
                                 </Row>
                                 <Row>
-                                  <Col lg={6}>
+                                  <Col lg={4}>
                                     <div className="mb-3">
                                       <label htmlFor="health status">
                                         Health status
@@ -984,26 +967,24 @@ const Beneficiary = () => {
                                     </div>
                                   </Col>
 
-                                  {/* <Col lg={4}>
-                                    <div className="mb-3">
-                                      <label htmlFor="navision_linked_no">
-                                        Navision linked No
-                                      </label>
-                                      <input
-                                        className="form-control"
-                                        name="navision_linked_no"
-                                        value={datas.navision_linked_no}
-                                        onChange={handleChanges}
-                                        placeholder="Navision linked no"
-                                        type="text"
-                                      />
-                                      {validationErrors.navision_linked_no && (
-                                        <small className="text-danger">
-                                          {validationErrors.navision_linked_no}
-                                        </small>
-                                      )}
-                                    </div>
-                                  </Col> */}
+                                  <Col lg={4}>
+                              <div className="mb-3">
+                                <label htmlFor="Date">Date</label>
+                                <input
+                                  className="form-control"
+                                  name="date"
+                                  value={datas.date}
+                                  onChange={handleChanges}
+                                  placeholder="Date"
+                                  type="date"
+                                />
+                                {validationErrors.date && (
+                                  <small className="text-danger">
+                                    {validationErrors.date}
+                                  </small>
+                                )}
+                              </div>
+                            </Col>
                                 </Row>
 
                                 <Row>

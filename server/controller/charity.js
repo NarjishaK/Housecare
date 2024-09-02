@@ -295,3 +295,5 @@ exports.detailses = asyncHandler(async (req, res) => {
       .json({ err: "An error occurred while fetching charity details" });
   }
 });
+
+  

@@ -14,6 +14,7 @@ const benificiarySchema = mongoose.Schema({
   physically_challenged: { type: String, required: true },
   family_members: { type: Number, required: true },
   account_status: { type: String, required: true },
+  date: { type: Date, default: Date.now },
   Balance: { type: Number},
   category: { type: String, required: true },
   age: { type: Number, required: true },

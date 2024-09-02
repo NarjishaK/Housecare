@@ -31,7 +31,8 @@ const Dashboards = () => {
   const [currentAmount, setCurrentAmount] = useState(0)
   const [previousAmount, setPreviousAmount] = useState(0)
   const [percentageChange, setPercentageChange] = useState(0)
-
+  const [splitsAmountSum, setSplitsAmountSum] = useState(0); // New state for sum of spliteamount
+  
   const updateLimitedAmount = (newAmount) => {
     const currentAmount = JSON.parse(localStorage.getItem("limitedamount")) || 0;
     localStorage.setItem("previousLimitedAmount", JSON.stringify(currentAmount));
@@ -74,13 +75,21 @@ const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
         split => split.beneficiary && split.beneficiary.charity_name === charityName
       );
       setSplits(filteredSplits);
-      // Calculate the count of pending approvals
+      console.log(filteredSplits, "Filtered Splits");
+      
       const pendingCount = filteredSplits.filter(split => split.status === "Pending").length;
       setPendingApprovalsCount(pendingCount);  
+        // Calculate the sum of spliteamount
+        const amountSum = filteredSplits.reduce((total, split) => total + (split.splitamount || 0), 0);
+        setSplitsAmountSum(amountSum); 
+        console.log(splitsAmountSum, "Splits Amount Sum");
+        
+  
     } catch (error) {
       console.error("Error fetching splits:", error);
     }
   };
+
   return (
     <>
       <Navbar />
@@ -89,21 +98,11 @@ const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Fund Size</div>
           <div className={styles.cardvalue}>SAR {currentAmount || "000"}</div>
-          {/* <div
-            className={styles.cardsubtext}
-            style={{
-              color: percentageChange >= 0 ? "green" : "red",
-            }}
-          >
-            {percentageChange >= 0
-              ? `+${percentageChange}%`
-              : `${percentageChange}%`}{" "}
-            From previous period
-          </div> */}
+         
         </div>
         <div className={styles.cards}>
           <div className={styles.cardtitle}>Invested</div>
-          <div className={styles.cardvalue}>SAR 46,782</div>
+          <div className={styles.cardvalue}>SAR {splitsAmountSum}</div>
           {/* <div className={styles.cardsubtext}>-29% From previous period</div> */}
         </div>
         <div className={styles.cards}>
