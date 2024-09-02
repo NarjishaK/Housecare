@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { showRightSidebarAction, toggleLeftmenu } from "store/actions";
 import { Container } from "reactstrap";
-// import NotificationDropdown from "components/CommonForBoth/TopbarDropdown/NotificationDropdown";
+import NotificationDropdown from "./notification";
 import ProfileMenu from "./Profile";
 // import PaymentModal from "../paymentmodal"; // Import the PaymentModal component
 import logo from "assets/images/logo-sm.png";
@@ -126,7 +126,7 @@ const Header = props => {
                 </form>
               </div>
             </div>
-            {/* <NotificationDropdown/> */}
+            <NotificationDropdown/>
             {/* <Button onClick={togglePaymentModal}>PAY NOW</Button> */}
             <ProfileMenu />
           </div>

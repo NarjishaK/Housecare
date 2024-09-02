@@ -28,11 +28,34 @@ const UiTabsAccordions = () => {
     setActiveDate(activeDate === date ? null : date);
   };
 
+  // const handleStatusChange = async (splitIds, status) => {
+  //   try {
+  //     await Promise.all(
+  //       splitIds.map(splitId => axios.put(`${BASE_URL}/splits/${splitId}/status`, { status }))
+  //     );
+  //     const response = await axios.get(`${BASE_URL}/api/splits`);
+  //     setSplits(response.data);
+  //     setSelectedSplits({}); // Reset selected splits after action
+  //     setSelectAll({}); // Reset select all checkboxes
+  //   } catch (error) {
+  //     console.error("Error updating status:", error);
+  //   }
+  // };
   const handleStatusChange = async (splitIds, status) => {
     try {
       await Promise.all(
-        splitIds.map(splitId => axios.put(`${BASE_URL}/splits/${splitId}/status`, { status }))
+        splitIds.map(async (splitId) => {
+          await axios.put(`${BASE_URL}/splits/${splitId}/status`, { status });
+          
+          const split = splits.find(s => s._id === splitId);
+          await axios.post(`${BASE_URL}/approvals/notifications`, {
+            charityName: split.beneficiary?.charity_name,
+            beneficiaryName: split.beneficiary?.benificiary_name,
+            status,
+          });
+        })
       );
+  
       const response = await axios.get(`${BASE_URL}/api/splits`);
       setSplits(response.data);
       setSelectedSplits({}); // Reset selected splits after action
@@ -41,6 +64,7 @@ const UiTabsAccordions = () => {
       console.error("Error updating status:", error);
     }
   };
+  
 
   const handleCheckboxChange = (splitDate, splitId) => {
     setSelectedSplits(prevSelectedSplits => {
