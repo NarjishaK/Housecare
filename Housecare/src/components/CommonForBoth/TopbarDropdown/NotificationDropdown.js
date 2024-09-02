@@ -1,47 +1,56 @@
-import React, { useEffect, useState } from "react"
-import PropTypes from 'prop-types'
-import { Link } from "react-router-dom"
-import { Dropdown, DropdownToggle, DropdownMenu, Row, Col, Button } from "reactstrap"
-import SimpleBar from "simplebar-react"
-import { BASE_URL } from "pages/Authentication/handle-api"
+import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
+import { Link } from "react-router-dom";
+import { Dropdown, DropdownToggle, DropdownMenu, Row, Col, Button } from "reactstrap";
+import SimpleBar from "simplebar-react";
+import { BASE_URL } from "pages/Authentication/handle-api";
 
-//i18n
-import { withTranslation } from "react-i18next"
-import axios from "axios"
+// i18n
+import { withTranslation } from "react-i18next";
+import axios from "axios";
 
-const NotificationDropdown = props => {
-  // Declare a new state variable, which we'll call "menu"
-  const [menu, setMenu] = useState(false)
-
-  const [notificationCount, setNotificationCount] = useState(0)
+const NotificationDropdown = (props) => {
+  const [menu, setMenu] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
-    const fetchNotificationCount = async () => {
+    const fetchNotifications = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/count`)
-        setNotificationCount(response.data.count)
+        const charityDetails = JSON.parse(localStorage.getItem("charitydetails"));
+        if (charityDetails) {
+          const response = await axios.get(`${BASE_URL}/notification/notifications`);
+          setNotifications(response.data);
+          const unread = response.data.filter(notification => !notification.isRead).length;
+          setUnreadCount(unread);
+        }
       } catch (error) {
-        console.error("Error fetching notification count:", error)
+        console.error("Error fetching notifications:", error);
       }
-    }
+    };
 
-    fetchNotificationCount()
-  }, [])
+    fetchNotifications();
+  }, []);
 
-  const handleResetNotifications = async () => {
+  const handleNotificationClick = async (notificationId) => {
     try {
-      await axios.post(`${BASE_URL}/reset`)
-      setNotificationCount(0)
-      console.log("Notification count reset successfully")
-      setMenu(false)
+      const charityDetails = JSON.parse(localStorage.getItem("charitydetails"));
+      if (charityDetails) {
+        // Delete the notification from the backend
+        await axios.delete(`${BASE_URL}/notification/${notificationId}`);
+
+        // Update the local state to remove the notification
+        setNotifications(prevNotifications => 
+          prevNotifications.filter(notification => notification._id !== notificationId)
+        );
+
+        // Update the unread count
+        setUnreadCount(prevUnreadCount => prevUnreadCount - 1);
+      }
     } catch (error) {
-      console.error("Error resetting notification count:", error)
+      console.error("Error deleting notification:", error);
     }
-  }
-const handleAccept =()=>{
-  window.location.href = "/history-split";
-  handleResetNotifications()
-}
+  };
 
   return (
     <React.Fragment>
@@ -50,7 +59,6 @@ const handleAccept =()=>{
         toggle={() => setMenu(!menu)}
         className="dropdown d-inline-block ms-1"
         tag="li"
-        
       >
         <DropdownToggle
           className="btn header-item noti-icon waves-effect"
@@ -58,113 +66,74 @@ const handleAccept =()=>{
           id="page-header-notifications-dropdown"
         >
           <i className="ti-bell"></i>
-          <span className="badge text-bg-danger rounded-pill">{notificationCount}</span>
+          {unreadCount > 0 && (
+            <span className="badge text-bg-danger rounded-pill">{unreadCount}</span>
+          )}
         </DropdownToggle>
 
         <DropdownMenu className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
           <div className="p-3">
             <Row className="align-items-center">
               <Col>
-                <h5 className="m-0"> {props.t("Notifications")} {notificationCount} </h5>
+                <h5 className="m-0"> {props.t("Notifications")} {unreadCount} </h5>
               </Col>
             </Row>
           </div>
 
           <SimpleBar style={{ height: "130px" }}>
-          
-
-            <Link to="#" className="text-reset notification-item">
-              <div className="d-flex">
-                <div className="flex-shrink-0 me-3">
-                  <div className="avatar-xs me-3">
-                    <span className="avatar-title border-warning rounded-circle ">
-                      <i className="mdi mdi-message"></i>
-                    </span>
+            {notifications.length > 0 ? (
+              notifications.map(notification => (
+                <Link 
+                  to="#" 
+                  className="text-reset notification-item" 
+                  key={notification._id}
+                  onClick={() => handleNotificationClick(notification._id)} // Pass the notification ID
+                >
+                  <div
+                    className="d-flex"
+                    style={{
+                      backgroundColor: !notification.isRead
+                        ? "#f8d7da"
+                        : "transparent",
+                      borderRadius: "4px",
+                      padding: "8px",
+                    }}
+                  >
+                    <div className="flex-shrink-0 me-3">
+                      <div className="avatar-xs me-3">
+                        <span className="avatar-title border-warning rounded-circle">
+                          <i className="mdi mdi-message"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex-grow-1">
+                      <h6 className="mt-0 mb-1">{notification.message}</h6>
+                    </div>
                   </div>
-                </div>
-                <div className="flex-grow-1">
-                  <h6 className="mt-0 mb-1">New Message received </h6>
-                  <div className="text-muted">
-                    <p className="mb-1">You have {notificationCount} unread messages</p>
-                  </div>
-                  <Button  onClick={handleAccept}>View</Button> 
-                  {/* <Button onClick={handleResetNotifications} style={{backgroundColor: "red"}}>Decline</Button> */}
-                </div>
-              </div>
-            </Link>
-
-            {/* <Link to="#" className="text-reset notification-item">
-              <div className="d-flex">
-                <div className="flex-shrink-0 me-3">
-                  <div className="avatar-xs me-3">
-                    <span className="avatar-title border-info rounded-circle ">
-                      <i className="mdi mdi-glass-cocktail"></i>
-                    </span>
-                  </div>
-                </div>
-                <div className="flex-grow-1">
-                  <h6 className="mt-0 mb-1">Your item is shipped</h6>
-                  <div className="text-muted">
-                    <p className="mb-1">It is a long established fact that a reader will</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            <Link to="#" className="text-reset notification-item">
-              <div className="d-flex">
-                <div className="flex-shrink-0 me-3">
-                  <div className="avatar-xs me-3">
-                    <span className="avatar-title border-primary rounded-circle ">
-                      <i className="mdi mdi-cart-outline"></i>
-                    </span>
-                  </div>
-                </div>
-                <div className="flex-grow-1">
-                  <h6 className="mt-0 mb-1">Your order is placed</h6>
-                  <div className="text-muted">
-                    <p className="mb-1">Dummy text of the printing and typesetting industry.</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            <Link to="#" className="text-reset notification-item">
-              <div className="d-flex">
-                <div className="flex-shrink-0 me-3">
-                  <div className="avatar-xs me-3">
-                    <span className="avatar-title border-warning rounded-circle ">
-                      <i className="mdi mdi-message"></i>
-                    </span>
-                  </div>
-                </div>
-                <div className="flex-grow-1">
-                  <h6 className="mb-1">New Message received</h6>
-                  <div className="text-muted">
-                    <p className="mb-1">You have 87 unread messages</p>
-                  </div>
-                </div>
-              </div>
-            </Link> */}
+                </Link>
+              ))
+            ) : (
+              <div className="p-3 text-center">No notifications</div>
+            )}
           </SimpleBar>
+
           <div className="p-2 border-top d-grid">
             <Link
               className="btn btn-sm btn-link font-size-14 btn-block text-center"
-              to="#"
+              to="/history-split"
             >
               <i className="mdi mdi-arrow-right-circle me-1"></i>
-              {" "}
-              {props.t("View all")}{" "}
+              {props.t("View all")}
             </Link>
           </div>
         </DropdownMenu>
       </Dropdown>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default withTranslation()(NotificationDropdown)
+export default withTranslation()(NotificationDropdown);
 
 NotificationDropdown.propTypes = {
   t: PropTypes.any
-}
+};

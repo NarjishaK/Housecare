@@ -1,11 +1,12 @@
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-// const notificationssSchema = new mongoose.Schema({
-//   charityName: String,
-//   details: String,
-//   viewed: { type: Boolean, default: false }, // Indicates if the notification has been viewed
-// }, { timestamps: true });
+const notificationssSchema = new mongoose.Schema({
+    charityName: { type: String, required: true },
+    message: { type: String, required: true },
+    date: { type: Date, default: Date.now },
+    isRead: { type: Boolean, default: false }
+ });
 
-// const Notificationn = mongoose.model("Notificationn", notificationssSchema);
+const Notificationn = mongoose.model("Notificationn", notificationssSchema);
 
-// module.exports = Notificationn;
+module.exports = Notificationn;

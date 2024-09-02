@@ -5,7 +5,7 @@ import html2canvas from "html2canvas"
 import Swal from "sweetalert2"
 import jsPDF from "jspdf"
 import axios from "axios"
-import * as XLSX from "xlsx" // Add this import
+import * as XLSX from "xlsx" 
 
 import Navbar from "./Navbars"
 import { BASE_URL } from "../Authentication/handle-api"
@@ -300,16 +300,36 @@ const App = () => {
       })
   }
 
+  // const handleShareEmail = async () => {
+  //   try {
+  //     await axios.post(`${BASE_URL}/increment`)
+  //     console.log("Notification count incremented successfully")
+  //   } catch (error) {
+  //     console.error("Error incrementing notification count:", error)
+  //   }
+  //   handleSaveData()
+  //   sendEmail()
+  // }
   const handleShareEmail = async () => {
     try {
-      await axios.post(`${BASE_URL}/increment`)
-      console.log("Notification count incremented successfully")
+      const charityDetails = JSON.parse(localStorage.getItem("charitydetails"));
+      if (charityDetails) {
+        const response = await axios.post(`${BASE_URL}/notification`, {
+          charityName: charityDetails.charity,
+          message: `New approval notification from ${charityDetails.charity}. Approve the payment.`,
+        });
+        console.log("Notification created successfully:", response.data);
+      }
+  
+      await axios.post(`${BASE_URL}/increment`);
+      console.log("Notification count incremented successfully");
+  
+      handleSaveData();
+      sendEmail();
     } catch (error) {
-      console.error("Error incrementing notification count:", error)
+      console.error("Error handling share email:", error);
     }
-    handleSaveData()
-    sendEmail()
-  }
+  };
   return (
     <>
       <Navbar />
@@ -404,12 +424,6 @@ const App = () => {
                   />
                 </div>
 
-                {/* <Button
-                    onClick={handleSaveData}
-                    style={{ backgroundColor: "transparent", color: "black" }}
-                  >
-                    Save Data
-                  </Button> */}
               </div>
             </div>
           </Card>
