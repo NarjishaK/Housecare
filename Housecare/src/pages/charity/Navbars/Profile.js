@@ -15,13 +15,16 @@ import { Link } from "react-router-dom"
 import withRouter from "components/Common/withRouter"
 
 // users
-import user1 from "../../../assets/images/users/user-1.jpg"
 import { BASE_URL } from "pages/Authentication/handle-api"
 // const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
   const charitydetails =JSON.parse(localStorage.getItem("charitydetails"))
+  const isRoleStaff = () => {
+    const charityDetails = JSON.parse(localStorage.getItem("charitydetails"))
+    return charityDetails && charityDetails.roles === "Main_Admin"
+  }
   return (
     <React.Fragment>
       <Dropdown
@@ -59,8 +62,9 @@ const ProfileMenu = props => {
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem
             tag="a"
-            // href={`/profiles/${charitydetails.id}`}
-            href="#"
+            href={`/profiles/${charitydetails.id}`}
+            disabled={!isRoleStaff()}
+            // href="#"
           >
             {" "}
             <i className="mdi mdi-account-circle font-size-17 text-muted align-middle me-1" />

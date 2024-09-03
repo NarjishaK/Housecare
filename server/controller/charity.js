@@ -168,6 +168,20 @@ exports.delete = asyncHandler(async (req, res) => {
   }
 });
 
+// exports.details = asyncHandler(async (req, res) => {
+// 	const { charity } = req.params;
+// 	try {
+// 	  const charityDetails = await Charity.findOne({ charity });
+// 	  if (!charityDetails) {
+// 		return res.status(404).json({ message: 'Charity not found' });
+// 	  }
+// 	  res.json(charityDetails);
+// 	} catch (err) {
+// 	  console.error('An error occurred:', err);
+// 	  res.status(500).json({ error: 'An error occurred while fetching charity details' });
+// 	}
+//   });
+
 exports.details = asyncHandler(async (req, res) => {
   const { charity } = req.params;
   try {
@@ -184,48 +198,6 @@ exports.details = asyncHandler(async (req, res) => {
   }
 });
 
-// exports.signin = asyncHandler(async (req, res) => {
-// 	const { email, password } = req.body;
-// 	try {
-// 	  const user = await Charity.findOne({ email });
-// 	  if (!user) {
-// 		console.log('user not found');
-// 		return res.status(400).json({ message: 'user not found' });
-// 	  }
-// 	  const isMatch = await bcrypt.compare(password, user.password);
-// 	  if (!isMatch) {
-// 		console.log('password not matched');
-// 		return res.status(400).json({ message: 'password not matched' });
-// 	  }
-// 	  if(user && isMatch){
-// 		const charitydetails ={
-// 			charity:user.charity,
-// 			email:user.email,
-// 			image:user.image,
-// 			phone:user.phone,
-// 			id:user._id,
-// 			roles:user.roles,
-// 			VAT_REG_NO:user.VAT_REG_NO,
-// 			authorizedperson:user.authorizedperson,
-// 			date:user.date,
-// 			arbic:user.arbic,
-// 			CR_NO:user.CR_NO,
-// 		}
-
-// 	  const token = jwt.sign({ email: user.email }, 'myjwtsecretkey');
-// 	  user.tokens = token;
-// 	  await user.save();
-// 	  console.log('login successful, token generated');
-// 	  return res.status(200).json({ token: token, charitydetails:charitydetails });
-
-// 	  }else{
-// 		return res.status(400).json({ message: 'password not matched' });
-// 	  }
-// 	} catch (err) {
-// 	  console.log(err, 'login failed');
-// 	  return res.status(500).json({ err: 'login failed' });
-// 	}
-//   });
 
 exports.signin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;

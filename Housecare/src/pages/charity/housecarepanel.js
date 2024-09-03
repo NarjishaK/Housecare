@@ -84,7 +84,7 @@ const HousecareLoginPanel = () => {
           </Row>
           <Row className="form-group mb-0">
             <Col className="text-center">
-              <Link to="/forgot-password" className="text-muted">
+              <Link to="/change-password" className="text-muted">
                 <i className="mdi mdi-lock"></i> Forgot your password?
               </Link>
             </Col>

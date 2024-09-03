@@ -32,7 +32,7 @@ const Profile = () => {
     authorizedperson: "",
     arbic: "",
   })
-  const [image, setImage] = useState("")
+  // const [image, setImage] = useState("")
 
   useEffect(() => {
     const storedSuperadmin = localStorage.getItem("charitydetails")
@@ -50,20 +50,20 @@ const Profile = () => {
         authorizedperson: parsedSuperadmin.authorizedperson,
         arbic: parsedSuperadmin.arbic,
       })
-      setImage(`${BASE_URL}/${parsedSuperadmin.image}`)
+      // setImage(`${BASE_URL}/${parsedSuperadmin.image}`)
     }
   }, [setValues])
 
-  const handleImage = e => {
-    const selectedImage = e.target.files[0]
-    if (selectedImage) {
-      setImage(URL.createObjectURL(selectedImage))
-      setValues(prevValues => ({
-        ...prevValues,
-        image: selectedImage,
-      }))
-    }
-  }
+  // const handleImage = e => {
+  //   const selectedImage = e.target.files[0]
+  //   if (selectedImage) {
+  //     setImage(URL.createObjectURL(selectedImage))
+  //     setValues(prevValues => ({
+  //       ...prevValues,
+  //       image: selectedImage,
+  //     }))
+  //   }
+  // }
 
   useEffect(() => {
     if (!id) {
@@ -91,7 +91,7 @@ const Profile = () => {
           authorizedperson: adminData.authorizedperson,
           arbic: adminData.arbic,
         })
-        setImage(`${BASE_URL}/${adminData.image}`)
+        // setImage(`${BASE_URL}/${adminData.image}`)
         setSuperAdmin(adminData)
       } catch (err) {
         console.error("An error occurred while fetching admin data:", err)
@@ -118,9 +118,9 @@ const Profile = () => {
     formData.append("authorizedperson", values.authorizedperson)
     formData.append("arbic", values.arbic)
 
-    if (values.image) {
-      formData.append("image", values.image)
-    }
+    // if (values.image) {
+    //   formData.append("image", values.image)
+    // }
 
     try {
       const response = await axios.put(`${BASE_URL}/charity/${id}`, formData, {
@@ -139,7 +139,7 @@ const Profile = () => {
         authorizedperson: values.authorizedperson,
         arbic: values.arbic,
         charity: values.charity,
-        image: response.data.image,
+        // image: response.data.image,
        
       }))
       setSuperAdmin(JSON.parse(localStorage.getItem("charitydetails")))
@@ -151,7 +151,7 @@ const Profile = () => {
       )
     }
   }
-
+const charityDetails = JSON.parse(localStorage.getItem("charitydetails"));
   return (
     <React.Fragment>
       <div className="page-content p-0">
@@ -164,7 +164,7 @@ const Profile = () => {
                   <div className="d-flex">
                     <div className="ms-3">
                       <img
-                        src={`${BASE_URL}/upload/${superadmin?.image}` || image}
+                        src={`${BASE_URL}/upload/${charityDetails.image}` }
                         alt=""
                         className="avatar-md rounded-circle img-thumbnail"
                       />
@@ -280,7 +280,7 @@ const Profile = () => {
                     <option value="Main_Admin">Main_Admin</option>
                   </select>
                   <br />
-                  <Label className="form-label">Profile Image</Label>
+                  {/* <Label className="form-label">Profile Image</Label>
                   <Input
                     name="image"
                     className="form-control"
@@ -288,12 +288,13 @@ const Profile = () => {
                     accept="image/*"
                     onChange={handleImage}
                   />
-                  <br />
+                  <br /> */}
                 </div>
                 <div className="text-center mt-4">
-                  <Button type="submit" color="danger">
+                  <Button type="submit" color="danger" style={{marginRight: "10px"}}>
                     Update
                   </Button>
+                  <Button >Update Password</Button>
                 </div>
               </Form>
             </CardBody>
