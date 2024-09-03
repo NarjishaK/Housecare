@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardBody, Label, Form, Input, Row, Col } from "reactstrap";
+import { CardBody, Form, Input, Row, Col, Button } from "reactstrap";
 import Swal from "sweetalert2";
 import logoDark from "../../assets/images/logo-dark.png";
-import logoLight from "../../assets/images/logo-dark.png";
 import { useForm } from "helpers/useForms";
 import { handleCharitySignin } from "../Authentication/handle-api";
-
+import "./LoginPage.css"
 const CharityLoginPanel = () => {
   const [values, handleChange] = useForm({ email: "", password: "" });
   const [loginStatus, setLoginStatus] = useState(null);
@@ -34,23 +33,14 @@ const CharityLoginPanel = () => {
 
   return (
     <CardBody className="pt-0">
-      <h3 className="text-center mt-5 mb-4">
-        <Link to="/" className="d-block auth-logo">
-          <img src={logoDark} alt="" height="100" className="auth-logo-dark" />
-          <img src={logoLight} alt="" height="60" className="auth-logo-light" />
-        </Link>
-      </h3>
+      <div className="p-4">
+        <h4 className="font-size-24 mb-4 text-center">Charity Login</h4>
 
-      <div className="p-3">
-        <h4 className="text-muted font-size-18 mb-1 text-center">
-          Charity Organization
-        </h4>
         <Form className="form-horizontal mt-4" onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <Label htmlFor="email">Email</Label>
+          <div className="mb-4">
             <Input
               name="email"
-              className="form-control"
+              className="custom-input"
               placeholder="Enter email"
               type="email"
               value={values.email}
@@ -58,8 +48,7 @@ const CharityLoginPanel = () => {
               required
             />
           </div>
-          <div className="mb-3">
-            <Label htmlFor="userpassword">Password</Label>
+          <div className="mb-4">
             <Input
               name="password"
               type="password"
@@ -67,37 +56,40 @@ const CharityLoginPanel = () => {
               value={values.password}
               onChange={handleChange}
               required
+              className="custom-input"
             />
           </div>
-          <Row className="mb-3 mt-4">
-            <div className="col-6">
+          <Row className="mb-4">
+            <Col xs="6">
               <div className="form-check">
                 <input
                   type="checkbox"
                   className="form-check-input"
-                  id="customControlInline"
+                  id="rememberMe"
                 />
                 <label
                   className="form-check-label"
-                  htmlFor="customControlInline"
+                  htmlFor="rememberMe"
                 >
                   Remember me
                 </label>
               </div>
-            </div>
-            <div className="col-6 text-end">
-              <button
-                className="btn btn-primary w-md waves-effect waves-light"
+            </Col>
+            <Col xs="6" className="text-end">
+              <Button
+                className="btn-custom"
                 type="submit"
               >
                 Log In
-              </button>
-            </div>
+              </Button>
+            </Col>
           </Row>
           <Row className="form-group mb-0">
-            <Link to="/forgot-password" className="text-muted">
-              <i className="mdi mdi-lock"></i> Forgot your password?
-            </Link>
+            {/* <Col className="text-center">
+              <Link to="/forgot-password" className="text-muted">
+                <i className="mdi mdi-lock"></i> Forgot your password?
+              </Link>
+            </Col> */}
           </Row>
         </Form>
       </div>

@@ -112,6 +112,7 @@ function Beneficiary() {
       throw err;
     }
   };
+  
   const handleView = (beneficiaryId) => {
     window.location.href=`/beneficiarydetails/${beneficiaryId}`
   }
@@ -158,7 +159,7 @@ function Beneficiary() {
                     <td>{benificiary.charity_name}</td>
                     <td>{benificiary.email_id}</td>
                     <td>{benificiary.number}</td>
-                    <td>{benificiary.Balance || 0}</td>
+                    <td>{benificiary.Balance ||0}</td>
                     <td style={{ justifyContent: "center", display: "flex" }}>
                       <Button
                         style={{

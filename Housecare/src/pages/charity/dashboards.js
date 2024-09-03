@@ -3,7 +3,7 @@ import styles from "./dashboard.module.css"
 import Navbar from "./Navbars"
 import axios from "axios"
 import { fetchBenificiarys , BASE_URL} from "pages/Authentication/handle-api"
-
+import Graf from "./Navbars/graf"
 const Dashboards = () => {
   //benificiarys list
   const [benificiarys, setBenificiarys] = useState([])
@@ -115,8 +115,11 @@ const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
           <div className={styles.cardvalue}>{pendingApprovalsCount}</div>
           {/* <div className={styles.cardsubtext}>+1% From previous period</div> */}
         </div>
+      <Graf />
+
       </div>
       </div>
+     
     </>
   )
 }
