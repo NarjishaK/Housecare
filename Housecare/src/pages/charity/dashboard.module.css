@@ -158,3 +158,111 @@
     width: 100%;
   }
 }
+
+
+.card {
+  border-radius: 12px;
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Smooth gradient background */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+  padding: 2rem;
+  color: #ffffff; /* White text for contrast */
+  position: relative;
+  overflow: hidden;
+}
+
+.card-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 250px; /* Fixed height for card */
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-logo {
+  height: 40px; /* Adjust logo size */
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff; /* White text color for the title */
+  margin-bottom: 1rem;
+}
+
+.card-number {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #ffffff; /* White text color for the card number */
+  margin: 0;
+}
+
+.card-info {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8); /* Slightly muted white for card details */
+  margin-bottom: 0.5rem;
+}
+
+.card-name {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-expiry {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8); /* Slightly muted white for expiry date */
+}
+
+.card-footer {
+  border-top: 2px solid rgba(255, 255, 255, 0.3); /* Light border for footer separation */
+  padding-top: 1rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8); /* Muted white text for footer */
+  text-align: right;
+}
+
+.badge-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px; /* Rounded corners for the badge */
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.badge.bg-success {
+  background-color: #28a745; /* Green for active status */
+  color: #ffffff;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545; /* Red for inactive status */
+  color: #ffffff;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white circle for decorative effect */
+  border-radius: 50%;
+  z-index: 0;
+}

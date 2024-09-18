@@ -80,7 +80,7 @@ const BenificiaryDetails = (props) => {
         <Col xs="12">
           <Card>
             <CardBody>
-              <Row>
+              {/* <Row>
                 <Col xs="12">
                   <div className="invoice-title">
                     <h3>
@@ -143,6 +143,81 @@ const BenificiaryDetails = (props) => {
                       </address>
                     </Col>
                   </Row>
+                </Col>
+              </Row> */}
+              <Row className="p-4">
+                <Col xs="12">
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h3>
+                      <img src={imgdark} alt="logo" height="34" />
+                    </h3>
+                    <hr className="flex-grow-1 mx-3" />
+                  </div>
+
+                  <Row>
+                    <Col xs="6">
+                      <address>
+                        <strong className="text-primary" style={{ fontSize: "large" }}>
+                          {beneficiarys.benificiary_name}
+                        </strong>
+                        <br />
+                        <span>Age: {beneficiarys.age}</span>
+                        <br />
+                        <span>{beneficiarys.category}</span>
+                        <br />
+                        <span>
+                          Physically challenged:{" "}
+                          {beneficiarys.physically_challenged}
+                        </span>
+                        <br />
+                        <span>Health status: {beneficiarys.health_status}</span>
+                        <br />
+                        <span>Marital status: {beneficiarys.marital}</span>
+                        <br />
+                        <span>
+                          Family members: {beneficiarys.family_members}
+                        </span>
+                      </address>
+                    </Col>
+                    <Col xs="12" md="6">
+  <div className="card border-light shadow-sm">
+    <div className="card-body">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <strong className="text-primary">
+          {beneficiarys.charity_name}
+        </strong>
+        {/* <strong className="text-secondary">
+          {beneficiarys.charity_name}
+        </strong> */}
+        <div className="badge-container">
+          {beneficiarys.account_status ? (
+            <span className="badge bg-success">Active</span>
+          ) : (
+            <span className="badge bg-danger">Inactive</span>
+          )}
+        </div>
+      </div>
+
+      <div className="d-flex justify-content-between mb-3">
+        <span>{beneficiarys.email_id}</span>
+        <span>{beneficiarys.number}</span>
+        <span>{beneficiarys.navision_linked_no}</span>
+      </div>
+
+      <div className="card-footer d-flex justify-content-between align-items-center" style={{fontSize: "medium"}}>
+        <small className="text-muted">
+          Beneficiary ID: {beneficiarys.benificiary_id}
+        </small>
+        <small className="text-muted">
+          Balance: <strong>SAR {beneficiarys.Balance}</strong>
+        </small>
+      </div>
+    </div>
+  </div>
+</Col>
+
+                  </Row>
+
                 </Col>
               </Row>
 

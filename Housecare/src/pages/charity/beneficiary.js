@@ -10,6 +10,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Input,
 } from "reactstrap"
 
 import axios from "axios"
@@ -48,6 +49,7 @@ const Beneficiary = () => {
 
   const [charitys, setCharitys] = useState([])
   // const [showPassword, setShowPassword] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
   const { id } = useParams()
   const [loginStatus, setLoginStatus] = useState(null)
   const [edits, setEdits] = useState(false)
@@ -246,7 +248,11 @@ const Beneficiary = () => {
   const handleShow = _id => {
     navigate(`/beneficiariesdetails/${_id}`)
   }
-
+  //search
+  const filteredBen = filteredBenificiarys.filter(ben => 
+    ben?.benificiary_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    ben?.benificiary_id?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <div>
       <Navbar />
@@ -259,6 +265,17 @@ const Beneficiary = () => {
                   <CardBody>
                     <div style={{ display: "flex", alignItems: "baseline" }}>
                       BENIFICIARIES
+                      <Input
+                type="text"
+                placeholder="Search Benificiaries..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: "10px",
+                  marginInline:"40px",
+                }}
+              />
                       <Button
                         style={{
                           marginLeft: "auto",
@@ -618,7 +635,7 @@ const Beneficiary = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredBenificiarys.map(benificiary => (
+                    {filteredBen.map(benificiary => (
                       <tr className="table-light">
                         <td>{benificiary.benificiary_name}</td>
                         <td>{benificiary.benificiary_id}</td>

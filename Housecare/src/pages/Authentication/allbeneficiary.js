@@ -24,6 +24,7 @@ const generateTransactionId = () => {
 
 function Beneficiary() {
   const [benificiarys, setBenificiarys] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // New state for search input
   const [modal, setModal] = useState(false);
   const [selectedBenificiary, setSelectedBenificiary] = useState(null);
   const [spendAmount, setSpendAmount] = useState("");
@@ -117,21 +118,32 @@ function Beneficiary() {
     window.location.href=`/beneficiarydetails/${beneficiaryId}`
   }
 
+    // Filter beneficiaries based on the search term
+    const filteredBeneficiaries = benificiarys.filter(benificiary =>
+      benificiary.benificiary_name.toLowerCase().includes(searchTerm.toLowerCase())||
+      benificiary.charity_name.toLowerCase().includes(searchTerm.toLowerCase())||
+      benificiary.benificiary_id.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   return (
     <React.Fragment>
       <div style={{ textAlign: "center" }}>
         <Card>
           <CardBody>
-            <div
+          <div
               style={{
                 display: "flex",
-                alignItems: "baseline",
-                flexWrap: "nowrap",
-                gap: "20px",
-                justifyContent: "space-evenly",
+                alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <h4 className="card-title mb-3">BENEFICIARY</h4>
+              <h4 className="card-title mb-3">BENEFICIARYS</h4>
+              <Input
+                type="text"
+                placeholder="Search Beneficiaries..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ width: "300px" }} // Adjust the width of the search bar as needed
+              />
             </div>
           </CardBody>
         </Card>
@@ -152,7 +164,7 @@ function Beneficiary() {
                 </tr>
               </thead>
               <tbody>
-                {benificiarys.map((benificiary) => (
+                {filteredBeneficiaries.map((benificiary) => (
                   <tr key={benificiary.id}>
                     <td>{benificiary.benificiary_name}</td>
                     <td>{benificiary.benificiary_id}</td>
