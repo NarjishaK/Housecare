@@ -3,6 +3,7 @@
 
 var express = require("express");
 const Controller = require("../controller/charity");
+const Controller1 = require("../controller/benficiary");
 var router = express.Router();
 const multer = require("multer");
 
@@ -25,4 +26,6 @@ const upload = multer({
 
 router.post("/import", upload.single("file"),Controller.importCharityFromExcel);
 
+router.post('/importbeneficiaries', upload.single('file'), Controller1.importBenificiariesFromExcel);
 module.exports = router;
+

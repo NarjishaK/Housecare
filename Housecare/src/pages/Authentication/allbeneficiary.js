@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import moment from 'moment'; // Import moment.js for handling dates
+import GoogleSheetsImport from "./benificiaryimport";
 
 import { fetchBenificiarys ,BASE_URL} from "./handle-api";
 // Function to generate a transaction ID that starts with "TR" followed by 6 digits
@@ -31,6 +32,7 @@ function Beneficiary() {
   const [transactionId, setTransactionId] = useState("");
   const [transactionDate, setTransactionDate] = useState(moment().format('YYYY-MM-DD')); // Default to today's date
 
+  const [importModal, setImportModal] = useState(false);
   useEffect(() => {
     loadData();
   }, []);
@@ -144,6 +146,8 @@ function Beneficiary() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ width: "300px" }} // Adjust the width of the search bar as needed
               />
+              <button
+                className="btn btn-primary"  onClick={() => setImportModal(true)}>IMPORT BENEFICIARYS</button>
             </div>
           </CardBody>
         </Card>
@@ -238,6 +242,14 @@ function Beneficiary() {
           </Form>
         </ModalBody>
       </Modal>
+      <GoogleSheetsImport
+  isOpen={importModal}
+  toggle={() => setImportModal(false)}
+  onImportSuccess={(data) => {
+    // Handle the imported data here
+    loadData(); // Refresh the charity list
+  }}
+/>
     </React.Fragment>
   );
 }

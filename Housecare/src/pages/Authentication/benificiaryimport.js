@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, Button, Alert } from 'reactstrap';
 import { BASE_URL } from './handle-api';
-import img1 from '../../assets/images/charitymodel.png';
+import img1 from '../../assets/images/benificiary.png';
 
 const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
   const [file, setFile] = useState(null);
@@ -20,43 +20,40 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
       setError('Please upload a valid Excel file (.xlsx or .xls)');
     }
   };
-
   const handleImport = async () => {
     if (!file) {
-      setError("Please select a file to upload");
+      setError('Please select a file before importing.');
       return;
     }
   
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
   
     setLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/imports/import`, {
-        method: "POST",
+      const response = await fetch(`${BASE_URL}/imports/importbeneficiaries`, {
+        method: 'POST',
         body: formData,
       });
   
       const result = await response.json();
       if (response.ok) {
-        console.log("Import Successful:", result);
         onImportSuccess();
-        toggle();
+        setFile(null);
       } else {
-        setError(result.message || "Import failed");
+        setError(result.error || 'Failed to import data');
       }
-    } catch (err) {
-      setError("Error uploading file");
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      setError('Error importing file');
     }
+    setLoading(false);
   };
   
   
   return (
-    <Modal isOpen={isOpen} toggle={toggle} className="modal-dialog-centered" size="lg">
+    <Modal isOpen={isOpen} toggle={toggle} className="modal-dialog-centered" size="xl">
       <ModalHeader toggle={toggle}>
-        Import Charity Data from Excel
+        Import Benificiary Data from Excel
       </ModalHeader>
       <ModalBody>
         <div className="mb-4">
@@ -81,9 +78,10 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
         )}
 
         <div className="text-center">
-        <Button color="primary" onClick={handleImport} disabled={loading || !file} style={{marginRight:"10px"}}>
+        <Button color="primary" onClick={handleImport} disabled={loading || !file} style={{ marginRight: '10px' }}>
   {loading ? "Importing..." : "Import Data"}
 </Button>
+
 
           <Button color="secondary" onClick={toggle}>
             Cancel

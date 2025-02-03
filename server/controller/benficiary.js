@@ -2,7 +2,7 @@ const Benificiaries = require("../model/benificiary");
 const asyncHandler = require("express-async-handler");
 const Debited = require('../model/debited');
 
-
+const xlsx = require('xlsx');
 
 exports.create = asyncHandler(async (req, res) => {
   const {
@@ -263,3 +263,74 @@ exports.updateBalances = async (req, res) => {
     res.status(500).json({ message: 'Error updating balances' });
   }
 };
+
+exports.importBenificiariesFromExcel = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    if (!sheetData.length) {
+      return res.status(400).json({ error: 'Empty Excel file' });
+    }
+
+    // Fetch existing emails from the database
+    const existingEmailsInDB = new Set(
+      (await Benificiaries.find({}, 'email_id')).map((b) => b.email_id)
+    );
+
+    // Fetch existing emails in the uploaded Excel file
+    const emailsInExcel = new Set();
+    const filteredData = sheetData.filter((b) => {
+      if (!b.email_id) return false; // Ignore empty emails
+
+      if (existingEmailsInDB.has(b.email_id) || emailsInExcel.has(b.email_id)) {
+        return false; // Skip duplicates in DB or Excel
+      }
+
+      emailsInExcel.add(b.email_id); // Store unique emails
+      return true;
+    });
+
+    if (!filteredData.length) {
+      return res.status(400).json({ error: 'All emails already exist!' });
+    }
+
+    // Get the last beneficiary ID and generate new ones
+    const lastBenificiary = await Benificiaries.findOne({}).sort({ createdAt: -1 });
+    let lastNum = lastBenificiary ? parseInt(lastBenificiary.benificiary_id.substring(4), 10) : 0;
+
+    const beneficiariesToInsert = filteredData.map((b) => ({
+      benificiary_id: `BENF${(++lastNum).toString().padStart(5, '0')}`,
+      benificiary_name: b.benificiary_name,
+      number: b.number,
+      email_id: b.email_id,
+      charity_name: b.charity_name,
+      nationality: b.nationality,
+      sex: b.sex,
+      health_status: b.health_status,
+      marital: b.marital,
+      navision_linked_no: b.navision_linked_no,
+      physically_challenged: b.physically_challenged,
+      family_members: b.family_members,
+      account_status: b.account_status,
+      Balance: b.Balance,
+      category: b.category,
+      age: b.age,
+    }));
+
+    await Benificiaries.insertMany(beneficiariesToInsert);
+
+    return res.status(200).json({
+      message: `${beneficiariesToInsert.length} beneficiaries imported successfully`,
+    });
+  } catch (error) {
+    console.error('Error importing beneficiaries:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
