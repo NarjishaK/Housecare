@@ -17,6 +17,7 @@ var benificiaryRouter = require("./routes/benificiary")
 var emailRouter = require("./routes/email")
 var approvalsRouter = require("./routes/approvals")
 var notifications=require('./routes/notification')
+var imports = require("./routes/import")
 
 connectDB()
 
@@ -48,6 +49,7 @@ app.use('/benificiary',benificiaryRouter);
 app.use('/email',emailRouter);
 app.use('/approvals',approvalsRouter);
 app.use('/notification',notifications);
+app.use('/imports',imports)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

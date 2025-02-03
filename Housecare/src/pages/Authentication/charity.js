@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import GoogleSheetsImport from './googlesheet';
 import Swal from "sweetalert2"
 import {
   Row,
@@ -29,6 +30,7 @@ function Charity() {
   const [searchTerm, setSearchTerm] = useState("") // New state for search input
   const [image, setImage] = useState("")
   const [editId, setEditId] = useState(null)
+  const [importModal, setImportModal] = useState(false);
   const [modal_center, setmodal_center] = useState(false)
   const [values, handleChange, setValues] = useForm({
     charity: "",
@@ -278,6 +280,12 @@ function Charity() {
                   padding: "10px",
                 }}
               />
+              <button 
+  className="btn btn-primary" 
+  onClick={() => setImportModal(true)}
+>
+  Import Charity
+</button>
               <Link
                 onClick={() => {
                   setmodal(!modal)
@@ -940,6 +948,14 @@ function Charity() {
           </Row>
         </CardBody>
       </Card>
+      <GoogleSheetsImport
+  isOpen={importModal}
+  toggle={() => setImportModal(false)}
+  onImportSuccess={(data) => {
+    // Handle the imported data here
+    loadData(); // Refresh the charity list
+  }}
+/>
     </React.Fragment>
   )
 }

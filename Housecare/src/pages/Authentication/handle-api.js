@@ -163,7 +163,7 @@ export const handleCharity = async formData => {
 export const charityDelete = async (id) => {
   const { isConfirmed } = await Swal.fire({
     title: 'Are you sure?',
-    text: 'Do you want to delete this product?',
+    text: 'Do you want to delete this charity?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -177,7 +177,7 @@ export const charityDelete = async (id) => {
       await axios.delete(`${CHARITY_URL}/${id}`);
       await Swal.fire({
         title: 'Deleted!',
-        text: 'The product has been deleted.',
+        text: 'The Charity has been deleted.',
         icon: 'success',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'OK'
@@ -186,7 +186,7 @@ export const charityDelete = async (id) => {
       console.error('Error deleting charity:', err);
       await Swal.fire({
         title: 'Error!',
-        text: 'Failed to delete the product. Please try again.',
+        text: 'Failed to delete the charity. Please try again.',
         icon: 'error',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'OK'

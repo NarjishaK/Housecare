@@ -4,6 +4,7 @@ const Charitystaffs = require("../model/charitystaff");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const XLSX = require("xlsx");
 exports.create = asyncHandler(async (req, res) => {
   const {
     charity,
@@ -269,3 +270,44 @@ exports.detailses = asyncHandler(async (req, res) => {
 });
 
   
+
+exports. importCharityFromExcel = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    console.log("File received:", req.file.originalname); // Debugging
+
+    // Ensure file buffer is not empty
+    if (!req.file.buffer || req.file.buffer.length === 0) {
+      return res.status(400).json({ message: "Uploaded file is empty" });
+    }
+
+    // Read Excel file
+    const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
+    console.log("Workbook Sheets:", workbook.SheetNames); // Debugging
+
+    if (workbook.SheetNames.length === 0) {
+      return res.status(400).json({ message: "Excel file has no sheets" });
+    }
+
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+    if (jsonData.length === 0) {
+      return res.status(400).json({ message: "Excel file is empty or invalid" });
+    }
+
+    console.log("Extracted Data:", jsonData); // Debugging
+
+    // Save data to database
+    const importedCharities = await Charity.insertMany(jsonData);
+
+    res.status(201).json({ message: "Charities imported successfully", data: importedCharities });
+  } catch (error) {
+    console.error("Error importing charities:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

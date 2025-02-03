@@ -9,7 +9,7 @@ const charitySchema = mongoose.Schema({
   phone: { type: Number, required: true },
   authorizedperson: { type: String, required: true },
   email: { type: String, required: true },
-  image: { type: String, required: true },
+  image: { type: String},
   date: { type: String, required: true },
   roles: { type: String, required: true },
   password: { type: String, required: true },
