@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import moment from 'moment'; // Import moment.js for handling dates
 import GoogleSheetsImport from "./benificiaryimport";
+import * as XLSX from "xlsx";
 
 import { fetchBenificiarys ,BASE_URL} from "./handle-api";
 // Function to generate a transaction ID that starts with "TR" followed by 6 digits
@@ -126,6 +127,45 @@ function Beneficiary() {
       benificiary.charity_name.toLowerCase().includes(searchTerm.toLowerCase())||
       benificiary.benificiary_id.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleExport = () => {
+      if (benificiarys.length === 0) {
+        alert("No data available to export.");
+        return;
+      }
+    
+      // Format data for Excel with all required fields
+      const exportData = benificiarys.map(benificiary => ({
+        "Beneficiary ID": benificiary.benificiary_id,
+        "Beneficiary Name": benificiary.benificiary_name,
+        "Phone Number": benificiary.number,
+        "Email": benificiary.email_id,
+        "Charity Name": benificiary.charity_name,
+        "Nationality": benificiary.nationality,
+        "Sex": benificiary.sex,
+        "Health Status": benificiary.health_status,
+        "Marital Status": benificiary.marital,
+        "Navision Linked No": benificiary.navision_linked_no,
+        "Physically Challenged": benificiary.physically_challenged,
+        "Family Members": benificiary.family_members,
+        "Account Status": benificiary.account_status,
+        "Balance": benificiary.Balance || 0,
+        "Category": benificiary.category,
+        "Age": benificiary.age,
+      }));
+    
+      // Create a worksheet
+      const ws = XLSX.utils.json_to_sheet(exportData);
+    
+      // Create a workbook and append the worksheet
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Beneficiaries");
+    
+      // Generate and download the Excel file
+      XLSX.writeFile(wb, "Beneficiaries.xlsx");
+    };
+    
+    
   return (
     <React.Fragment>
       <div style={{ textAlign: "center" }}>
@@ -146,8 +186,12 @@ function Beneficiary() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ width: "300px" }} // Adjust the width of the search bar as needed
               />
+<button className="btn btn-primary" onClick={handleExport}>
+  EXPORT BENEFICIARY
+</button>
               <button
                 className="btn btn-primary"  onClick={() => setImportModal(true)}>IMPORT BENEFICIARYS</button>
+
             </div>
           </CardBody>
         </Card>

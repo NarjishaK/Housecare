@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, Button, Alert } from 'reactstrap';
 import { BASE_URL } from './handle-api';
 import img1 from '../../assets/images/benificiary.png';
+import * as XLSX from "xlsx";
 
 const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
   const [file, setFile] = useState(null);
@@ -50,6 +51,18 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
   };
   
   
+    const handleDownloadTemplate = () => {
+      const headings = [
+        ["benificiary_name","number","email_id","charity_name","nationality","sex","health_status","marital","navision_linked_no","physically_challenged","family_members","account_status","Balance","category","age"],
+      ];
+    
+      const worksheet = XLSX.utils.aoa_to_sheet(headings);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Template");
+    
+      // Create a Blob and trigger a download
+      XLSX.writeFile(workbook, "Benificiary_Template.xlsx");
+    };
   return (
     <Modal isOpen={isOpen} toggle={toggle} className="modal-dialog-centered" size="xl">
       <ModalHeader toggle={toggle}>
@@ -82,7 +95,9 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
   {loading ? "Importing..." : "Import Data"}
 </Button>
 
-
+ <Button color="primary" onClick={handleDownloadTemplate} style={{ marginRight: "10px" }}>
+            Download Template
+          </Button>
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>

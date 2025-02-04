@@ -306,21 +306,21 @@ exports.importBenificiariesFromExcel = async (req, res) => {
 
     const beneficiariesToInsert = filteredData.map((b) => ({
       benificiary_id: `BENF${(++lastNum).toString().padStart(5, '0')}`,
-      benificiary_name: b.benificiary_name,
-      number: b.number,
-      email_id: b.email_id,
-      charity_name: b.charity_name,
-      nationality: b.nationality,
-      sex: b.sex,
-      health_status: b.health_status,
-      marital: b.marital,
-      navision_linked_no: b.navision_linked_no,
-      physically_challenged: b.physically_challenged,
-      family_members: b.family_members,
-      account_status: b.account_status,
-      Balance: b.Balance,
-      category: b.category,
-      age: b.age,
+      benificiary_name: b.benificiary_name || "", // Default to an empty string if missing
+      number: b.number || "",
+      email_id: b.email_id || "",
+      charity_name: b.charity_name || "",
+      nationality: b.nationality || "",
+      sex: b.sex || "",
+      health_status: b.health_status || "",
+      marital: b.marital || "",
+      navision_linked_no: b.navision_linked_no || "",
+      physically_challenged: b.physically_challenged || "",
+      family_members: b.family_members || 0, // Default to 0 if missing
+      account_status: b.account_status || "",
+      Balance: b.Balance || 0, // Default to 0 if missing
+      category: b.category || "",
+      age: b.age || 0, // Default to 0 if missing
     }));
 
     await Benificiaries.insertMany(beneficiariesToInsert);
