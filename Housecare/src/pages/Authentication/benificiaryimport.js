@@ -8,10 +8,10 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    // Check if file is an Excel file
     if (selectedFile && (selectedFile.type === 'application/vnd.ms-excel' || 
         selectedFile.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
       setFile(selectedFile);
@@ -31,6 +31,8 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
     formData.append('file', file);
   
     setLoading(true);
+    setError('');
+    
     try {
       const response = await fetch(`${BASE_URL}/imports/importbeneficiaries`, {
         method: 'POST',
@@ -39,30 +41,43 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
   
       const result = await response.json();
       if (response.ok) {
+        setSuccess(result.message);
         onImportSuccess();
-        setFile(null);
+        setTimeout(() => {
+          toggle();
+        }, 2000);
       } else {
         setError(result.error || 'Failed to import data');
       }
     } catch (error) {
-      setError('Error importing file');
+      setError('Network error while importing file. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
-  
-  
-    const handleDownloadTemplate = () => {
-      const headings = [
-        ["benificiary_name","number","email_id","charity_name","nationality","sex","health_status","marital","navision_linked_no","physically_challenged","family_members","account_status","Balance","category","age"],
-      ];
+
+  const handleDownloadTemplate = () => {
+    const headings = [
+      ["benificiary_name", "number", "email_id", "charity_name", "nationality", 
+       "sex", "health_status", "marital", "navision_linked_no", 
+       "physically_challenged", "family_members", "account_status", 
+       "Balance", "category", "age"]
+    ];
     
-      const worksheet = XLSX.utils.aoa_to_sheet(headings);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Template");
-    
-      // Create a Blob and trigger a download
-      XLSX.writeFile(workbook, "Benificiary_Template.xlsx");
-    };
+    // Add a sample row to show expected format
+    const sampleRow = [
+      ["John Doe", "1234567890", "john@example.com", "Charity A", "US", 
+       "Male", "Good", "Single", "NAV001", 
+       "No", "3", "Active", 
+       "1000", "Category A", "30"]
+    ];
+
+    const worksheet = XLSX.utils.aoa_to_sheet([...headings, ...sampleRow]);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Template");
+    XLSX.writeFile(workbook, "Benificiary_Template.xlsx");
+  };
+
   return (
     <Modal isOpen={isOpen} toggle={toggle} className="modal-dialog-centered" size="xl">
       <ModalHeader toggle={toggle}>
@@ -77,11 +92,13 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
             accept=".xlsx, .xls"
             onChange={handleFileChange}
           />
-          <small className="text-muted">
+          <small className="text-muted d-block">
             Supported formats: .xlsx, .xls
-          </small><br/>
-          <small className="text-danger">use this model template</small>
-          <img src={img1} alt="Excel" style={{ maxWidth: '100%', marginTop: '10px' }} />
+          </small>
+          <small className="text-danger d-block mt-2">
+            All fields marked with * in the template are required
+          </small>
+          <img src={img1} alt="Excel Template" style={{ maxWidth: '100%', marginTop: '10px' }} />
         </div>
 
         {error && (
@@ -90,14 +107,29 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
           </Alert>
         )}
 
-        <div className="text-center">
-        <Button color="primary" onClick={handleImport} disabled={loading || !file} style={{ marginRight: '10px' }}>
-  {loading ? "Importing..." : "Import Data"}
-</Button>
+        {success && (
+          <Alert color="success" className="mb-4">
+            {success}
+          </Alert>
+        )}
 
- <Button color="primary" onClick={handleDownloadTemplate} style={{ marginRight: "10px" }}>
-            Download Template
+        <div className="text-center">
+          <Button 
+            color="primary" 
+            onClick={handleImport} 
+            disabled={loading || !file} 
+            style={{ marginRight: '10px' }}
+          >
+            {loading ? "Importing..." : "Import Data"}
           </Button>
+
+          <Button 
+            color="primary" 
+            onClick={handleDownloadTemplate} 
+            style={{ marginRight: "10px" }}
+          >
+            Download Template
+          </Button>       
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>

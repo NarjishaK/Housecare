@@ -51,7 +51,6 @@ const Beneficiary = () => {
   // const [showPassword, setShowPassword] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const { id } = useParams()
-  const [loginStatus, setLoginStatus] = useState(null)
   const [edits, setEdits] = useState(false)
   const [benificiarys, setBenificiarys] = useState([])
   const [modals, setmodals] = useState(false)
@@ -310,35 +309,7 @@ const Beneficiary = () => {
       });
     }
   };
-  const handleImport = async (event) => {
-    const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('current_charity_name', charitydetails.charity);
-  
-    try {
-      const response = await axios.post(`${BASE_URL}/imports/importbeneficiary`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      
-      // Refresh beneficiary list after successful import
-      fetchDatas();
-      
-      Swal.fire({
-        title: 'Success!',
-        text: response.data.message,
-        icon: 'success'
-      });
-    } catch (error) {
-      Swal.fire({
-        title: 'Error!',
-        text: error.response?.data?.error || 'Import failed',
-        icon: 'error'
-      });
-    }
-  };
+ 
   return (
     <div>
       <Navbar />
@@ -391,16 +362,7 @@ const Beneficiary = () => {
                       >
                         EXPORT BENEFICIARY
                       </Button>
-                      <Button 
-  className="btn btn-primary ms-2"
-  onClick={() => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = '.xlsx, .xls, .csv';
-    fileInput.onchange = handleImport;
-    fileInput.click();
-  }}
->
+                      <Button >
   IMPORT BENEFICIARY
 </Button>                    </div>
 
