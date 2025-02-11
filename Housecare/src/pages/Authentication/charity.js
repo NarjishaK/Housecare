@@ -97,6 +97,7 @@ function Charity() {
     if (!image) errors.image = "image is required."
     if (!values.roles) errors.roles = "Roles is required."
     if (!values.VAT_REG_NO) errors.VAT_REG_NO = "VAT_REG_NO is required."
+    if(!values.prifix) errors.prifix = "Prifix is required."
 
     setValidationErrors(errors)
 
@@ -117,6 +118,7 @@ function Charity() {
     formData.append("phone", values.phone)
     formData.append("authorizedperson", values.authorizedperson)
     formData.append("password", values.password)
+    formData.append("prifix", values.prifix)
     formData.append("image", image)
     try {
       await handleCharity(formData)
@@ -500,7 +502,7 @@ function Charity() {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg={6}>
+                    <Col lg={4}>
                       <div className="mb-3">
                         <label htmlFor="password">Password</label>
                         <input
@@ -520,7 +522,7 @@ function Charity() {
                         )}
                       </div>
                     </Col>
-                    <Col lg={6}>
+                    <Col lg={4}>
                       <div className="mb-3">
                         <label htmlFor="image">Image</label>
                         <input
@@ -533,6 +535,24 @@ function Charity() {
                         {validationErrors.image && (
                           <small className="text-danger">
                             {validationErrors.image}
+                          </small>
+                        )}
+                      </div>
+                    </Col>
+                    <Col lg={4}>
+                      <div className="mb-3">
+                        <label htmlFor="status">Prifix</label>
+                        <input
+                          className="form-control"
+                          name="prifix"
+                          type="name"
+                          value={values.prifix}
+                          onChange={handleChange}
+                          placeholder="prifix"
+                          ></input>
+                        {validationErrors.prifix && (
+                          <small className="text-danger">
+                            {validationErrors.prifix}
                           </small>
                         )}
                       </div>

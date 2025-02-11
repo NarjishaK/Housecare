@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 
 const charitySchema = mongoose.Schema({
   charity: { type: String, required: true },
+  prifix:{type:String,required:true,unique:true},
+  charityId: { type: String, unique: true },
   arbic: { type: String, required: true },
   CR_NO: { type: String, required: true },
   VAT_REG_NO: { type: String, required: true },

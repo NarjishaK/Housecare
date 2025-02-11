@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const XLSX = require("xlsx");
+// const asyncHandler = require("express-async-handler");
+
 exports.create = asyncHandler(async (req, res) => {
   const {
     charity,
@@ -17,49 +19,62 @@ exports.create = asyncHandler(async (req, res) => {
     VAT_REG_NO,
     authorizedperson,
     phone,
+    prifix, // Ensure prifix is received in the request body
   } = req.body;
-  const image = req.file.filename;
+  const image = req.file ? req.file.filename : "";
 
   try {
     const charitys = await Charity.findOne({ email });
     if (charitys) {
-      return res
-        .status(400)
-        .json({ invalid: true, message: "email is already exist" });
+      return res.status(400).json({ invalid: true, message: "Email already exists" });
     }
+    
     const charitysphone = await Charity.findOne({ phone });
     if (charitysphone) {
-      return res
-        .status(400)
-        .json({ invalid: true, message: "phone number is already exist" });
+      return res.status(400).json({ invalid: true, message: "Phone number already exists" });
     }
 
-    const charities = await Charity.create({
-      charity: charity,
-      email: email,
-      password: password,
-      date: date,
-      authorizedperson: authorizedperson,
-      CR_NO: CR_NO,
-      roles: roles,
-      VAT_REG_NO: VAT_REG_NO,
-      phone: phone,
-      arbic: arbic,
-      image: image,
-    });
-    if (!charities) {
-      console.log("charity creation failed");
-      res.send("Failed");
-    } else {
-      res.send("Success");
+    // Get the latest charityId and generate a new one
+    const lastCharity = await Charity.findOne().sort({ _id: -1 }).select("charityId");
+    let newIdNumber = 1;
+
+    if (lastCharity && lastCharity.charityId) {
+      const lastId = lastCharity.charityId.match(/\d+/g); // Extract numeric part
+      if (lastId) {
+        newIdNumber = parseInt(lastId[0]) + 1;
+      }
     }
+
+    const newCharityId = `CH${newIdNumber.toString().padStart(6, "0")}${prifix}`;
+
+    const newCharity = await Charity.create({
+      charity,
+      email,
+      password,
+      date,
+      authorizedperson,
+      CR_NO,
+      roles,
+      VAT_REG_NO,
+      phone,
+      arbic,
+      image,
+      prifix,
+      charityId: newCharityId, // Assign the generated ID
+    });
+
+    if (!newCharity) {
+      console.log("Charity creation failed");
+      return res.status(500).json({ message: "Failed to create charity" });
+    }
+
+    res.status(201).json({ message: "Success", charity: newCharity });
   } catch (err) {
-    console.log(err, "craetion failed");
-    return res
-      .status(400)
-      .json({ err: "something went wrong in charity creation" });
+    console.log(err, "Creation failed");
+    return res.status(400).json({ err: "Something went wrong in charity creation" });
   }
 });
+
 
 exports.list = asyncHandler(async (req, res) => {
   try {
