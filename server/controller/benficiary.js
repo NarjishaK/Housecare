@@ -367,52 +367,69 @@ exports.importFromExcel = async (req, res) => {
       return res.status(400).json({ error: 'Empty Excel file' });
     }
 
-    // Fetch existing emails from the database
-    const existingEmailsInDB = new Set(
-      (await Benificiaries.find({}, 'email_id')).map((b) => b.email_id)
-    );
+    // Fetch all existing beneficiary IDs and emails to prevent duplicates
+    const existingBeneficiaries = await Benificiaries.find({}, 'benificiary_id email_id');
+    const existingBenificiaryIds = new Set(existingBeneficiaries.map((b) => b.benificiary_id));
+    const existingEmails = new Set(existingBeneficiaries.map((b) => b.email_id));
 
-    // Fetch existing emails in the uploaded Excel file
-    const emailsInExcel = new Set();
-    const filteredData = sheetData.filter((b) => {
-      if (!b.email_id) return false; // Ignore empty emails
+    const beneficiariesToInsert = [];
 
-      if (existingEmailsInDB.has(b.email_id) || emailsInExcel.has(b.email_id)) {
-        return false; // Skip duplicates in DB or Excel
+    for (const b of sheetData) {
+      // Check if email already exists
+      if (b.email_id && existingEmails.has(b.email_id)) {
+        console.log(`Skipping duplicate email: ${b.email_id}`);
+        continue; // Skip this entry
       }
 
-      emailsInExcel.add(b.email_id); // Store unique emails
-      return true;
-    });
+      // Fetch the charity prefix
+      const charity = await Charity.findOne({ charity: b.charity_name });
+      if (!charity) {
+        return res.status(400).json({ error: `Charity '${b.charity_name}' not found!` });
+      }
 
-    if (!filteredData.length) {
-      return res.status(400).json({ error: 'All emails already exist!' });
+      const charityPrefix = charity.prifix;
+      if (!charityPrefix) {
+        return res.status(400).json({ error: `Prefix not found for charity '${b.charity_name}'` });
+      }
+
+      // Find the next available unique ID
+      let newIdNumber = 1;
+      let newBenificiaryId;
+
+      do {
+        newBenificiaryId = `${charityPrefix}${newIdNumber.toString().padStart(5, '0')}`;
+        newIdNumber++;
+      } while (existingBenificiaryIds.has(newBenificiaryId));
+
+      existingBenificiaryIds.add(newBenificiaryId); // Track used IDs
+      existingEmails.add(b.email_id); // Track used emails to prevent duplicates
+
+      beneficiariesToInsert.push({
+        benificiary_id: newBenificiaryId,
+        benificiary_name: b.benificiary_name || "",
+        number: b.number || "",
+        email_id: b.email_id || "",
+        charity_name: b.charity_name || "",
+        nationality: b.nationality || "",
+        sex: b.sex || "",
+        health_status: b.health_status || "",
+        marital: b.marital || "",
+        navision_linked_no: b.navision_linked_no || "",
+        physically_challenged: b.physically_challenged || "",
+        family_members: b.family_members || 0,
+        account_status: b.account_status || "",
+        Balance: b.Balance || 0,
+        category: b.category || "",
+        age: b.age || 0,
+      });
     }
 
-    // Get the last beneficiary ID and generate new ones
-    const lastBenificiary = await Benificiaries.findOne({}).sort({ createdAt: -1 });
-    let lastNum = lastBenificiary ? parseInt(lastBenificiary.benificiary_id.substring(4), 10) : 0;
+    if (beneficiariesToInsert.length === 0) {
+      return res.status(400).json({ error: 'No new beneficiaries to insert' });
+    }
 
-    const beneficiariesToInsert = filteredData.map((b) => ({
-      benificiary_id: `BENF${(++lastNum).toString().padStart(5, '0')}`,
-      benificiary_name: b.benificiary_name || "", // Default to an empty string if missing
-      number: b.number || "",
-      email_id: b.email_id || "",
-      charity_name: b.charity_name || "",
-      nationality: b.nationality || "",
-      sex: b.sex || "",
-      health_status: b.health_status || "",
-      marital: b.marital || "",
-      navision_linked_no: b.navision_linked_no || "",
-      physically_challenged: b.physically_challenged || "",
-      family_members: b.family_members || 0, // Default to 0 if missing
-      account_status: b.account_status || "",
-      Balance: b.Balance || 0, // Default to 0 if missing
-      category: b.category || "",
-      age: b.age || 0, // Default to 0 if missing
-    }));
-
-    await Benificiaries.insertMany(beneficiariesToInsert);
+    // Insert all at once
+    await Benificiaries.insertMany(beneficiariesToInsert, { ordered: false });
 
     return res.status(200).json({
       message: `${beneficiariesToInsert.length} beneficiaries imported successfully`,
@@ -422,4 +439,6 @@ exports.importFromExcel = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
 
