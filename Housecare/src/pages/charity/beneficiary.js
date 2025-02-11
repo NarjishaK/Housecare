@@ -57,7 +57,6 @@ const Beneficiary = () => {
   const [modals, setmodals] = useState(false)
   const [editedId, setEditedId] = useState(null)
   const [validationErrors, setValidationErrors] = useState({})
-  // const [allcharity, setAllCharity] = useState([])
   const navigate = useNavigate()
 
   //charity details
@@ -253,6 +252,93 @@ const Beneficiary = () => {
     ben?.benificiary_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     ben?.benificiary_id?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
+
+  const handleExport = async () => {
+    try {
+      // Only export beneficiaries for the current charity
+      const exportData = filteredBenificiarys.map(ben => ({
+        benificiary_name: ben.benificiary_name,
+        benificiary_id: ben.benificiary_id,
+        number: ben.number,
+        email_id: ben.email_id,
+        charity_name: ben.charity_name,
+        nationality: ben.nationality,
+        sex: ben.sex,
+        health_status: ben.health_status,
+        marital: ben.marital,
+        physically_challenged: ben.physically_challenged,
+        family_members: ben.family_members,
+        account_status: ben.account_status,
+        date: ben.date,
+        category: ben.category,
+        age: ben.age,
+        Balance: ben.Balance || 0
+      }));
+
+      // Create and download CSV
+      const headers = Object.keys(exportData[0]).join(',');
+      const csv = [
+        headers,
+        ...exportData.map(row => Object.values(row).join(','))
+      ].join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `beneficiaries_${charitydetails.charity}_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      Swal.fire({
+        title: "Success!",
+        text: "Beneficiaries exported successfully",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      console.error("Export failed:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to export beneficiaries",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+  const handleImport = async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('current_charity_name', charitydetails.charity);
+  
+    try {
+      const response = await axios.post(`${BASE_URL}/imports/importbeneficiary`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      // Refresh beneficiary list after successful import
+      fetchDatas();
+      
+      Swal.fire({
+        title: 'Success!',
+        text: response.data.message,
+        icon: 'success'
+      });
+    } catch (error) {
+      Swal.fire({
+        title: 'Error!',
+        text: error.response?.data?.error || 'Import failed',
+        icon: 'error'
+      });
+    }
+  };
   return (
     <div>
       <Navbar />
@@ -299,7 +385,24 @@ const Beneficiary = () => {
                         </Link>{" "}
                         ADD NEW BENEFICIARY{" "}
                       </Button>
-                    </div>
+                      <Button 
+                        className="btn btn-primary ms-2"
+                        onClick={handleExport}
+                      >
+                        EXPORT BENEFICIARY
+                      </Button>
+                      <Button 
+  className="btn btn-primary ms-2"
+  onClick={() => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.xlsx, .xls, .csv';
+    fileInput.onchange = handleImport;
+    fileInput.click();
+  }}
+>
+  IMPORT BENEFICIARY
+</Button>                    </div>
 
                     <Modal
                       size="lg"
