@@ -12,7 +12,7 @@ import {
   ModalBody,
   Input,
 } from "reactstrap"
-
+import ImportBeneficiaryModal from './charitybenificiaryimport';
 import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 import { Link } from "react-router-dom"
@@ -57,7 +57,7 @@ const Beneficiary = () => {
   const [editedId, setEditedId] = useState(null)
   const [validationErrors, setValidationErrors] = useState({})
   const navigate = useNavigate()
-
+  const [importModalOpen, setImportModalOpen] = useState(false);
   //charity details
   useEffect(() => {
     // loadData()
@@ -309,7 +309,7 @@ const Beneficiary = () => {
       });
     }
   };
- 
+  const toggleImportModal = () => setImportModalOpen(!importModalOpen);
   return (
     <div>
       <Navbar />
@@ -362,9 +362,9 @@ const Beneficiary = () => {
                       >
                         EXPORT BENEFICIARY
                       </Button>
-                      <Button >
+                      <Button onClick={toggleImportModal}>
   IMPORT BENEFICIARY
-</Button>                    </div>
+</Button>                 </div>
 
                     <Modal
                       size="lg"
@@ -1114,6 +1114,11 @@ const Beneficiary = () => {
           </Card>
         </Col>
       </Row>
+      <ImportBeneficiaryModal 
+  isOpen={importModalOpen}
+  toggle={toggleImportModal}
+  onImportSuccess={fetchDatas}
+/>
     </div>
   )
 }
