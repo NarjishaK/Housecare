@@ -18,6 +18,7 @@ import GoogleSheetsImport from "./benificiaryimport";
 import * as XLSX from "xlsx";
 
 import { fetchBenificiarys ,BASE_URL} from "./handle-api";
+import Swal from "sweetalert2";
 // Function to generate a transaction ID that starts with "TR" followed by 6 digits
 const generateTransactionId = () => {
   const randomDigits = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit number
@@ -130,7 +131,12 @@ function Beneficiary() {
 
     const handleExport = () => {
       if (benificiarys.length === 0) {
-        alert("No data available to export.");
+        Swal.fire({
+          icon: 'error',
+          title: 'No data available to export.',
+          showConfirmButton: false,
+          timer: 1500
+        })
         return;
       }
     
