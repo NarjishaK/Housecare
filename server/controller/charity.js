@@ -383,8 +383,9 @@ exports.importCharityFromExcel = async (req, res) => {
           }
         }
 
-        // Format the date to DD/MM/YYYY
-        const formattedDate = moment(item.date, ["YYYY-MM-DD", "MM/DD/YYYY", "DD-MM-YYYY"]).format("DD/MM/YYYY");
+        // Convert date to DD/MM/YYYY format
+        const parsedDate = new Date(item.date);
+        const formattedDate = parsedDate.toLocaleDateString("en-GB"); // en-GB uses DD/MM/YYYY format
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(item.password, 10);
