@@ -328,7 +328,7 @@ exports.detailses = asyncHandler(async (req, res) => {
 // };
 
 
-
+//
 exports.importCharityFromExcel = async (req, res) => {
   try {
     if (!req.file) {
@@ -361,6 +361,17 @@ exports.importCharityFromExcel = async (req, res) => {
 
       console.log("Extracted Data:", jsonData);
 
+      // Find existing charities by email or charity name
+      const existingCharities = await Charity.find({
+        $or: jsonData.map((item) => ({
+          email: item.email,
+          charity: item.charity,
+        })),
+      });
+
+      const existingEmails = new Set(existingCharities.map((charity) => charity.email));
+      const existingNames = new Set(existingCharities.map((charity) => charity.charity));
+
       // Find the last charity to determine the next ID number
       const lastCharity = await Charity.findOne().sort({ charityId: -1 });
 
@@ -375,6 +386,11 @@ exports.importCharityFromExcel = async (req, res) => {
       const charityData = [];
 
       for (const item of jsonData) {
+        if (existingEmails.has(item.email) || existingNames.has(item.charity)) {
+          console.log(`Skipping existing charity: ${item.charity} (${item.email})`);
+          continue;
+        }
+
         // Required fields
         const requiredFields = ["charity", "prifix", "phone", "authorizedperson", "email", "date", "roles", "password"];
         for (const field of requiredFields) {
@@ -415,7 +431,12 @@ exports.importCharityFromExcel = async (req, res) => {
       const importedCharities = await Charity.insertMany(charityData);
       console.log("Import successful, records created:", importedCharities.length);
 
-      res.status(201).json({ message: "Charities imported successfully", count: importedCharities.length });
+      res.status(201).json({
+        message: "Charities imported successfully", 
+        importedCount: importedCharities.length,
+        skippedCount: existingCharities.length,
+        skippedCharities: existingCharities.map((c) => c.charity),
+      });
     } catch (parseError) {
       console.error("Error parsing Excel or processing data:", parseError);
       return res.status(400).json({ message: `Error processing file: ${parseError.message}` });
