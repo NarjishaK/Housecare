@@ -339,13 +339,11 @@ exports.importCharityFromExcel = async (req, res) => {
     console.log("File size:", req.file.size);
     console.log("File mimetype:", req.file.mimetype);
 
-    // Ensure file buffer is not empty
     if (!req.file.buffer || req.file.buffer.length === 0) {
       return res.status(400).json({ message: "Uploaded file is empty" });
     }
 
     try {
-      // Read Excel file
       const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
       console.log("Workbook Sheets:", workbook.SheetNames);
 
@@ -365,46 +363,50 @@ exports.importCharityFromExcel = async (req, res) => {
 
       // Find the last charity to determine the next ID number
       const lastCharity = await Charity.findOne().sort({ charityId: -1 });
-      
+
       let lastNumber = 0;
       if (lastCharity && lastCharity.charityId) {
-        // Extract the number from the charityId (e.g., "CH000004R1" -> 4)
         const match = lastCharity.charityId.match(/CH(\d+)/);
         if (match && match[1]) {
           lastNumber = parseInt(match[1]);
         }
       }
 
-      // Create charity records with sequential IDs
       const charityData = [];
-      
+
       for (const item of jsonData) {
-        // Check if required fields are present
-        const requiredFields = ['charity', 'prifix', 'arbic', 'CR_NO', 'VAT_REG_NO', 'phone', 'authorizedperson', 'email', 'date', 'roles', 'password'];
+        // Required fields
+        const requiredFields = ["charity", "prifix", "phone", "authorizedperson", "email", "date", "roles", "password"];
         for (const field of requiredFields) {
           if (!item[field]) {
             throw new Error(`Missing required field: ${field}`);
           }
         }
-        
+
+        // Format the date to DD/MM/YYYY
+        const formattedDate = moment(item.date, ["YYYY-MM-DD", "MM/DD/YYYY", "DD-MM-YYYY"]).format("DD/MM/YYYY");
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(item.password, 10);
+
         // Generate the next sequential ID
         lastNumber++;
-        const paddedNumber = String(lastNumber).padStart(6, '0');
+        const paddedNumber = String(lastNumber).padStart(6, "0");
         const charityId = `CH${paddedNumber}${item.prifix}`;
-        
+
         charityData.push({
           charity: item.charity,
           prifix: item.prifix,
           charityId: charityId,
-          arbic: item.arbic,
-          CR_NO: item.CR_NO,
-          VAT_REG_NO: item.VAT_REG_NO,
+          arbic: item.arbic || "", // Optional field
+          CR_NO: item.CR_NO || "", // Optional field
+          VAT_REG_NO: item.VAT_REG_NO || "", // Optional field
           phone: item.phone,
           authorizedperson: item.authorizedperson,
           email: item.email,
-          date: item.date,
+          date: formattedDate,
           roles: item.roles,
-          password: item.password
+          password: hashedPassword,
         });
       }
 
