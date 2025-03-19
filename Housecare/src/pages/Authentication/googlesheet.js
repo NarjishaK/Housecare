@@ -34,7 +34,7 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
     const formData = new FormData();
     formData.append("file", file);
   
-    const url = `http://localhost:8000/imports/import`;
+    const url = `${BASE_URL}/imports/import`;
     console.log("Sending request to:", url);
     
     setLoading(true);
