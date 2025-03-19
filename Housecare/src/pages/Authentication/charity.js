@@ -590,13 +590,14 @@ function Charity() {
                         className="inbox-item"
                         style={{ paddingInline: "10px" }}
                       >
-                        <div className="inbox-item-img float-start me-4">
-                          <img
-                            src={`${BASE_URL}/upload/${details.image}`}
-                            className="avatar-md rounded-circle"
-                            alt=""
-                          />
-                        </div>
+                       <div className="inbox-item-img float-start me-4">
+  <img
+    src={details.image?.includes("http") ? details.image : `${BASE_URL}/upload/${details.image}`}
+    className="avatar-md rounded-circle"
+    alt="Charity"
+  />
+</div>
+
                         <div>
                           <h6 className="inbox-item-author mb-1 font-size-16">
                             {details.authorizedperson}

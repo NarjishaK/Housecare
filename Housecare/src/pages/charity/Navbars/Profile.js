@@ -53,7 +53,8 @@ const ProfileMenu = props => {
       </div>
       <img
         className="rounded-circle header-profile-user"
-        src={`${BASE_URL}/upload/${charitydetails.image}`}
+              src={charitydetails.image?.includes("http") ? charitydetails.image : `${BASE_URL}/upload/${charitydetails.image}`}
+       
         alt="Header Avatar"
         style={{ width: '40px', height: '40px', marginRight: '10px' }}
       />

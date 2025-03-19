@@ -64,20 +64,6 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
     }
   };
 
-  // Function to generate and download the Excel template
-  // const handleDownloadTemplate = () => {
-  //   const headings = [
-  //     ["charity", "arbic", "CR_NO", "VAT_REG_NO", "phone", "authorizedperson", "email", "date", "roles", "password"],
-  //   ];
-  
-  //   const worksheet = XLSX.utils.aoa_to_sheet(headings);
-  //   const workbook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Template");
-  
-  //   // Create a Blob and trigger a download
-  //   XLSX.writeFile(workbook, "Charity_Template.xlsx");
-  // };
-  
   const handleDownloadTemplate = () => {
     const headings = [
       ["charity", "prifix", "arbic", "CR_NO", "VAT_REG_NO", "phone", "authorizedperson", "email", "date", "roles", "password"],

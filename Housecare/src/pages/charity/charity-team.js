@@ -433,7 +433,7 @@ function CharityDetails() {
 
         <div className="card-body">
           <img
-            src={`${BASE_URL}/upload/${charitys.image}`}
+       src={charitys.image?.includes("http") ? charitys.image : `${BASE_URL}/upload/${charitys.image}`}
             alt="user"
             className="avatar-xs me-2 rounded-circle"
           />{" "}
