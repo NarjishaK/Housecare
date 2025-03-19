@@ -385,47 +385,51 @@ exports.importCharityFromExcel = async (req, res) => {
 
       const charityData = [];
 
-      for (const item of jsonData) {
-        if (existingEmails.has(item.email) || existingNames.has(item.charity)) {
-          console.log(`Skipping existing charity: ${item.charity} (${item.email})`);
-          continue;
-        }
+      // Default image URL (change this to your preferred image link)
+const DEFAULT_IMAGE_URL = "https://cdn-icons-png.flaticon.com/512/2922/2922510.png"; 
 
-        // Required fields
-        const requiredFields = ["charity", "prifix", "phone", "authorizedperson", "email", "date", "roles", "password"];
-        for (const field of requiredFields) {
-          if (!item[field]) {
-            throw new Error(`Missing required field: ${field}`);
-          }
-        }
+for (const item of jsonData) {
+  if (existingEmails.has(item.email) || existingNames.has(item.charity)) {
+    console.log(`Skipping existing charity: ${item.charity} (${item.email})`);
+    continue;
+  }
 
-        // Convert date to DD/MM/YYYY format
-        const parsedDate = new Date(item.date);
-        const formattedDate = parsedDate.toLocaleDateString("en-GB"); // en-GB uses DD/MM/YYYY format
+  // Required fields
+  const requiredFields = ["charity", "prifix", "phone", "authorizedperson", "email", "date", "roles", "password"];
+  for (const field of requiredFields) {
+    if (!item[field]) {
+      throw new Error(`Missing required field: ${field}`);
+    }
+  }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(item.password, 10);
+  // Convert date to DD/MM/YYYY format
+  const parsedDate = new Date(item.date);
+  const formattedDate = parsedDate.toLocaleDateString("en-GB");
 
-        // Generate the next sequential ID
-        lastNumber++;
-        const paddedNumber = String(lastNumber).padStart(6, "0");
-        const charityId = `CH${paddedNumber}${item.prifix}`;
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(item.password, 10);
 
-        charityData.push({
-          charity: item.charity,
-          prifix: item.prifix,
-          charityId: charityId,
-          arbic: item.arbic || "", // Optional field
-          CR_NO: item.CR_NO || "", // Optional field
-          VAT_REG_NO: item.VAT_REG_NO || "", // Optional field
-          phone: item.phone,
-          authorizedperson: item.authorizedperson,
-          email: item.email,
-          date: formattedDate,
-          roles: item.roles,
-          password: hashedPassword,
-        });
-      }
+  // Generate the next sequential ID
+  lastNumber++;
+  const paddedNumber = String(lastNumber).padStart(6, "0");
+  const charityId = `CH${paddedNumber}${item.prifix}`;
+
+  charityData.push({
+    charity: item.charity,
+    prifix: item.prifix,
+    charityId: charityId,
+    arbic: item.arbic || "",
+    CR_NO: item.CR_NO || "",
+    VAT_REG_NO: item.VAT_REG_NO || "",
+    phone: item.phone,
+    authorizedperson: item.authorizedperson,
+    email: item.email,
+    date: formattedDate,
+    roles: item.roles,
+    password: hashedPassword,
+    image: item.image || DEFAULT_IMAGE_URL, // Set default image if not provided
+  });
+}
 
       // Save data to database
       const importedCharities = await Charity.insertMany(charityData);
