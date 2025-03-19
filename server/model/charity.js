@@ -5,7 +5,7 @@ const charitySchema = mongoose.Schema({
   charity: { type: String, required: true },
   prifix:{type:String,required:true,unique:true},
   charityId: { type: String, unique: true },
-  arbic: { type: String, required: true },
+  arbic: { type: String},
   CR_NO: { type: String },
   VAT_REG_NO: { type: String },
   phone: { type: Number, required: true },
