@@ -30,18 +30,25 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
       setError("Please select a file to upload");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("file", file);
-
+  
+    const url = `http://localhost:8000/imports/import`;
+    console.log("Sending request to:", url);
+    
     setLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/imports/import`, {
+      const response = await fetch(url, {
         method: "POST",
         body: formData,
       });
-
+  
+      console.log("Response status:", response.status);
+      
       const result = await response.json();
+      console.log("Response data:", result);
+      
       if (response.ok) {
         console.log("Import Successful:", result);
         onImportSuccess();
@@ -50,6 +57,7 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
         setError(result.message || "Import failed");
       }
     } catch (err) {
+      console.error("Error during import:", err);
       setError("Error uploading file");
     } finally {
       setLoading(false);
@@ -57,9 +65,22 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
   };
 
   // Function to generate and download the Excel template
+  // const handleDownloadTemplate = () => {
+  //   const headings = [
+  //     ["charity", "arbic", "CR_NO", "VAT_REG_NO", "phone", "authorizedperson", "email", "date", "roles", "password"],
+  //   ];
+  
+  //   const worksheet = XLSX.utils.aoa_to_sheet(headings);
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Template");
+  
+  //   // Create a Blob and trigger a download
+  //   XLSX.writeFile(workbook, "Charity_Template.xlsx");
+  // };
+  
   const handleDownloadTemplate = () => {
     const headings = [
-      ["charity", "arbic", "CR_NO", "VAT_REG_NO", "phone", "authorizedperson", "email", "date", "roles", "password"],
+      ["charity", "prifix", "arbic", "CR_NO", "VAT_REG_NO", "phone", "authorizedperson", "email", "date", "roles", "password"],
     ];
   
     const worksheet = XLSX.utils.aoa_to_sheet(headings);
@@ -69,10 +90,10 @@ const ExcelImport = ({ isOpen, toggle, onImportSuccess }) => {
     // Create a Blob and trigger a download
     XLSX.writeFile(workbook, "Charity_Template.xlsx");
   };
-  
 
   return (
-    <Modal isOpen={isOpen} toggle={toggle} className="modal-dialog-centered" size="lg">
+    // <Modal isOpen={isOpen} toggle={toggle} className="modal-dialog-centered" size="lg">
+    <Modal isOpen={isOpen} toggle={toggle} className="modal-dialog-centered" size="lg" fade={true} timeout={900}>
       <ModalHeader toggle={toggle}>Import Charity Data from Excel</ModalHeader>
       <ModalBody>
         <div className="mb-4">
