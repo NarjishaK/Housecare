@@ -286,43 +286,140 @@ exports.detailses = asyncHandler(async (req, res) => {
 
   
 
-exports. importCharityFromExcel = async (req, res) => {
+// exports. importCharityFromExcel = async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ message: "No file uploaded" });
+//     }
+
+//     console.log("File received:", req.file.originalname); // Debugging
+
+//     // Ensure file buffer is not empty
+//     if (!req.file.buffer || req.file.buffer.length === 0) {
+//       return res.status(400).json({ message: "Uploaded file is empty" });
+//     }
+
+//     // Read Excel file
+//     const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
+//     console.log("Workbook Sheets:", workbook.SheetNames); // Debugging
+
+//     if (workbook.SheetNames.length === 0) {
+//       return res.status(400).json({ message: "Excel file has no sheets" });
+//     }
+
+//     const sheetName = workbook.SheetNames[0];
+//     const sheet = workbook.Sheets[sheetName];
+//     const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+//     if (jsonData.length === 0) {
+//       return res.status(400).json({ message: "Excel file is empty or invalid" });
+//     }
+
+//     console.log("Extracted Data:", jsonData); // Debugging
+
+//     // Save data to database
+//     const importedCharities = await Charity.insertMany(jsonData);
+
+//     res.status(201).json({ message: "Charities imported successfully", data: importedCharities });
+//   } catch (error) {
+//     console.error("Error importing charities:", error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+
+
+exports.importCharityFromExcel = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    console.log("File received:", req.file.originalname); // Debugging
+    console.log("File received:", req.file.originalname);
+    console.log("File size:", req.file.size);
+    console.log("File mimetype:", req.file.mimetype);
 
     // Ensure file buffer is not empty
     if (!req.file.buffer || req.file.buffer.length === 0) {
       return res.status(400).json({ message: "Uploaded file is empty" });
     }
 
-    // Read Excel file
-    const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
-    console.log("Workbook Sheets:", workbook.SheetNames); // Debugging
+    try {
+      // Read Excel file
+      const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
+      console.log("Workbook Sheets:", workbook.SheetNames);
 
-    if (workbook.SheetNames.length === 0) {
-      return res.status(400).json({ message: "Excel file has no sheets" });
+      if (workbook.SheetNames.length === 0) {
+        return res.status(400).json({ message: "Excel file has no sheets" });
+      }
+
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+      if (jsonData.length === 0) {
+        return res.status(400).json({ message: "Excel file is empty or invalid" });
+      }
+
+      console.log("Extracted Data:", jsonData);
+
+      // Find the last charity to determine the next ID number
+      const lastCharity = await Charity.findOne().sort({ charityId: -1 });
+      
+      let lastNumber = 0;
+      if (lastCharity && lastCharity.charityId) {
+        // Extract the number from the charityId (e.g., "CH000004R1" -> 4)
+        const match = lastCharity.charityId.match(/CH(\d+)/);
+        if (match && match[1]) {
+          lastNumber = parseInt(match[1]);
+        }
+      }
+
+      // Create charity records with sequential IDs
+      const charityData = [];
+      
+      for (const item of jsonData) {
+        // Check if required fields are present
+        const requiredFields = ['charity', 'prifix', 'arbic', 'CR_NO', 'VAT_REG_NO', 'phone', 'authorizedperson', 'email', 'date', 'roles', 'password'];
+        for (const field of requiredFields) {
+          if (!item[field]) {
+            throw new Error(`Missing required field: ${field}`);
+          }
+        }
+        
+        // Generate the next sequential ID
+        lastNumber++;
+        const paddedNumber = String(lastNumber).padStart(6, '0');
+        const charityId = `CH${paddedNumber}${item.prifix}`;
+        
+        charityData.push({
+          charity: item.charity,
+          prifix: item.prifix,
+          charityId: charityId,
+          arbic: item.arbic,
+          CR_NO: item.CR_NO,
+          VAT_REG_NO: item.VAT_REG_NO,
+          phone: item.phone,
+          authorizedperson: item.authorizedperson,
+          email: item.email,
+          date: item.date,
+          roles: item.roles,
+          password: item.password
+        });
+      }
+
+      // Save data to database
+      const importedCharities = await Charity.insertMany(charityData);
+      console.log("Import successful, records created:", importedCharities.length);
+
+      res.status(201).json({ message: "Charities imported successfully", count: importedCharities.length });
+    } catch (parseError) {
+      console.error("Error parsing Excel or processing data:", parseError);
+      return res.status(400).json({ message: `Error processing file: ${parseError.message}` });
     }
-
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-    if (jsonData.length === 0) {
-      return res.status(400).json({ message: "Excel file is empty or invalid" });
-    }
-
-    console.log("Extracted Data:", jsonData); // Debugging
-
-    // Save data to database
-    const importedCharities = await Charity.insertMany(jsonData);
-
-    res.status(201).json({ message: "Charities imported successfully", data: importedCharities });
   } catch (error) {
-    console.error("Error importing charities:", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error importing charities:", error.message);
+    console.error(error.stack);
+    res.status(500).json({ message: "Internal Server Error", details: error.message });
   }
 };
