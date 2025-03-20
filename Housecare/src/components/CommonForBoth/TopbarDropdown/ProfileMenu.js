@@ -18,6 +18,8 @@ import withRouter from "components/Common/withRouter"
 import { BASE_URL } from "pages/Authentication/handle-api"
 
 const ProfileMenu = props => {
+  const IMAGE = "https://cdn-icons-png.flaticon.com/512/2922/2922510.png";
+
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
   // const isSuperadmin = !!localStorage.getItem("Superadmin")
@@ -41,7 +43,9 @@ const ProfileMenu = props => {
         >
           <img
             className="rounded-circle header-profile-user"
-            src={`${BASE_URL}/upload/${admin.image}`}
+            // src={`${BASE_URL}/upload/${admin.image}`}
+                src={admin.image ? `${BASE_URL}/upload/${admin.image}` : IMAGE}
+            
             alt="Header Avatar"
           />
         </DropdownToggle>

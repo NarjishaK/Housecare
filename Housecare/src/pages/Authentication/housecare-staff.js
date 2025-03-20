@@ -24,6 +24,7 @@ import { useForm } from "helpers/useForms"
 import { BASE_URL } from "./handle-api"
 
 function Staff() {
+  const IMAGE ="https://cdn-icons-png.flaticon.com/512/2922/2922510.png"
   // const isSuperadmin = !!localStorage.getItem("HomecareAdmin")
   const isRoleStaff = () => {
     const HomecareAdmin = JSON.parse(localStorage.getItem("HomecareAdmin"));
@@ -146,7 +147,6 @@ function Staff() {
     if (!values.role) errors.role = "Role is required."
     if (!values.iqama) errors.iqama = "Iqama No is required."
     if (!values.phone) errors.phone = "Phone Number is required."
-    if (!image) errors.image = "Image is required."
 
     setValidationErrors(errors)
 
@@ -301,11 +301,11 @@ const filteredStaff = staff.filter(staf =>
                 {filteredStaff.map(staffs => (
                   <tr>
                     <td>
-                      <img
-                        src={`${BASE_URL}/upload/${staffs.image}`}
-                        alt={`${staffs.staff}`}
-                        className="avatar-xs rounded-circle me-2"
-                      />{" "}
+                    <img
+    src={staffs.image ? `${BASE_URL}/upload/${staffs.image}` : IMAGE}
+    alt={staffs.staff}
+    className="avatar-xs rounded-circle me-2"
+  />{" "}
                       {staffs.staff}
                     </td>
                     <td>{staffs.email}</td>

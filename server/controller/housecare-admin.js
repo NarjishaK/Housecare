@@ -179,7 +179,7 @@ exports.edit = asyncHandler(async (req, res) => {
 });
 //update staff details
 exports.update = asyncHandler(async (req, res) => {
-  const { staff, email, password ,iqama,phone,role} = req.body;
+  const { staff, email ,iqama,phone,role} = req.body;
   const { id } = req.params;
   
   try {
@@ -202,7 +202,7 @@ exports.update = asyncHandler(async (req, res) => {
       }
     admin.email = email;
     admin.role = role;
-    admin.password = password;
+    // admin.password = password;
     admin.staff = staff;
     admin.iqama = iqama;
     admin.phone =phone;
