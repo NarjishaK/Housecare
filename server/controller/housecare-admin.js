@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 //create new staff
 exports.create = asyncHandler(async (req, res) => {
   const { staff, email, password,iqama,phone,role } = req.body;
-  const image = req.file.filename;
+  const image = req.file ? req.file.filename : null;
 
   try {
     const admins = await Staffs.findOne({ email });
