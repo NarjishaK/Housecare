@@ -440,7 +440,6 @@ exports.importFromExcel = async (req, res) => {
   }
 };
 
-
 exports.importBenificiariesFromExcel = async (req, res) => {
   try {
     if (!req.file) {
@@ -455,47 +454,40 @@ exports.importBenificiariesFromExcel = async (req, res) => {
       return res.status(400).json({ error: "Empty Excel file" });
     }
 
-    // Get existing emails from database
-    const existingBeneficiaries = await Benificiaries.find({}, "email_id");
+    // Get all existing emails from database for duplicate checking
     const existingEmailsInDB = new Set(
-      existingBeneficiaries.map((b) => b.email_id?.toLowerCase()).filter(Boolean)
+      (await Benificiaries.find({}, "email_id")).map((b) => b.email_id)
     );
 
-    // Track duplicates within the Excel file
     const emailsInExcel = new Set();
-    const beneficiariesToInsert = [];
-    let duplicateCount = 0;
-    
-    // Create a map to store last ID numbers for each charity
-    const charityLastIdMap = new Map();
-    
-    // First, collect all unique beneficiaries from Excel
-    const uniqueBeneficiaries = [];
-    
-    for (const b of sheetData) {
-      // Skip entries without email
-      if (!b.email_id) continue;
-      
-      const emailLowerCase = b.email_id.toLowerCase();
-      
-      // Check for duplicates in DB or within the Excel file
-      if (existingEmailsInDB.has(emailLowerCase) || emailsInExcel.has(emailLowerCase)) {
-        duplicateCount++;
-        continue;
+    const filteredData = sheetData.filter((b) => {
+      if (!b.email_id) return false;
+      if (existingEmailsInDB.has(b.email_id) || emailsInExcel.has(b.email_id)) {
+        return false;
       }
-      
-      // Mark this email as processed
-      emailsInExcel.add(emailLowerCase);
-      uniqueBeneficiaries.push(b);
+      emailsInExcel.add(b.email_id);
+      return true;
+    });
+
+    if (!filteredData.length) {
+      return res.status(400).json({ error: "All emails already exist!" });
     }
+
+    // Group beneficiaries by charity name for proper ID assignment
+    const beneficiariesByCharity = {};
     
-    // Collect all charity names first
-    const charityNames = [...new Set(uniqueBeneficiaries.map(b => b.charity_name))];
+    for (const b of filteredData) {
+      if (!beneficiariesByCharity[b.charity_name]) {
+        beneficiariesByCharity[b.charity_name] = [];
+      }
+      beneficiariesByCharity[b.charity_name].push(b);
+    }
+
+    const beneficiariesToInsert = [];
     
-    // Pre-fetch all charity info and last IDs to avoid repeated database queries
-    const charityInfoMap = new Map();
-    
-    for (const charityName of charityNames) {
+    // Process each charity group separately
+    for (const charityName of Object.keys(beneficiariesByCharity)) {
+      // Find the charity to get its prefix
       const charity = await Charity.findOne({ charity: charityName });
       
       if (!charity) {
@@ -503,89 +495,55 @@ exports.importBenificiariesFromExcel = async (req, res) => {
         continue;
       }
       
-      // Get the prefix for this charity
       const charityPrefix = charity.prifix;
       
-      // Get the latest ID for this charity
-      const lastBeneficiary = await Benificiaries.findOne({ charity_name: charityName })
+      // Find the last beneficiary ID for this specific charity
+      const lastBenificiary = await Benificiaries.findOne({ charity_name: charityName })
         .sort({ createdAt: -1 });
       
       let lastIdNumber = 0;
-      if (lastBeneficiary && lastBeneficiary.benificiary_id) {
-        // Extract the numeric part after the prefix
-        const lastId = lastBeneficiary.benificiary_id.replace(charityPrefix, "");
+      if (lastBenificiary && lastBenificiary.benificiary_id) {
+        const lastId = lastBenificiary.benificiary_id.replace(charityPrefix, "");
         lastIdNumber = parseInt(lastId, 10) || 0;
       }
       
-      charityInfoMap.set(charityName, {
-        prefix: charityPrefix,
-        lastIdNumber: lastIdNumber
-      });
-    }
-    
-    // Now process all beneficiaries using the cached charity info
-    for (const b of uniqueBeneficiaries) {
-      const charityName = b.charity_name;
-      
-      // Skip if charity info wasn't found
-      if (!charityInfoMap.has(charityName)) {
-        continue;
+      // Process all beneficiaries for this charity
+      for (const b of beneficiariesByCharity[charityName]) {
+        lastIdNumber++; // Increment the number for each new beneficiary
+        const newIdNumber = lastIdNumber.toString().padStart(5, "0"); // Ensure 5-digit format
+        
+        beneficiariesToInsert.push({
+          benificiary_id: `${charityPrefix}${newIdNumber}`,
+          benificiary_name: b.benificiary_name || "",
+          number: b.number || "",
+          email_id: b.email_id || "",
+          charity_name: b.charity_name || "",
+          nationality: b.nationality || "",
+          sex: b.sex || "",
+          health_status: b.health_status || "",
+          marital: b.marital || "",
+          navision_linked_no: b.navision_linked_no || "",
+          physically_challenged: b.physically_challenged || "",
+          family_members: b.family_members || 0,
+          account_status: b.account_status || "",
+          Balance: b.Balance || 0,
+          category: b.category || "",
+          age: b.age || 0,
+        });
       }
-      
-      // Get charity info and increment ID
-      const charityInfo = charityInfoMap.get(charityName);
-      charityInfo.lastIdNumber++;
-      
-      // Create new beneficiary ID
-      const newIdNumber = charityInfo.lastIdNumber.toString().padStart(5, "0");
-      
-      beneficiariesToInsert.push({
-        benificiary_id: `${charityInfo.prefix}${newIdNumber}`,
-        benificiary_name: b.benificiary_name || "",
-        number: b.number || "",
-        email_id: b.email_id || "",
-        charity_name: b.charity_name || "",
-        nationality: b.nationality || "",
-        sex: b.sex || "",
-        health_status: b.health_status || "",
-        marital: b.marital || "",
-        navision_linked_no: b.navision_linked_no || "",
-        physically_challenged: b.physically_challenged || "",
-        family_members: b.family_members || 0,
-        account_status: b.account_status || "",
-        Balance: b.Balance || 0,
-        category: b.category || "",
-        age: b.age || 0,
-      });
     }
 
-    // Check if we have any beneficiaries to insert
     if (beneficiariesToInsert.length === 0) {
-      return res.status(200).json({ 
-        message: "No new beneficiaries to import. All entries were duplicates or had invalid charity names.",
-        stats: {
-          total: sheetData.length,
-          duplicates: duplicateCount,
-          invalid: sheetData.length - duplicateCount - 0,
-          imported: 0
-        }
-      });
+      return res.status(400).json({ error: "No valid beneficiaries to import." });
     }
 
-    // Insert all beneficiaries at once
-    const result = await Benificiaries.insertMany(beneficiariesToInsert);
+    await Benificiaries.insertMany(beneficiariesToInsert);
 
     return res.status(200).json({
-      message: `${result.length} beneficiaries imported successfully. ${duplicateCount} duplicates were skipped.`,
-      stats: {
-        total: sheetData.length,
-        duplicates: duplicateCount,
-        invalid: sheetData.length - duplicateCount - result.length,
-        imported: result.length
-      }
+      message: `${beneficiariesToInsert.length} beneficiaries imported successfully`,
     });
   } catch (error) {
     console.error("Error importing beneficiaries:", error);
-    return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
