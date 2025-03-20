@@ -531,11 +531,6 @@ function Staff() {
                         accept="image/*"
                         onChange={handleImage}
                       />
-                      {validationErrors.image && (
-                        <div className="text-danger">
-                          {validationErrors.image}
-                        </div>
-                      )}
                     </div>
                   </Col>
                 </Row>

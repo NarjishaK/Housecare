@@ -34,6 +34,8 @@ import {
 } from "./handle-api"
 
 function CharityDetails() {
+  const IMAGE = "https://cdn-icons-png.flaticon.com/512/2922/2922510.png";
+
   const [modal, setmodal] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [modals, setmodals] = useState(false)
@@ -428,8 +430,13 @@ function CharityDetails() {
             {charitys.charity} {charitys.arbic}
           </p>
           <img
-                src={charitys.image?.includes("http") ? charitys.image : `${BASE_URL}/upload/${charitys.image}`}
-            
+                src={
+                  charitys.image && charitys.image.includes("http")
+                    ? charitys.image
+                    : charitys.image
+                    ? `${BASE_URL}/upload/${charitys.image}`
+                    : IMAGE
+                }
             alt="user"
             className="avatar-xs me-2 rounded-circle"
           />{" "}

@@ -26,6 +26,7 @@ import {
 import { useForm } from "helpers/useForms"
 
 function Charity() {
+  const IMAGE = "https://cdn-icons-png.flaticon.com/512/2922/2922510.png";
   const [modal, setmodal] = useState(false)
   const [charity1, setCharity1] = useState([])
   const [searchTerm, setSearchTerm] = useState("") // New state for search input
@@ -97,7 +98,6 @@ function Charity() {
     if (!values.date) errors.date = "Date is required."
     if (!values.arbic) errors.arbic = "Arbic name is required."
     if (!values.CR_NO) errors.CR_NO = "CR_NO is required."
-    if (!image) errors.image = "image is required."
     if (!values.roles) errors.roles = "Roles is required."
     if (!values.VAT_REG_NO) errors.VAT_REG_NO = "VAT_REG_NO is required."
     if (!values.prifix) errors.prifix = "Prifix is required."
@@ -536,11 +536,6 @@ function Charity() {
                           accept="image/*"
                           onChange={handleImage}
                         />
-                        {validationErrors.image && (
-                          <small className="text-danger">
-                            {validationErrors.image}
-                          </small>
-                        )}
                       </div>
                     </Col>
                     <Col lg={4}>
@@ -596,11 +591,13 @@ function Charity() {
                       >
                         <div className="inbox-item-img float-start me-4">
                           <img
-                            src={
-                              details.image?.includes("http")
-                                ? details.image
-                                : `${BASE_URL}/upload/${details.image}`
-                            }
+                           src={
+                            details.image && details.image.includes("http")
+                              ? details.image
+                              : details.image
+                              ? `${BASE_URL}/upload/${details.image}`
+                              : IMAGE
+                          }
                             className="avatar-md rounded-circle"
                             alt="Charity"
                           />
@@ -948,8 +945,8 @@ function Charity() {
                 />
                 {values.image && (
                   <img
-                    src={values.image}
-                    alt="Charity"
+                    src={values.image || ""}
+                    alt="Img"
                     style={{ width: "100px", marginTop: "10px" }}
                   />
                 )}
