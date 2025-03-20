@@ -466,6 +466,9 @@ exports.importBenificiariesFromExcel = async (req, res) => {
     const beneficiariesToInsert = [];
     let duplicateCount = 0;
     
+    // Create a map to store last ID numbers for each charity
+    const charityLastIdMap = new Map();
+    
     // First, collect all unique beneficiaries from Excel
     const uniqueBeneficiaries = [];
     
@@ -486,20 +489,25 @@ exports.importBenificiariesFromExcel = async (req, res) => {
       uniqueBeneficiaries.push(b);
     }
     
-    // Process each unique beneficiary
-    for (const b of uniqueBeneficiaries) {
-      // Find the charity to get the prefix
-      const charity = await Charity.findOne({ charity: b.charity_name });
+    // Collect all charity names first
+    const charityNames = [...new Set(uniqueBeneficiaries.map(b => b.charity_name))];
+    
+    // Pre-fetch all charity info and last IDs to avoid repeated database queries
+    const charityInfoMap = new Map();
+    
+    for (const charityName of charityNames) {
+      const charity = await Charity.findOne({ charity: charityName });
       
       if (!charity) {
-        console.warn(`Charity "${b.charity_name}" not found, skipping entry.`);
+        console.warn(`Charity "${charityName}" not found, skipping entries.`);
         continue;
       }
       
+      // Get the prefix for this charity
       const charityPrefix = charity.prifix;
       
-      // Get the latest ID for this specific charity
-      const lastBeneficiary = await Benificiaries.findOne({ charity_name: b.charity_name })
+      // Get the latest ID for this charity
+      const lastBeneficiary = await Benificiaries.findOne({ charity_name: charityName })
         .sort({ createdAt: -1 });
       
       let lastIdNumber = 0;
@@ -509,12 +517,30 @@ exports.importBenificiariesFromExcel = async (req, res) => {
         lastIdNumber = parseInt(lastId, 10) || 0;
       }
       
+      charityInfoMap.set(charityName, {
+        prefix: charityPrefix,
+        lastIdNumber: lastIdNumber
+      });
+    }
+    
+    // Now process all beneficiaries using the cached charity info
+    for (const b of uniqueBeneficiaries) {
+      const charityName = b.charity_name;
+      
+      // Skip if charity info wasn't found
+      if (!charityInfoMap.has(charityName)) {
+        continue;
+      }
+      
+      // Get charity info and increment ID
+      const charityInfo = charityInfoMap.get(charityName);
+      charityInfo.lastIdNumber++;
+      
       // Create new beneficiary ID
-      lastIdNumber++; // Increment for this new beneficiary
-      const newIdNumber = lastIdNumber.toString().padStart(5, "0"); // Ensure 5-digit format
+      const newIdNumber = charityInfo.lastIdNumber.toString().padStart(5, "0");
       
       beneficiariesToInsert.push({
-        benificiary_id: `${charityPrefix}${newIdNumber}`,
+        benificiary_id: `${charityInfo.prefix}${newIdNumber}`,
         benificiary_name: b.benificiary_name || "",
         number: b.number || "",
         email_id: b.email_id || "",
@@ -540,6 +566,7 @@ exports.importBenificiariesFromExcel = async (req, res) => {
         stats: {
           total: sheetData.length,
           duplicates: duplicateCount,
+          invalid: sheetData.length - duplicateCount - 0,
           imported: 0
         }
       });
@@ -553,6 +580,7 @@ exports.importBenificiariesFromExcel = async (req, res) => {
       stats: {
         total: sheetData.length,
         duplicates: duplicateCount,
+        invalid: sheetData.length - duplicateCount - result.length,
         imported: result.length
       }
     });
