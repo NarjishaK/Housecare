@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import GoogleSheetsImport from './googlesheet';
+import GoogleSheetsImport from "./googlesheet"
 import Swal from "sweetalert2"
 import {
   Row,
@@ -30,7 +30,7 @@ function Charity() {
   const [searchTerm, setSearchTerm] = useState("") // New state for search input
   const [image, setImage] = useState("")
   const [editId, setEditId] = useState(null)
-  const [importModal, setImportModal] = useState(false);
+  const [importModal, setImportModal] = useState(false)
   const [modal_center, setmodal_center] = useState(false)
   const [values, handleChange, setValues] = useForm({
     charity: "",
@@ -98,7 +98,7 @@ function Charity() {
     if (!image) errors.image = "image is required."
     if (!values.roles) errors.roles = "Roles is required."
     if (!values.VAT_REG_NO) errors.VAT_REG_NO = "VAT_REG_NO is required."
-    if(!values.prifix) errors.prifix = "Prifix is required."
+    if (!values.prifix) errors.prifix = "Prifix is required."
 
     setValidationErrors(errors)
 
@@ -159,16 +159,18 @@ function Charity() {
     try {
       const charityDetails = await charityEdit(id)
       setEditId(id)
-      const formattedDate = charityDetails.date ? new Date(charityDetails.date).toISOString().split('T')[0] : '';
+      const formattedDate = charityDetails.date
+        ? new Date(charityDetails.date).toISOString().split("T")[0]
+        : ""
 
       setValues({
         ...charityDetails,
         date: formattedDate,
-        image: charityDetails.image?.includes("http") 
-          ? charityDetails.image 
-          : `${BASE_URL}/upload/${charityDetails.image}`
-      });
-      
+        image: charityDetails.image?.includes("http")
+          ? charityDetails.image
+          : `${BASE_URL}/upload/${charityDetails.image}`,
+      })
+
       setmodal_center(true)
     } catch (err) {
       console.log(err, "an error occurred in fetching charity details")
@@ -190,7 +192,7 @@ function Charity() {
     if (!values.CR_NO) errors.CR_NO = "CR_NO is required."
     if (!values.roles) errors.roles = "Roles is required."
     if (!values.VAT_REG_NO) errors.VAT_REG_NO = "VAT_REG_NO is required."
-    if(!values.prifix) errors.prifix = "Prifix is required."
+    if (!values.prifix) errors.prifix = "Prifix is required."
 
     setValidationErrors(errors)
 
@@ -282,12 +284,12 @@ function Charity() {
                   padding: "10px",
                 }}
               />
-              <button 
-  className="btn btn-primary" 
-  onClick={() => setImportModal(true)}
->
-  Import Charity
-</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => setImportModal(true)}
+              >
+                Import Charity
+              </button>
               <Link
                 onClick={() => {
                   setmodal(!modal)
@@ -549,7 +551,7 @@ function Charity() {
                           value={values.prifix}
                           onChange={handleChange}
                           placeholder="prifix"
-                          ></input>
+                        ></input>
                         {validationErrors.prifix && (
                           <small className="text-danger">
                             {validationErrors.prifix}
@@ -590,13 +592,17 @@ function Charity() {
                         className="inbox-item"
                         style={{ paddingInline: "10px" }}
                       >
-                       <div className="inbox-item-img float-start me-4">
-  <img
-    src={details.image?.includes("http") ? details.image : `${BASE_URL}/upload/${details.image}`}
-    className="avatar-md rounded-circle"
-    alt="Charity"
-  />
-</div>
+                        <div className="inbox-item-img float-start me-4">
+                          <img
+                            src={
+                              details.image?.includes("http")
+                                ? details.image
+                                : `${BASE_URL}/upload/${details.image}`
+                            }
+                            className="avatar-md rounded-circle"
+                            alt="Charity"
+                          />
+                        </div>
 
                         <div>
                           <h6 className="inbox-item-author mb-1 font-size-16">
@@ -618,11 +624,7 @@ function Charity() {
                             alignContent: "flex-end",
                           }}
                         >
-                          <div
-                            onClick={() => {
-                              tog_center()
-                            }}
-                          >
+                          <div>
                             <Button
                               type="button"
                               className="btn btn-primary waves-effect waves-light"
@@ -633,7 +635,6 @@ function Charity() {
                                 borderColor: "black",
                                 color: "black",
                                 padding: "8px 16px",
-                                // width:"100px"
                               }}
                               onClick={() => handleEdit(details._id)}
                             >
@@ -651,255 +652,6 @@ function Charity() {
                             </Button>
                           </div>
 
-                          <Modal
-                            isOpen={modal_center}
-                            toggle={() => {
-                              tog_center()
-                            }}
-                            centered={true}
-                            size="lg"
-                          >
-                            <div className="modal-header">
-                              <h5 className="modal-title mt-0">
-                                Edit Charity Organaization{" "}
-                              </h5>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setmodal_center(false)
-                                }}
-                                className="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                              >
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div className="modal-body">
-                              <Row>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="authorizedperson">
-                                      Authorizedperson
-                                    </label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      name="authorizedperson"
-                                      value={values.authorizedperson}
-                                      onChange={handleChange}
-                                      placeholder="Authorizedperson"
-                                    />
-                                    {validationErrors.authorizedperson && (
-                                      <small className="text-danger">
-                                        {validationErrors.authorizedperson}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="Role">Role</label>
-                                    <select
-                                      className="form-control"
-                                      name="roles"
-                                      value={values.roles}
-                                      onChange={handleChange}
-                                    >
-                                      <option>Role</option>
-                                      <option>Main_Admin</option>
-                                      <option>DATA_ENTRY</option>
-                                      <option>DATA_VERIFY</option>
-                                    </select>
-                                    {validationErrors.roles && (
-                                      <small className="text-danger">
-                                        {validationErrors.roles}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="name">Charity</label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      name="charity"
-                                      value={values.charity}
-                                      onChange={handleChange}
-                                      placeholder="Charity Organaization"
-                                    />
-                                    {validationErrors.charity && (
-                                      <small className="text-danger">
-                                        {validationErrors.charity}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="name">
-                                      اسم الجمعية الخيرية
-                                    </label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      name="arbic"
-                                      value={values.arbic}
-                                      onChange={handleChange}
-                                      placeholder="اسم الجمعية الخيرية"
-                                    />
-                                    {validationErrors.arbic && (
-                                      <small className="text-danger">
-                                        {validationErrors.arbic}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="email">Email</label>
-                                    <input
-                                      type="email"
-                                      className="form-control"
-                                      name="email"
-                                      value={values.email}
-                                      onChange={handleChange}
-                                      placeholder="Enter Email"
-                                    />
-                                    {validationErrors.email && (
-                                      <small className="text-danger">
-                                        {validationErrors.email}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="Phone">Phone No</label>
-                                    <input
-                                      type="number"
-                                      className="form-control"
-                                      name="phone"
-                                      value={values.phone}
-                                      onChange={handleChange}
-                                      placeholder="Phone No"
-                                    />
-                                    {validationErrors.phone && (
-                                      <small className="text-danger">
-                                        {validationErrors.phone}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="VAT_REG_NO">
-                                      VAT_REG_NO
-                                    </label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      name="VAT_REG_NO"
-                                      value={values.VAT_REG_NO}
-                                      onChange={handleChange}
-                                      placeholder="VAT_REG_NO"
-                                    />
-                                    {validationErrors.VAT_REG_NO && (
-                                      <small className="text-danger">
-                                        {validationErrors.VAT_REG_NO}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="CR_NO">CR_NO</label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      name="CR_NO"
-                                      value={values.CR_NO}
-                                      onChange={handleChange}
-                                      placeholder="CR_NO"
-                                    />
-                                    {validationErrors.CR_NO && (
-                                      <small className="text-danger">
-                                        {validationErrors.CR_NO}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                              </Row>
-                              <Row>
-                              <Col lg={6}>
-  <div className="mb-3">
-    <label htmlFor="date">Date</label>
-    <input
-      type="date"
-      className="form-control"
-      name="date"
-      value={values.date}
-      onChange={handleChange}
-    />
-    {validationErrors.date && (
-      <small className="text-danger">{validationErrors.date}</small>
-    )}
-  </div>
-</Col>
-
-<Col lg={6}>
-  <div className="mb-3">
-    <label htmlFor="image">Image</label>
-    <input
-      type="file"
-      className="form-control"
-      name="image"
-      onChange={handleImage} // Ensure handleImage is called
-    />
-    {values.image && (
-      <img src={values.image} alt="Charity" style={{ width: "100px", marginTop: "10px" }} />
-    )}
-  </div>
-</Col>
-
-                              </Row>
-                              <Row>
-                                <Col lg={12}>
-                                  <div className="mb-3">
-                                    <label htmlFor="prifix">Prifix</label>
-                                    
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      name="prifix"
-                                      value={values.prifix}
-                                      onChange={handleChange}
-                                      placeholder="Prifix"
-                                    />
-                                    {validationErrors.prifix && (
-                                      <small className="text-danger">
-                                        {validationErrors.prifix}
-                                      </small>
-                                    )}
-                                    </div>
-                                </Col>
-                                </Row><br/>
-                              <Button
-                                onClick={handleUpdate}
-                                style={{ marginRight: "5px" }}
-                              >
-                                Update
-                              </Button>
-                              <Button>Password change</Button>
-                            </div>
-                          </Modal>
                           <Button
                             style={{
                               backgroundColor: "transparent",
@@ -987,14 +739,256 @@ function Charity() {
           </Row>
         </CardBody>
       </Card>
+      <Modal
+        isOpen={modal_center}
+        toggle={() => {
+          tog_center()
+        }}
+        centered={true}
+        size="lg"
+      >
+        <div className="modal-header">
+          <h5 className="modal-title mt-0">Edit Charity Organaization </h5>
+          <button
+            type="button"
+            onClick={() => {
+              setmodal_center(false)
+            }}
+            className="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div className="modal-body">
+          <Row>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="authorizedperson">Authorizedperson</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="authorizedperson"
+                  value={values.authorizedperson}
+                  onChange={handleChange}
+                  placeholder="Authorizedperson"
+                />
+                {validationErrors.authorizedperson && (
+                  <small className="text-danger">
+                    {validationErrors.authorizedperson}
+                  </small>
+                )}
+              </div>
+            </Col>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="Role">Role</label>
+                <select
+                  className="form-control"
+                  name="roles"
+                  value={values.roles}
+                  onChange={handleChange}
+                >
+                  <option>Role</option>
+                  <option>Main_Admin</option>
+                  <option>DATA_ENTRY</option>
+                  <option>DATA_VERIFY</option>
+                </select>
+                {validationErrors.roles && (
+                  <small className="text-danger">
+                    {validationErrors.roles}
+                  </small>
+                )}
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="name">Charity</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="charity"
+                  value={values.charity}
+                  onChange={handleChange}
+                  placeholder="Charity Organaization"
+                />
+                {validationErrors.charity && (
+                  <small className="text-danger">
+                    {validationErrors.charity}
+                  </small>
+                )}
+              </div>
+            </Col>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="name">اسم الجمعية الخيرية</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="arbic"
+                  value={values.arbic}
+                  onChange={handleChange}
+                  placeholder="اسم الجمعية الخيرية"
+                />
+                {validationErrors.arbic && (
+                  <small className="text-danger">
+                    {validationErrors.arbic}
+                  </small>
+                )}
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  placeholder="Enter Email"
+                />
+                {validationErrors.email && (
+                  <small className="text-danger">
+                    {validationErrors.email}
+                  </small>
+                )}
+              </div>
+            </Col>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="Phone">Phone No</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  name="phone"
+                  value={values.phone}
+                  onChange={handleChange}
+                  placeholder="Phone No"
+                />
+                {validationErrors.phone && (
+                  <small className="text-danger">
+                    {validationErrors.phone}
+                  </small>
+                )}
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="VAT_REG_NO">VAT_REG_NO</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="VAT_REG_NO"
+                  value={values.VAT_REG_NO}
+                  onChange={handleChange}
+                  placeholder="VAT_REG_NO"
+                />
+                {validationErrors.VAT_REG_NO && (
+                  <small className="text-danger">
+                    {validationErrors.VAT_REG_NO}
+                  </small>
+                )}
+              </div>
+            </Col>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="CR_NO">CR_NO</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="CR_NO"
+                  value={values.CR_NO}
+                  onChange={handleChange}
+                  placeholder="CR_NO"
+                />
+                {validationErrors.CR_NO && (
+                  <small className="text-danger">
+                    {validationErrors.CR_NO}
+                  </small>
+                )}
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="date">Date</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  name="date"
+                  value={values.date}
+                  onChange={handleChange}
+                />
+                {validationErrors.date && (
+                  <small className="text-danger">{validationErrors.date}</small>
+                )}
+              </div>
+            </Col>
+
+            <Col lg={6}>
+              <div className="mb-3">
+                <label htmlFor="image">Image</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  name="image"
+                  onChange={handleImage} // Ensure handleImage is called
+                />
+                {values.image && (
+                  <img
+                    src={values.image}
+                    alt="Charity"
+                    style={{ width: "100px", marginTop: "10px" }}
+                  />
+                )}
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={12}>
+              <div className="mb-3">
+                <label htmlFor="prifix">Prifix</label>
+
+                <input
+                  type="text"
+                  className="form-control"
+                  name="prifix"
+                  value={values.prifix}
+                  onChange={handleChange}
+                  placeholder="Prifix"
+                />
+                {validationErrors.prifix && (
+                  <small className="text-danger">
+                    {validationErrors.prifix}
+                  </small>
+                )}
+              </div>
+            </Col>
+          </Row>
+          <br />
+          <Button onClick={handleUpdate} style={{ marginRight: "5px" }}>
+            Update
+          </Button>
+          <Button>Password change</Button>
+        </div>
+      </Modal>
       <GoogleSheetsImport
-  isOpen={importModal}
-  toggle={() => setImportModal(false)}
-  onImportSuccess={(data) => {
-    // Handle the imported data here
-    loadData(); // Refresh the charity list
-  }}
-/>
+        isOpen={importModal}
+        toggle={() => setImportModal(false)}
+        onImportSuccess={data => {
+          // Handle the imported data here
+          loadData() // Refresh the charity list
+        }}
+      />
     </React.Fragment>
   )
 }
