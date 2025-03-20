@@ -440,7 +440,7 @@ exports.importFromExcel = async (req, res) => {
   }
 };
 
-exports.importBenificiariesFromExcel = async (req, res) => {
+async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -454,15 +454,19 @@ exports.importBenificiariesFromExcel = async (req, res) => {
       return res.status(400).json({ error: "Empty Excel file" });
     }
 
+    // Fetch all existing beneficiary emails to prevent duplicates
     const existingEmailsInDB = new Set(
       (await Benificiaries.find({}, "email_id")).map((b) => b.email_id)
     );
 
+    // Track new emails in the current import
     const emailsInExcel = new Set();
+
+    // Filter out duplicates before processing
     const filteredData = sheetData.filter((b) => {
-      if (!b.email_id) return false;
+      if (!b.email_id) return false; // Ignore rows without email
       if (existingEmailsInDB.has(b.email_id) || emailsInExcel.has(b.email_id)) {
-        return false;
+        return false; // Ignore duplicates
       }
       emailsInExcel.add(b.email_id);
       return true;
@@ -472,34 +476,42 @@ exports.importBenificiariesFromExcel = async (req, res) => {
       return res.status(400).json({ error: "All emails already exist!" });
     }
 
+    // Fetch all charities from DB at once (optimization)
+    const charityNames = [...new Set(filteredData.map((b) => b.charity_name))];
+    const charities = await Charity.find({ charity: { $in: charityNames } });
+
+    // Create a map of charity prefixes
+    const charityMap = {};
+    charities.forEach((charity) => {
+      charityMap[charity.charity] = charity.prifix;
+    });
+
+    // Get the last used beneficiary ID for each charity
+    const lastBeneficiaries = await Benificiaries.aggregate([
+      { $match: { charity_name: { $in: charityNames } } },
+      { $sort: { createdAt: -1 } },
+      { $group: { _id: "$charity_name", lastId: { $first: "$benificiary_id" } } },
+    ]);
+
+    // Map to track last used ID per charity
+    const lastIdMap = {};
+    lastBeneficiaries.forEach(({ _id, lastId }) => {
+      lastIdMap[_id] = lastId ? parseInt(lastId.replace(charityMap[_id], ""), 10) : 0;
+    });
+
     const beneficiariesToInsert = [];
-    const lastIdNumbers = {}; // Object to store last ID per charity
 
     for (const b of filteredData) {
-      const charity = await Charity.findOne({ charity: b.charity_name });
+      const charityPrefix = charityMap[b.charity_name];
 
-      if (!charity) {
+      if (!charityPrefix) {
         console.warn(`Charity "${b.charity_name}" not found, skipping entry.`);
         continue;
       }
 
-      const charityPrefix = charity.prifix;
-
-      // Check if we already fetched the last beneficiary for this charity
-      if (!lastIdNumbers[charityPrefix]) {
-        const lastBenificiary = await Benificiaries.findOne({ charity_name: b.charity_name }).sort({ createdAt: -1 });
-        
-        let lastIdNumber = 0;
-        if (lastBenificiary && lastBenificiary.benificiary_id) {
-          const lastId = lastBenificiary.benificiary_id.replace(charityPrefix, "");
-          lastIdNumber = parseInt(lastId, 10) || 0; // Extract number
-        }
-        lastIdNumbers[charityPrefix] = lastIdNumber;
-      }
-
-      // Generate new ID
-      lastIdNumbers[charityPrefix]++;
-      const newIdNumber = lastIdNumbers[charityPrefix].toString().padStart(5, "0");
+      // Increment the last used ID per charity
+      lastIdMap[b.charity_name] = (lastIdMap[b.charity_name] || 0) + 1;
+      const newIdNumber = lastIdMap[b.charity_name].toString().padStart(5, "0");
 
       beneficiariesToInsert.push({
         benificiary_id: `${charityPrefix}${newIdNumber}`,
@@ -525,6 +537,7 @@ exports.importBenificiariesFromExcel = async (req, res) => {
       return res.status(400).json({ error: "No valid beneficiaries to import." });
     }
 
+    // Bulk insert for efficiency
     await Benificiaries.insertMany(beneficiariesToInsert);
 
     return res.status(200).json({
@@ -535,3 +548,5 @@ exports.importBenificiariesFromExcel = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
