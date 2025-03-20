@@ -404,30 +404,21 @@ for (const item of jsonData) {
 // Update Password by _id
 exports.updatePassword = async (req, res) => {
   try {
-    const { id } = req.params; // Get ID from URL
-    const { newPassword } = req.body; // Get new password from request body
+      const { _id, newPassword } = req.body;
 
-    if (!newPassword) {
-      return res.status(400).json({ error: "New password is required" });
-    }
+      if (!_id || !newPassword) {
+          return res.status(400).json({ message: "Missing required fields" });
+      }
 
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      const updatedCharity = await Charity.findByIdAndUpdate(_id, { password: hashedPassword }, { new: true });
 
-    // Update password in database
-    const updatedCharity = await Charity.findByIdAndUpdate(
-      id,
-      { password: hashedPassword },
-      { new: true }
-    );
+      if (!updatedCharity) {
+          return res.status(404).json({ message: "Charity not found" });
+      }
 
-    if (!updatedCharity) {
-      return res.status(404).json({ error: "Charity not found" });
-    }
-
-    res.status(200).json({ message: "Password updated successfully" });
+      res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
-    console.error("Error updating password:", error);
-    res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ message: "Error updating password", error });
   }
 };

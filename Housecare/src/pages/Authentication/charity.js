@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import GoogleSheetsImport from "./googlesheet"
 import Swal from "sweetalert2"
+import PasswordUpdateModal from "./passwordmodal"
 import {
   Row,
   Col,
@@ -32,6 +33,7 @@ function Charity() {
   const [editId, setEditId] = useState(null)
   const [importModal, setImportModal] = useState(false)
   const [modal_center, setmodal_center] = useState(false)
+  const [passwordModal, setPasswordModal] = useState(false);
   const [values, handleChange, setValues] = useForm({
     charity: "",
     email: "",
@@ -739,7 +741,7 @@ function Charity() {
           </Row>
         </CardBody>
       </Card>
-      
+
       <Modal
         isOpen={modal_center}
         toggle={() => {
@@ -979,9 +981,15 @@ function Charity() {
           <Button onClick={handleUpdate} style={{ marginRight: "5px" }}>
             Update
           </Button>
-          <Button>Password change</Button>
+          <Button onClick={() => setPasswordModal(true)}>Password Change</Button>
         </div>
       </Modal>
+
+<PasswordUpdateModal 
+    charityId={values._id} 
+    isOpen={passwordModal} 
+    toggle={() => setPasswordModal(!passwordModal)} 
+/>
       <GoogleSheetsImport
         isOpen={importModal}
         toggle={() => setImportModal(false)}

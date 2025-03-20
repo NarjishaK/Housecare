@@ -22,5 +22,5 @@ router.put("/:id",Authentication, upload.single("image"), Controller.update);
 router.delete("/:id",Authentication, Controller.delete);
 router.post("/signin", Controller.signin);
 router.get("/detailses/:id",Authentication, Controller.detailses);
-router.put("/update-password/:id", Controller.updatePassword);
+router.put("/update-password", Controller.updatePassword);
 module.exports = router;
