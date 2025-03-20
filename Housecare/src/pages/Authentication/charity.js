@@ -159,8 +159,11 @@ function Charity() {
     try {
       const charityDetails = await charityEdit(id)
       setEditId(id)
+      const formattedDate = charityDetails.date ? new Date(charityDetails.date).toISOString().split('T')[0] : '';
+
       setValues({
         ...charityDetails,
+        date: formattedDate,
         image: charityDetails.image?.includes("http") 
           ? charityDetails.image 
           : `${BASE_URL}/upload/${charityDetails.image}`
@@ -654,6 +657,7 @@ function Charity() {
                               tog_center()
                             }}
                             centered={true}
+                            size="lg"
                           >
                             <div className="modal-header">
                               <h5 className="modal-title mt-0">
