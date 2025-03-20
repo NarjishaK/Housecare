@@ -443,78 +443,89 @@ exports.importFromExcel = async (req, res) => {
 exports.importBenificiariesFromExcel = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
+      return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
+    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
     const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
     if (!sheetData.length) {
-      return res.status(400).json({ error: "Empty Excel file" });
+      return res.status(400).json({ error: 'Empty Excel file' });
     }
 
-    // Fetch all existing beneficiary emails to prevent duplicates
-    const existingEmailsInDB = new Set(
-      (await Benificiaries.find({}, "email_id")).map((b) => b.email_id)
-    );
+    // Fetch all existing beneficiary IDs and emails to prevent duplicates
+    const existingBeneficiaries = await Beneficiaries.find({}, 'benificiary_id email_id');
+    const existingBeneficiaryIds = new Set(existingBeneficiaries.map((b) => b.benificiary_id));
+    const existingEmails = new Set(existingBeneficiaries.filter(b => b.email_id).map((b) => b.email_id));
 
-    // Track new emails in the current import
-    const emailsInExcel = new Set();
-
-    // Filter out duplicates before processing
-    const filteredData = sheetData.filter((b) => {
-      if (!b.email_id) return false; // Ignore rows without email
-      if (existingEmailsInDB.has(b.email_id) || emailsInExcel.has(b.email_id)) {
-        return false; // Ignore duplicates
-      }
-      emailsInExcel.add(b.email_id);
-      return true;
+    // Fetch all charities and create a map for quick lookup
+    const allCharities = await Charity.find({});
+    const charityMap = new Map();
+    allCharities.forEach(charity => {
+      charityMap.set(charity.charity, {
+        id: charity._id,
+        prefix: charity.prifix
+      });
     });
 
-    if (!filteredData.length) {
-      return res.status(400).json({ error: "All emails already exist!" });
-    }
-
-    // Fetch all charities from DB at once (optimization)
-    const charityNames = [...new Set(filteredData.map((b) => b.charity_name))];
-    const charities = await Charity.find({ charity: { $in: charityNames } });
-
-    // Create a map of charity prefixes
-    const charityMap = {};
-    charities.forEach((charity) => {
-      charityMap[charity.charity] = charity.prifix;
-    });
-
-    // Get the last used beneficiary ID for each charity
-    const lastBeneficiaries = await Benificiaries.aggregate([
-      { $match: { charity_name: { $in: charityNames } } },
-      { $sort: { createdAt: -1 } },
-      { $group: { _id: "$charity_name", lastId: { $first: "$benificiary_id" } } },
-    ]);
-
-    // Map to track last used ID per charity
-    const lastIdMap = {};
-    lastBeneficiaries.forEach(({ _id, lastId }) => {
-      lastIdMap[_id] = lastId ? parseInt(lastId.replace(charityMap[_id], ""), 10) : 0;
-    });
-
+    // Track next ID for each charity prefix
+    const nextIdMap = new Map();
+    
     const beneficiariesToInsert = [];
+    const errors = [];
 
-    for (const b of filteredData) {
-      const charityPrefix = charityMap[b.charity_name];
-
-      if (!charityPrefix) {
-        console.warn(`Charity "${b.charity_name}" not found, skipping entry.`);
+    for (const [index, b] of sheetData.entries()) {
+      // Skip entries without charity name
+      if (!b.charity_name) {
+        errors.push(`Row ${index + 2}: Missing charity name`);
         continue;
       }
 
-      // Increment the last used ID per charity
-      lastIdMap[b.charity_name] = (lastIdMap[b.charity_name] || 0) + 1;
-      const newIdNumber = lastIdMap[b.charity_name].toString().padStart(5, "0");
+      // Skip entries with duplicate emails if email exists
+      if (b.email_id && existingEmails.has(b.email_id)) {
+        errors.push(`Row ${index + 2}: Duplicate email: ${b.email_id}`);
+        continue;
+      }
+
+      // Get charity info
+      const charityInfo = charityMap.get(b.charity_name);
+      if (!charityInfo) {
+        errors.push(`Row ${index + 2}: Charity '${b.charity_name}' not found!`);
+        continue;
+      }
+
+      const charityPrefix = charityInfo.prefix;
+      if (!charityPrefix) {
+        errors.push(`Row ${index + 2}: Prefix not found for charity '${b.charity_name}'`);
+        continue;
+      }
+
+      // Initialize next ID counter for this charity if not already done
+      if (!nextIdMap.has(charityPrefix)) {
+        // Find highest existing ID for this prefix
+        const existingIds = Array.from(existingBeneficiaryIds)
+          .filter(id => id.startsWith(charityPrefix))
+          .map(id => parseInt(id.substring(charityPrefix.length), 10))
+          .filter(num => !isNaN(num));
+        
+        const highestId = existingIds.length > 0 ? Math.max(...existingIds) : 0;
+        nextIdMap.set(charityPrefix, highestId + 1);
+      }
+
+      // Generate new beneficiary ID
+      let nextId = nextIdMap.get(charityPrefix);
+      const newBeneficiaryId = `${charityPrefix}${nextId.toString().padStart(5, '0')}`;
+      nextIdMap.set(charityPrefix, nextId + 1);
+      
+      // Track used IDs and emails
+      existingBeneficiaryIds.add(newBeneficiaryId);
+      if (b.email_id) {
+        existingEmails.add(b.email_id);
+      }
 
       beneficiariesToInsert.push({
-        benificiary_id: `${charityPrefix}${newIdNumber}`,
+        benificiary_id: newBeneficiaryId,
         benificiary_name: b.benificiary_name || "",
         number: b.number || "",
         email_id: b.email_id || "",
@@ -534,19 +545,23 @@ exports.importBenificiariesFromExcel = async (req, res) => {
     }
 
     if (beneficiariesToInsert.length === 0) {
-      return res.status(400).json({ error: "No valid beneficiaries to import." });
+      return res.status(400).json({ 
+        error: 'No new beneficiaries to insert',
+        details: errors.length > 0 ? errors : undefined
+      });
     }
 
-    // Bulk insert for efficiency
-    await Benificiaries.insertMany(beneficiariesToInsert);
+    // Insert all at once
+    await Beneficiaries.insertMany(beneficiariesToInsert, { ordered: false });
 
     return res.status(200).json({
       message: `${beneficiariesToInsert.length} beneficiaries imported successfully`,
+      errors: errors.length > 0 ? errors : undefined,
+      successCount: beneficiariesToInsert.length,
+      errorCount: errors.length
     });
   } catch (error) {
-    console.error("Error importing beneficiaries:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error('Error importing beneficiaries:', error);
+    return res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 };
-
-
