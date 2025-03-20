@@ -455,7 +455,7 @@ exports.importBenificiariesFromExcel = async (req, res) => {
     }
 
     // Fetch all existing beneficiary IDs and emails to prevent duplicates
-    const existingBeneficiaries = await Beneficiaries.find({}, 'benificiary_id email_id');
+    const existingBeneficiaries = await Benificiaries.find({}, 'benificiary_id email_id');
     const existingBeneficiaryIds = new Set(existingBeneficiaries.map((b) => b.benificiary_id));
     const existingEmails = new Set(existingBeneficiaries.filter(b => b.email_id).map((b) => b.email_id));
 
@@ -552,7 +552,7 @@ exports.importBenificiariesFromExcel = async (req, res) => {
     }
 
     // Insert all at once
-    await Beneficiaries.insertMany(beneficiariesToInsert, { ordered: false });
+    await Benificiaries.insertMany(beneficiariesToInsert, { ordered: false });
 
     return res.status(200).json({
       message: `${beneficiariesToInsert.length} beneficiaries imported successfully`,
