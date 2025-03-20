@@ -61,7 +61,6 @@ const Register = props => {
     if (!values.role) errors.role = "Role is required."
     if (!values.iqama) errors.iqama = "Iqama No is required."
     if (!values.phone) errors.phone = "Phone Number is required."
-    if (!image) errors.image = "Image is required."
 
     setValidationErrors(errors)
 

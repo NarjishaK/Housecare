@@ -5,7 +5,7 @@ const housecareSchema = mongoose.Schema({
   staff: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String,required:true },
-  image: { type: String, required: true },
+  image: { type: String },
   iqama:{type:String,required:true},
   phone:{type:Number,required:true},
   isBlocked: { type: Boolean, default: false },
