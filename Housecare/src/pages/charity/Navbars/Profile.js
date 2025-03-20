@@ -18,6 +18,8 @@ import withRouter from "components/Common/withRouter"
 import { BASE_URL } from "pages/Authentication/handle-api"
 // const charitydetails = JSON.parse(localStorage.getItem("charitydetails"))
 const ProfileMenu = props => {
+  const IMAGE = "https://cdn-icons-png.flaticon.com/512/2922/2922510.png";
+
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
   const charitydetails =JSON.parse(localStorage.getItem("charitydetails"))
@@ -53,8 +55,14 @@ const ProfileMenu = props => {
       </div>
       <img
         className="rounded-circle header-profile-user"
-              src={charitydetails.image?.includes("http") ? charitydetails.image : `${BASE_URL}/upload/${charitydetails.image}`}
-       
+              // src={charitydetails.image?.includes("http") ? charitydetails.image : `${BASE_URL}/upload/${charitydetails.image}`}
+       src={
+        charitydetails.image && charitydetails.image.includes("http")
+                                       ? charitydetails.image
+                                       : charitydetails.image
+                                       ? `${BASE_URL}/upload/${charitydetails.image}`
+                                       : IMAGE
+                                   }
         alt="Header Avatar"
         style={{ width: '40px', height: '40px', marginRight: '10px' }}
       />

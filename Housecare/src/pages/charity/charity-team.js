@@ -33,6 +33,7 @@ import {
 } from "../Authentication/handle-api"
 import Navbar from "./Navbars"
 function CharityDetails() {
+  const IMAGE = "https://cdn-icons-png.flaticon.com/512/2922/2922510.png";
   const [datas, handleChanges, setDatas] = useForm({
     benificiary_name: "",
     category: "",
@@ -143,7 +144,6 @@ function CharityDetails() {
     if (!values.phone) errors.phone = "Phone is required."
     if (!values.password) errors.password = "Password is required."
     if (!values.charity) errors.charity = "Charity is required."
-    if (!image) errors.image = "Image is required."
     setValidationErrors(errors)
 
     if (Object.keys(errors).length > 0) {
@@ -215,7 +215,6 @@ function CharityDetails() {
     if (!values.phone) errors.phone = "Phone is required."
     if (!values.password) errors.password = "Password is required."
     if (!values.charity) errors.charity = "Charity is required."
-    if (!image) errors.image = "Image is required."
     setValidationErrors(errors)
 
     if (Object.keys(errors).length > 0) {
@@ -662,11 +661,6 @@ function CharityDetails() {
                                   onChange={handleImage}
                                   rows="3"
                                 />
-                                {validationErrors.image && (
-                                  <small className="text-danger">
-                                    {validationErrors.image}
-                                  </small>
-                                )}
                               </div>
                             </Col>
                           </Row>
@@ -706,7 +700,13 @@ function CharityDetails() {
                       <tr className="table-light">
                         <td>
                           <img
-                            src={`${BASE_URL}/upload/${charitystaff.image}`}
+                            src={
+                              charitystaff.image && charitystaff.image.includes("http")
+                                ? charitystaff.image
+                                : charitystaff.image
+                                ? `${BASE_URL}/upload/${charitystaff.image}`
+                                : IMAGE
+                            }
                             alt="user"
                             className="avatar-xs me-2 rounded-circle"
                           />{" "}
@@ -928,11 +928,6 @@ function CharityDetails() {
                                         onChange={handleImage}
                                         rows="3"
                                       />
-                                      {validationErrors.image && (
-                                        <small className="text-danger">
-                                          {validationErrors.image}
-                                        </small>
-                                      )}
                                     </div>
                                   </Col>
                                 </Row>

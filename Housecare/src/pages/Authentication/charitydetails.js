@@ -708,7 +708,13 @@ function CharityDetails() {
                       <tr className="table-light">
                         <td>
                           <img
-                            src={`${BASE_URL}/upload/${charitystaff.image}`}
+                             src={
+                              charitystaff.image && charitystaff.image.includes("http")
+                                ? charitystaff.image
+                                : charitystaff.image
+                                ? `${BASE_URL}/upload/${charitystaff.image}`
+                                : IMAGE
+                            }
                             alt="user"
                             className="avatar-xs me-2 rounded-circle"
                           />{" "}
