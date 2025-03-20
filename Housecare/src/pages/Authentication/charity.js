@@ -160,17 +160,12 @@ function Charity() {
       const charityDetails = await charityEdit(id)
       setEditId(id)
       setValues({
-        charity: charityDetails.charity,
-        email: charityDetails.email,
-        CR_NO: charityDetails.CR_NO,
-        roles: charityDetails.roles,
-        date: charityDetails.date,
-        VAT_REG_NO: charityDetails.VAT_REG_NO,
-        phone: charityDetails.phone,
-        arbic: charityDetails.arbic,
-        authorizedperson: charityDetails.authorizedperson,
-        // password:charityDetails.password,
-      })
+        ...charityDetails,
+        image: charityDetails.image?.includes("http") 
+          ? charityDetails.image 
+          : `${BASE_URL}/upload/${charityDetails.image}`
+      });
+      
       setmodal_center(true)
     } catch (err) {
       console.log(err, "an error occurred in fetching charity details")
@@ -839,41 +834,37 @@ function Charity() {
                                 </Col>
                               </Row>
                               <Row>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="date">Date</label>
-                                    <input
-                                      type="date"
-                                      className="form-control"
-                                      name="date"
-                                      value={values.date}
-                                      onChange={handleChange}
-                                      placeholder="Date"
-                                    />
-                                    {validationErrors.date && (
-                                      <small className="text-danger">
-                                        {validationErrors.date}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
-                                <Col lg={6}>
-                                  <div className="mb-3">
-                                    <label htmlFor="image">Image</label>
-                                    <input
-                                      className="form-control"
-                                      name="image"
-                                      type="file"
-                                      accept="image/*"
-                                      onChange={handleImage}
-                                    />
-                                    {validationErrors.image && (
-                                      <small className="text-danger">
-                                        {validationErrors.image}
-                                      </small>
-                                    )}
-                                  </div>
-                                </Col>
+                              <Col lg={6}>
+  <div className="mb-3">
+    <label htmlFor="date">Date</label>
+    <input
+      type="date"
+      className="form-control"
+      name="date"
+      value={values.date}
+      onChange={handleChange}
+    />
+    {validationErrors.date && (
+      <small className="text-danger">{validationErrors.date}</small>
+    )}
+  </div>
+</Col>
+
+<Col lg={6}>
+  <div className="mb-3">
+    <label htmlFor="image">Image</label>
+    <input
+      type="file"
+      className="form-control"
+      name="image"
+      onChange={handleImage} // Ensure handleImage is called
+    />
+    {values.image && (
+      <img src={values.image} alt="Charity" style={{ width: "100px", marginTop: "10px" }} />
+    )}
+  </div>
+</Col>
+
                               </Row>
                               <Row>
                                 <Col lg={12}>
