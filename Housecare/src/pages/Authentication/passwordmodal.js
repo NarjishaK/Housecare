@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Modal, Button } from "reactstrap";
 import { BASE_URL } from "./handle-api";
+import Swal from "sweetalert2";
 
 const PasswordUpdateModal = ({ charityId, isOpen, toggle }) => {
     const [newPassword, setNewPassword] = useState("");
@@ -20,7 +21,11 @@ const PasswordUpdateModal = ({ charityId, isOpen, toggle }) => {
                 newPassword
             });
 
-            alert(response.data.message);
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: response.data.message
+            })
             toggle(); // Close modal
         } catch (err) {
             setError("Error updating password");
