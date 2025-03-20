@@ -137,7 +137,6 @@ function CharityDetails() {
     if (!values.roles) errors.roles = "Role is required."
     if (!values.phone) errors.phone = "Phone Number is required."
     if (!values.password) errors.password = "Password is required."
-    if (!image) errors.image = "Image is required."
 
     setValidationErrors(errors)
 
@@ -211,7 +210,6 @@ function CharityDetails() {
     if (!values.roles) errors.roles = "Role is required."
     if (!values.phone) errors.phone = "Phone Number is required."
     if (!values.password) errors.password = "Password is required."
-    if (!image) errors.image = "Image is required."
 
     setValidationErrors(errors)
 
@@ -671,11 +669,6 @@ function CharityDetails() {
                                   onChange={handleImage}
                                   rows="3"
                                 />
-                                {validationErrors.image && (
-                                  <small className="text-danger">
-                                    {validationErrors.image}
-                                  </small>
-                                )}
                               </div>
                             </Col>
                           </Row>
@@ -935,11 +928,6 @@ function CharityDetails() {
                                         onChange={handleImage}
                                         rows="3"
                                       />
-                                      {validationErrors.image && (
-                                        <small className="text-danger">
-                                          {validationErrors.image}
-                                        </small>
-                                      )}
                                     </div>
                                   </Col>
                                 </Row>

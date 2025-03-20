@@ -3,7 +3,9 @@ const asyncHandler = require('express-async-handler');
 
 exports.create = asyncHandler(async (req, res) => {
 	const { name, email, phone, password, roles, charity } = req.body;
-	const image = req.file.filename;
+	// const image = req.file.filename;
+	const image = req.file ? req.file.filename : "";
+
 	try {
 		const staffs = await Charitystaffs.findOne({ email });
 		if (staffs) {
