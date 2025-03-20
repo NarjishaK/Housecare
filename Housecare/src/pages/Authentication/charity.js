@@ -739,6 +739,7 @@ function Charity() {
           </Row>
         </CardBody>
       </Card>
+      
       <Modal
         isOpen={modal_center}
         toggle={() => {
