@@ -37,6 +37,7 @@ function Charity() {
     email: "",
     date: "",
     arbic: "",
+    prifix: "",
     CR_NO: "",
     roles: "",
     VAT_REG_NO: "",
@@ -191,7 +192,7 @@ function Charity() {
     if (!values.CR_NO) errors.CR_NO = "CR_NO is required."
     if (!values.roles) errors.roles = "Roles is required."
     if (!values.VAT_REG_NO) errors.VAT_REG_NO = "VAT_REG_NO is required."
-    if (!image) errors.image = "Image is required."
+    if(!values.prifix) errors.prifix = "Prifix is required."
 
     setValidationErrors(errors)
 
@@ -208,6 +209,7 @@ function Charity() {
     formData.append("phone", values.phone)
     formData.append("authorizedperson", values.authorizedperson)
     formData.append("charity", values.charity)
+    formData.append("prifix", values.prifix)
 
     if (image) {
       formData.append("image", image)
@@ -873,6 +875,27 @@ function Charity() {
                                   </div>
                                 </Col>
                               </Row>
+                              <Row>
+                                <Col lg={12}>
+                                  <div className="mb-3">
+                                    <label htmlFor="prifix">Prifix</label>
+                                    
+                                    <input
+                                      type="text"
+                                      className="form-control"
+                                      name="prifix"
+                                      value={values.prifix}
+                                      onChange={handleChange}
+                                      placeholder="Prifix"
+                                    />
+                                    {validationErrors.prifix && (
+                                      <small className="text-danger">
+                                        {validationErrors.prifix}
+                                      </small>
+                                    )}
+                                    </div>
+                                </Col>
+                                </Row><br/>
                               <Button
                                 onClick={handleUpdate}
                                 style={{ marginRight: "5px" }}

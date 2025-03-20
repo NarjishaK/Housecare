@@ -121,6 +121,7 @@ exports.update = asyncHandler(async (req, res) => {
     roles,
     VAT_REG_NO,
     authorizedperson,
+    prifix,
     phone,
   } = req.body;
   const { id } = req.params;
@@ -151,6 +152,7 @@ exports.update = asyncHandler(async (req, res) => {
     charities.roles = roles;
     charities.authorizedperson = authorizedperson;
     charities.arbic = arbic;
+    charities.prifix = prifix;
     if (req.file) {
       charities.image = req.file.filename;
     }
