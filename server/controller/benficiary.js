@@ -250,13 +250,13 @@ exports.updateBalances = async (req, res) => {
   try {
     const { balanceUpdates } = req.body;
 
-    await Promise.all(balanceUpdates.map(async (update) => {
-      const beneficiary = await Benificiaries.findById(update.beneficiaryId);
-      if (beneficiary) {
-        beneficiary.Balance += update.newBalance;
-        await beneficiary.save();
-      }
-    }));
+    await Promise.all(balanceUpdates.map((update) =>
+      Benificiaries.updateOne(
+        { _id: update.beneficiaryId },
+        { $inc: { Balance: update.newBalance } }
+      )
+    ));
+    
 
     res.status(200).json({ message: 'Balances updated successfully' });
   } catch (error) {
