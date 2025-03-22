@@ -246,113 +246,58 @@ exports.updateBeneficiary = async (req, res) => {
 };
 
 //balanceupdate splited tobalance
+// exports.updateBalances = async (req, res) => {
+//   try {
+//     const { balanceUpdates } = req.body;
+
+//     await Promise.all(balanceUpdates.map(async (update) => {
+//       const beneficiary = await Benificiaries.findById(update.beneficiaryId);
+//       if (beneficiary) {
+//         beneficiary.Balance += update.newBalance;
+//         await beneficiary.save();
+//       }
+//     }));
+
+//     res.status(200).json({ message: 'Balances updated successfully' });
+//   } catch (error) {
+//     console.error('Error updating balances:', error);
+//     res.status(500).json({ message: 'Error updating balances' });
+//   }
+// };
 exports.updateBalances = async (req, res) => {
   try {
     const { balanceUpdates } = req.body;
 
-    await Promise.all(balanceUpdates.map(async (update) => {
-      const beneficiary = await Benificiaries.findById(update.beneficiaryId);
-      if (beneficiary) {
-        beneficiary.Balance += update.newBalance;
-        await beneficiary.save();
-      }
-    }));
+    if (!balanceUpdates || !Array.isArray(balanceUpdates)) {
+      return res.status(400).json({ message: "Invalid input data" });
+    }
 
-    res.status(200).json({ message: 'Balances updated successfully' });
+    await Promise.all(
+      balanceUpdates.map(async (update) => {
+        if (!mongoose.Types.ObjectId.isValid(update.beneficiaryId)) {
+          console.error(`Invalid beneficiaryId: ${update.beneficiaryId}`);
+          return;
+        }
+
+        const result = await Benificiaries.updateOne(
+          { _id: update.beneficiaryId },
+          { $inc: { Balance: update.newBalance } }
+        );
+
+        if (result.matchedCount === 0) {
+          console.error(`Beneficiary not found: ${update.beneficiaryId}`);
+        }
+      })
+    );
+
+    res.status(200).json({ message: "Balances updated successfully" });
   } catch (error) {
-    console.error('Error updating balances:', error);
-    res.status(500).json({ message: 'Error updating balances' });
+    console.error("Error updating balances:", error.message, error.stack);
+    res.status(500).json({ message: "Error updating balances", error: error.message });
   }
 };
 
-// exports.importBenificiariesFromExcel = async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({ error: "No file uploaded" });
-//     }
 
-//     const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
-//     const sheetName = workbook.SheetNames[0];
-//     const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
-
-//     if (!sheetData.length) {
-//       return res.status(400).json({ error: "Empty Excel file" });
-//     }
-
-//     const existingEmailsInDB = new Set(
-//       (await Benificiaries.find({}, "email_id")).map((b) => b.email_id)
-//     );
-
-//     const emailsInExcel = new Set();
-//     const filteredData = sheetData.filter((b) => {
-//       if (!b.email_id) return false;
-//       if (existingEmailsInDB.has(b.email_id) || emailsInExcel.has(b.email_id)) {
-//         return false;
-//       }
-//       emailsInExcel.add(b.email_id);
-//       return true;
-//     });
-
-//     if (!filteredData.length) {
-//       return res.status(400).json({ error: "All emails already exist!" });
-//     }
-
-//     const beneficiariesToInsert = [];
-//     const lastBenificiary = await Benificiaries.findOne({ charity_name: filteredData[0].charity_name }).sort({ createdAt: -1 });
-
-//     let lastIdNumber = 0;
-//     if (lastBenificiary && lastBenificiary.benificiary_id) {
-//       const lastId = lastBenificiary.benificiary_id.replace(charityPrefix, "");
-//       lastIdNumber = parseInt(lastId, 10) || 0; // Get the numeric part
-//     }
-
-//     for (const b of filteredData) {
-//       const charity = await Charity.findOne({ charity: b.charity_name });
-
-//       if (!charity) {
-//         console.warn(`Charity "${b.charity_name}" not found, skipping entry.`);
-//         continue;
-//       }
-
-//       const charityPrefix = charity.prifix;
-//       lastIdNumber++; // Increment the number for each new beneficiary
-
-//       const newIdNumber = lastIdNumber.toString().padStart(5, "0"); // Ensure 5-digit format
-//       beneficiariesToInsert.push({
-//         benificiary_id: `${charityPrefix}${newIdNumber}`,
-//         benificiary_name: b.benificiary_name || "",
-//         number: b.number || "",
-//         email_id: b.email_id || "",
-//         charity_name: b.charity_name || "",
-//         nationality: b.nationality || "",
-//         sex: b.sex || "",
-//         health_status: b.health_status || "",
-//         marital: b.marital || "",
-//         navision_linked_no: b.navision_linked_no || "",
-//         physically_challenged: b.physically_challenged || "",
-//         family_members: b.family_members || 0,
-//         account_status: b.account_status || "",
-//         Balance: b.Balance || 0,
-//         category: b.category || "",
-//         age: b.age || 0,
-//       });
-//     }
-
-
-//     if (beneficiariesToInsert.length === 0) {
-//       return res.status(400).json({ error: "No valid beneficiaries to import." });
-//     }
-
-//     await Benificiaries.insertMany(beneficiariesToInsert);
-
-//     return res.status(200).json({
-//       message: `${beneficiariesToInsert.length} beneficiaries imported successfully`,
-//     });
-//   } catch (error) {
-//     console.error("Error importing beneficiaries:", error);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
 exports.importFromExcel = async (req, res) => {
   try {
     if (!req.file) {
