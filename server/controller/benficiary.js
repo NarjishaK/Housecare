@@ -246,58 +246,24 @@ exports.updateBeneficiary = async (req, res) => {
 };
 
 //balanceupdate splited tobalance
-// exports.updateBalances = async (req, res) => {
-//   try {
-//     const { balanceUpdates } = req.body;
-
-//     await Promise.all(balanceUpdates.map(async (update) => {
-//       const beneficiary = await Benificiaries.findById(update.beneficiaryId);
-//       if (beneficiary) {
-//         beneficiary.Balance += update.newBalance;
-//         await beneficiary.save();
-//       }
-//     }));
-
-//     res.status(200).json({ message: 'Balances updated successfully' });
-//   } catch (error) {
-//     console.error('Error updating balances:', error);
-//     res.status(500).json({ message: 'Error updating balances' });
-//   }
-// };
 exports.updateBalances = async (req, res) => {
   try {
     const { balanceUpdates } = req.body;
 
-    if (!balanceUpdates || !Array.isArray(balanceUpdates)) {
-      return res.status(400).json({ message: "Invalid input data" });
-    }
+    await Promise.all(balanceUpdates.map(async (update) => {
+      const beneficiary = await Benificiaries.findById(update.beneficiaryId);
+      if (beneficiary) {
+        beneficiary.Balance += update.newBalance;
+        await beneficiary.save();
+      }
+    }));
 
-    await Promise.all(
-      balanceUpdates.map(async (update) => {
-        if (!mongoose.Types.ObjectId.isValid(update.beneficiaryId)) {
-          console.error(`Invalid beneficiaryId: ${update.beneficiaryId}`);
-          return;
-        }
-
-        const result = await Benificiaries.updateOne(
-          { _id: update.beneficiaryId },
-          { $inc: { Balance: update.newBalance } }
-        );
-
-        if (result.matchedCount === 0) {
-          console.error(`Beneficiary not found: ${update.beneficiaryId}`);
-        }
-      })
-    );
-
-    res.status(200).json({ message: "Balances updated successfully" });
+    res.status(200).json({ message: 'Balances updated successfully' });
   } catch (error) {
-    console.error("Error updating balances:", error.message, error.stack);
-    res.status(500).json({ message: "Error updating balances", error: error.message });
+    console.error('Error updating balances:', error);
+    res.status(500).json({ message: 'Error updating balances' });
   }
 };
-
-
 exports.importFromExcel = async (req, res) => {
   try {
     if (!req.file) {
